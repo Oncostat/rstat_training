@@ -4,6 +4,7 @@
 .Ruserdata
 
 *_files*
+*.html
 *_cache*
 
 modules/test*
