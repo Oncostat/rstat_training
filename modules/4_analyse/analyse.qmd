@@ -13,7 +13,7 @@ format:
     # incremental: true
     # embed-resources: true
     # scrollable: true
-    toc: true
+    # toc: tru e
     slide-number: true
     smaller: true
     preview-links: auto
@@ -32,6 +32,7 @@ knitr:
     comment: "#>" 
     R.options:
       crosstable_compact: true
+      width: 100
 editor: 
   markdown: 
     wrap: 72
@@ -94,7 +95,6 @@ et
 #| echo: !expr c(1,2,4,5)
 library(tidyverse)
 library(crosstable)
-options(width = 100)
 head(mtcars2)
 get_label(mtcars2)
 ```
@@ -283,8 +283,6 @@ tibble(x=rep(1:4, 100)) %>%
 
 - Vignette spécifique dans la documentation :
 [percent_pattern.html](https://danchaltiel.github.io/crosstable/articles/percent_pattern.html)
-
-<br> 
 
 :::::  {.columns}
 
