@@ -1,0 +1,437 @@
+---
+format:
+  revealjs:
+    css: style.css
+    theme: simple
+    pagetitle: "Oncostat R - analyses"
+    template-partials: 
+     - title-slide.html
+    title: "Équipe ONCOSTAT <br> Modules de cours de R"
+    subtitle: "Analyse descriptive & Analyse statistique"
+    author: "Dan Chaltiel"
+    description: "🎯 Décrire et analyser vos données efficacement !"
+    # incremental: true
+    # embed-resources: true
+    # scrollable: true
+    toc: true
+    slide-number: true
+    smaller: true
+    preview-links: auto
+    footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+execute:
+  echo: true
+  cache: true
+  code-overflow: wrap
+  warnings: false
+  messages: false
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
+    R.options:
+      crosstable_compact: true
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Plan du module
+1.  [**Analyse descriptive**](#analyse-descriptive)
+    -   Tables descriptives avec `crosstable`
+    -   Formatage avec `flextable`\
+2.  [**Analyse statistique**](#analyse-statistique)
+    -   Modèles logistiques (`glm`) et modèles de Cox (`coxph`)
+    -   Formatage en table
+    -   Tests d'hypothèses
+
+# Analyse descriptive
+
+## Le package `crosstable`
+
+-   Package permettant de générer des tableaux descriptifs
+-   Gère quasiment tous les types de variables (continues, discrètes,
+    ...)
+-   Très flexible: adaptabilité des calculs descriptifs
+-   Permet de calculer automatiquement des tailles d'effet, voire des
+    test statistiques
+-   S'intègre avec d'autre outils comme `officer` ou `quarto`
+
+![](media/logo_crosstable.png){fig-align="right" width="120"}
+
+## Fonctions
+
+::: largeULMargin
+-   Fonction
+    [`crosstable()`](https://danchaltiel.github.io/crosstable/reference/crosstable.html)
+    pour générer le contenu du tableau descriptif
+
+    -   Crée un objet R de type `data.frame`, modifiable si besoin
+        (dplyr)
+
+-   Fonction
+    [`as_flextable()`](https://danchaltiel.github.io/crosstable/reference/as_flextable.html)
+    pour le formatter graphiquement
+
+    -   Crée un objet de type `flextable`, qui représente un tableau
+        HTML
+:::
+
+-   Documentation détaillée sur
+    [https://danchaltiel.github.io/crosstable/](https://danchaltiel.github.io/crosstable/#overview)
+
+::: {.callout-note title="Astuce"}
+Il y a 2 autres formats d’output, [`as_gt()`](https://danchaltiel.github.io/crosstable/reference/as_gt.html)
+et 
+[`as_workbook()`](https://danchaltiel.github.io/crosstable/reference/as_workbook.html), mais on n'en parlera pas ici.
+:::
+
+## Dataset `mtcars2`
+
+```{r}
+#| df-print: paged
+#| echo: !expr c(1,2,4,5)
+library(tidyverse)
+library(crosstable)
+options(width = 100)
+head(mtcars2)
+get_label(mtcars2)
+```
+
+## Exemple simple
+
+```{r}
+crosstable(mtcars2, cols=c(mpg, hp), 
+           by=cyl) %>% 
+  as_flextable(keep_id=TRUE)
+```
+
+## Exemple compliqué
+
+```{r}
+crosstable(mtcars2, cols=c(starts_with("cy"), ends_with("at")), 
+           by=c(am, vs), 
+           num_digits=3, 
+           funs=c(mean, quantile), 
+           funs_arg=list(probs=c(.25,.75)),
+           effect=TRUE) %>% 
+  as_flextable(keep_id=TRUE, compact=TRUE, header_show_n=1:2)
+
+```
+
+## Arguments principaux
+
+La documentation de
+[`crosstable()`](https://danchaltiel.github.io/crosstable/reference/crosstable.html)
+est disponible sur RStudio et [en
+ligne](https://danchaltiel.github.io/crosstable/reference/crosstable.html).
+
+Il y a un grand nombre de paramètres, les principaux sont les suivants:
+
+-   `data` : Jeu de données contenant les variables à analyser, vient
+    souvent du pipe.
+
+-   `cols` : Variables à analyser. Peut utiliser la syntaxe tidyselect
+    🤩.
+
+-   `by` : Variables de regroupement.
+
+-   `total` : Affiche les totaux des colonnes (`"row"`), des lignes
+    (`"column"`), ou des deux (`"both"`). Oui, c'est contre-intuitif
+    ¯\\*(ツ)*/¯
+
+-   `percent_pattern`,`percent_digits` : Contrôle les pourcentages.
+
+-   `funs`, `funs_arg` : Contrôle les calculs sur les variables
+    numériques.
+
+## Arguments accessoires
+
+Arguments moins importants mais souvent utiles
+
+-   `showNA` : Affiche ou non les valeurs manquantes.
+
+-   `drop_levels` : Supprime les levels non observés.
+
+-   `remove_zero_percent` : Supprime les proportions quand N=0.
+
+-   `unique_numeric` : Nombre minimum de valeurs uniques pour considérer
+    une variable numérique. Par défaut: `3`.
+
+-   `test`& `effect` : Calcule des tests statistiques ou des
+    effect-sizes. A utiliser avec parcimonie.
+
+## Options
+
+Tous les arguments de
+[`crosstable()`](https://danchaltiel.github.io/crosstable/reference/crosstable.html)
+et de
+[`as_flextable()`](https://danchaltiel.github.io/crosstable/reference/as_flextable.html)
+peuvent être définis à un niveau global.
+
+Il y a aussi quelques options plus mineures qui peuvent être utiles.
+
+Utiliser la fonction
+[`crosstable_options()`](https://danchaltiel.github.io/crosstable/reference/crosstable_options.html)
+pour avoir la saisie semi-automatique et le help.
+
+Exemple :
+
+```{r}
+#| eval: false
+crosstable_options(
+  unique_numeric=6,
+  header_show_n = TRUE, #in as_flextable()
+  compact = TRUE,
+  padding_v=0,
+  units="cm",
+)
+```
+
+## Tidyselect
+
+Syntaxe permettant de sélectionner des colonnes intelligemment, utilisée
+notamment dans
+[`dplyr::select()`](https://dplyr.tidyverse.org/reference/select.html).
+
+Documentation dans le help
+[`?tidyselect::starts_with`](https://tidyselect.r-lib.org/reference/starts_with.html):
+
+-   `starts_with(x)` : colonnes qui commencent par `x`
+
+-   `ends_with(x)` : colonnes qui terminent par `x`
+
+-   `contains(x)` : colonnes qui contiennent `x`
+
+-   `matches()` : colonnes qui correspondent à une expression régulière
+
+::: {.callout-tip title="Astuce"}
+- Utilisez `ignore.case = TRUE` pour que la sélection ignore les
+majuscules.  
+- Utilisez <https://regex101.com>{target="_blank"} pour écrire vos regex.
+:::
+
+## Tidyselect : exemple
+
+```{r}
+crosstable(mtcars2, 
+           cols=c(starts_with("cy"), ends_with("at"), 
+                  contains("is"), matches("g.*r"))) %>% 
+  as_flextable(keep_id=TRUE, compact=FALSE)
+```
+
+## Labels
+
+-   `set_label(x, lab)`, `get_label(x)`, `copy_label_from(x, y)`
+
+-   `apply_labels()`, utile après un mutate pour labelliser les nouvelles colonnes
+
+```{r}
+iris %>% 
+  apply_labels(Sepal.Length="Length of Sepal", Petal.Width="Width of Petal") %>% 
+  get_label()
+```
+
+-   `rename_with_labels()`, utile pour les plots
+
+```{r}
+#| df-print: paged
+mtcars2 %>% 
+  select(1:5) %>% 
+  rename_with_labels() %>% names()
+```
+
+::: {.callout-tip title="Astuce"}
+- Liste des fonctions dans la documentation : [index.html#labelling](https://danchaltiel.github.io/crosstable/reference/index.html#labelling) 
+- Aussi compatible avec les packages
+[labelled](https://larmarange.github.io/labelled/) et
+[hmisc](https://cran.r-project.org/web/packages/Hmisc/index.html).
+:::
+
+
+## Arguments : `unique_numeric`
+
+- Pas beaucoup de sens de calculer la moyenne si très peu de niveaux. 
+
+- L'argument `unique_numeric=3` permet de décider à partir de combien ça a du sens.
+
+- S'il vaut `0` c'est toujours numérique, s'il vaut `Inf` c'est toujour factor.
+
+:::::  {.columns}
+
+::: {.column width="50%"}
+```{r}
+tibble(x=rep(1:3, 100)) %>% crosstable()
+#
+tibble(x=rep(1:3, 100)) %>% 
+  crosstable(unique_numeric=0)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+tibble(x=rep(1:4, 100)) %>% crosstable()
+tibble(x=rep(1:4, 100)) %>% 
+  crosstable(unique_numeric=Inf)
+```
+:::
+
+::::: 
+
+## Arguments : `percent_pattern`
+
+- Vignette spécifique dans la documentation :
+[percent_pattern.html](https://danchaltiel.github.io/crosstable/articles/percent_pattern.html)
+
+<br> 
+
+:::::  {.columns}
+
+::: {.column width="50%"}
+```{r}
+# Valeur par défaut : `"{n} ({p_row})"`
+#  si pas de groupe, `p_col` sinon.
+crosstable(mtcars2, cols=c(am, vs)) %>% 
+  as_flextable()
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+crosstable(mtcars2, cols=c(am, vs), 
+           percent_pattern="N={n} (pct={p_row})", 
+           percent_digits=0) %>% 
+  as_flextable()
+```
+:::
+
+::::: 
+
+::: {.callout-warning title="Attention"}
+Si `total=TRUE`, il faut un pattern pour les totaux. Voir la syntaxe
+dans la vignette
+:::
+
+## Arguments : `funs` & `funs_arg`
+
+- Permettent de contrôler les calculs effectués sur les variables
+numériques
+
+:::::  {.columns}
+
+::: {.column .smallP width="50%"}
+`funs_arg` permet d'ajouter des arguments à `funs`.
+
+```{r}
+#
+
+crosstable(mtcars2, cols=c(mpg, wt), 
+           funs=c(mean, quantile),
+           funs_arg=list(probs=c(.25,.75))) %>% 
+  as_flextable(keep_id=TRUE)
+```
+:::
+
+::: {.column .smallP width="50%"}
+Mais il vaut mieux faire une fonction custom.
+```{r}
+my_summary_function = function(x){
+  c("Med"=median(x), "Mean"=mean(x), "Std dv"=sd(x))
+}
+crosstable_options(funs=c(" "=my_summary_function))
+crosstable(mtcars2, cols=c(mpg, wt)) %>% 
+  as_flextable(keep_id=TRUE)
+```
+:::
+
+::::: 
+
+## Arguments : `effect` & `test`
+
+:::::  {.columns}
+::: {.column width="50%"}
+Les effect-sizes, c'est cool 😊
+```{r}
+crosstable(mtcars2, c(vs, qsec), by=am, funs=mean, 
+           effect=TRUE) %>% 
+  as_flextable()
+```
+:::
+
+:::: {.column width="50%"}
+Les tests automatiques, c'est pas cool 😫
+```{r}
+crosstable(mtcars2, c(vs, qsec), by=am, funs=mean, 
+           test=TRUE) %>% 
+  as_flextable()
+```
+::: {.callout-warning title="Attention"}
+Les tests dans les tables de description sont non-recommandés ([CONSORT
+2010](https://www.bmj.com/content/340/bmj.c869#:~:text=Unfortunately%20significance%20tests%20of%20baseline%20differences%20are%20still%20common))
+:::
+
+::::
+
+:::::
+
+
+
+## Post-processing
+
+TODO : crosstable retourne une dataframe, on peut filter et mutate si
+besoin
+
+
+## Arguments de `as_flextable()`
+
+TODO : 
+
+## Conclusion
+
+TODO Trouver un GIF marrant
+
+Dire que dans un module futur on verra `officer`
+
+# Analyse statistique
+
+## Modèles
+
+lm, glm logistique, coxph (comparaison avec les arguments et outputs
+SAS)
+
+## Kaplan Meier
+
+package ggsurvfit (et surtout pas survminer !) —\>
+https://www.danieldsjoberg.com/ggsurvfit/articles/gallery.html#kmunicate
+
+## Vérification des hypothèses
+
+Blablablabla
+
+## Cox
+
+-   HPP : survival::cox.zph()
+-   Linéarité : débrouillez vous!
+
+survminer::ggcoxfunctionnal ? psplines ? rcs ? test de SAS implémenté en
+R ?
+
+## glm
+
+https://sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html qqplot ?
+
+## Output
+
+-   broom::tidy() output standardisé des modèles
+-   gtsummary présentation résultats modèles en table HTML
+
+## Merci de votre attention {.center visibility="uncounted"}
+
+![](media/keep%20calm.jpeg){fig-align="center"}
+
+# Backup {.appendix visibility="uncounted"}
+
+## modèles mixtes {visibility="uncounted"}
+
+(lme4, nlme, mmrm), betareg
