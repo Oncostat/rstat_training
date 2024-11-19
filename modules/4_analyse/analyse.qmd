@@ -448,9 +448,23 @@ https://sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html qqplot ?
 -   broom::tidy() output standardisé des modèles
 -   gtsummary présentation résultats modèles en table HTML
 
-## Merci de votre attention {.center visibility="uncounted"}
+## {.center visibility="uncounted"}
 
-![](media/keep%20calm.jpeg){fig-align="center"}
+:::: {.columns}
+
+::: {.column width="60%"}
+![](media/bob.jpg){fig-align="center"}
+:::
+
+::: {.column width="40%"}
+![](media/keep_calm.jpeg){fig-align="center"}
+:::
+
+::::
+
+
+
+
 
 # Backup {.appendix visibility="uncounted"}
 
