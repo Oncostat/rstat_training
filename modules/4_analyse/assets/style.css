@@ -1,14 +1,18 @@
 
-.title_slide img{
+#title_slide img{
   width: 200px;
   margin-inline: 50px;
 }
 
-.title_slide .subtitle{
+#title_slide .subtitle{
   font-size: 2em;
   margin: 50px auto;
 }
 
+#title-slide img {
+  height: 150px;
+  margin: 0px 50px;
+}
 
 .footer > p {
   font-size: 14px;
