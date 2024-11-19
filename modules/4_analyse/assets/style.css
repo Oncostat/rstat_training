@@ -37,6 +37,10 @@
   box-sizing: border-box;
 }
 
+.cell-output-display .flextable-shadow-host {
+  margin-top: 10px;
+}
+
 /*
 .reveal a {
   //color: #9753B8;

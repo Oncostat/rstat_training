@@ -1,8 +1,8 @@
 ---
 format:
   revealjs:
-    css: style.css
     theme: simple
+    css: assets/style.css
     pagetitle: "Oncostat R - analyses"
     template-partials: 
      - title-slide.html
@@ -433,3 +433,6 @@ https://sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html qqplot ?
 ## modèles mixtes {visibility="uncounted"}
 
 (lme4, nlme, mmrm), betareg
+
+
+<script src="assets/custom.js"></script>
