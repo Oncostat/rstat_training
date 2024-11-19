@@ -154,8 +154,7 @@ ligne](https://danchaltiel.github.io/crosstable/reference/crosstable.html).
 
 Il y a un grand nombre de paramètres, les principaux sont les suivants:
 
--   `data` : Jeu de données contenant les variables à analyser, vient
-    souvent du pipe.
+-   `data` : Dataset source, vient souvent du pipe.
 
 -   `cols` : Variables à analyser. Peut utiliser la syntaxe tidyselect
     🤩.
@@ -166,9 +165,9 @@ Il y a un grand nombre de paramètres, les principaux sont les suivants:
     (`"column"`), ou des deux (`"both"`). Oui, c'est contre-intuitif
     ¯\\*(ツ)*/¯
 
--   `percent_pattern`,`percent_digits` : Contrôle les pourcentages.
+-   `percent_pattern` et `percent_digits` : Contrôle les pourcentages.
 
--   `funs`, `funs_arg` : Contrôle les calculs sur les variables
+-   `funs` et `funs_arg` : Contrôle les calculs sur les variables
     numériques.
 
 ## Arguments accessoires
@@ -204,7 +203,7 @@ Documentation dans le help
 
 -   `matches()` : colonnes qui correspondent à une expression régulière
 
-::: {.callout-tip title="Astuce"}
+::: {.callout-tip title="Astuces"}
 - Utilisez `ignore.case = TRUE` pour que la sélection ignore les
 majuscules.  
 - Utilisez <https://regex101.com>{target="_blank"} pour écrire vos regex.
@@ -225,7 +224,7 @@ crosstable(mtcars2,
 
 -   `apply_labels()`, utile après un mutate pour labelliser les nouvelles colonnes
 
-```{r}
+```{r attr.source="fragment-index=2"}
 iris %>% 
   apply_labels(Sepal.Length="Length of Sepal", Petal.Width="Width of Petal") %>% 
   get_label()
@@ -234,7 +233,6 @@ iris %>%
 -   `rename_with_labels()`, utile pour les plots
 
 ```{r}
-#| df-print: paged
 mtcars2 %>% 
   select(1:5) %>% 
   rename_with_labels() %>% names()
@@ -456,7 +454,7 @@ https://sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html qqplot ?
 
 # Backup {.appendix visibility="uncounted"}
 
-## modèles mixtes {visibility="uncounted"}
+## Modèles mixtes {visibility="uncounted"}
 
 (lme4, nlme, mmrm), betareg
 
