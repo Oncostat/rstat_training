@@ -187,33 +187,6 @@ Arguments moins importants mais souvent utiles
 -   `test`& `effect` : Calcule des tests statistiques ou des
     effect-sizes. A utiliser avec parcimonie.
 
-## Options
-
-Tous les arguments de
-[`crosstable()`](https://danchaltiel.github.io/crosstable/reference/crosstable.html)
-et de
-[`as_flextable()`](https://danchaltiel.github.io/crosstable/reference/as_flextable.html)
-peuvent être définis à un niveau global.
-
-Il y a aussi quelques options plus mineures qui peuvent être utiles.
-
-Utiliser la fonction
-[`crosstable_options()`](https://danchaltiel.github.io/crosstable/reference/crosstable_options.html)
-pour avoir la saisie semi-automatique et le help.
-
-Exemple :
-
-```{r}
-#| eval: false
-crosstable_options(
-  unique_numeric=6,
-  header_show_n = TRUE, #in as_flextable()
-  compact = TRUE,
-  padding_v=0,
-  units="cm",
-)
-```
-
 ## Tidyselect
 
 Syntaxe permettant de sélectionner des colonnes intelligemment, utilisée
@@ -398,6 +371,38 @@ Les tests dans les tables de description sont non-recommandés ([CONSORT
 
 :::::
 
+## Arguments de `as_flextable()`
+
+TODO : 
+
+
+
+## Options
+
+- Tous les arguments de
+[`crosstable()`](https://danchaltiel.github.io/crosstable/reference/crosstable.html)
+et de
+[`as_flextable()`](https://danchaltiel.github.io/crosstable/reference/as_flextable.html)
+peuvent être définis à un niveau global.
+
+- Il y a aussi quelques options plus mineures qui peuvent être utiles.
+
+- Utiliser la fonction
+[`crosstable_options()`](https://danchaltiel.github.io/crosstable/reference/crosstable_options.html)
+pour avoir la saisie semi-automatique et le help.
+
+- Exemple :
+
+```{r}
+#| eval: false
+crosstable_options(
+  unique_numeric=6,
+  header_show_n = TRUE, #in as_flextable()
+  compact = TRUE,
+  padding_v=0,
+  units="cm",
+)
+```
 
 
 ## Post-processing
@@ -405,10 +410,6 @@ Les tests dans les tables de description sont non-recommandés ([CONSORT
 TODO : crosstable retourne une dataframe, on peut filter et mutate si
 besoin
 
-
-## Arguments de `as_flextable()`
-
-TODO : 
 
 ## Conclusion
 
