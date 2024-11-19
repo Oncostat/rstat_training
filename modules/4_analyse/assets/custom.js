@@ -31,8 +31,33 @@ const init = function(event) {
   });
 
 }
+
+const later = function(event) {
+
+  console.log("custom.js -> later")
+
+  // si on définit real-fragment-index, on remplace fragment-index en postprod
+  // résout le bug du non-incremental
+  // interaction avec incremental=true donc setTimeout mais c'est pas très propre...
+  const elements = document.querySelectorAll('[data-real-fragment-index]');
+  elements.forEach(element => {
+      const value = element.getAttribute('data-real-fragment-index');
+      element.setAttribute('data-fragment-index', value);
+  });
+}
+
+
+
 window.addEventListener("ready", (event) => {
   console.log("EVENT: window ready")
+  Reveal.on('ready', (event) => {
+    console.log("EVENT: Reveal ready")
+  });
+  Reveal.on('slidechanged', (event) => {
+    console.log("EVENT: slidechanged")
+  });
+
+  setTimeout(later, 500); //in ms
   init()
 });
 

@@ -121,7 +121,7 @@ get_label(mtcars2)
 ## Exemple simple
 
 ```{r}
-crosstable(mtcars2, cols=c(mpg, hp), 
+crosstable(mtcars2, cols=c(mpg, vs), 
            by=cyl) %>% 
   as_flextable(keep_id=TRUE)
 ```
@@ -135,9 +135,15 @@ crosstable(mtcars2, cols=c(starts_with("cy"), ends_with("at")),
            funs=c(mean, quantile), 
            funs_arg=list(probs=c(.25,.75)),
            effect=TRUE) %>% 
-  as_flextable(keep_id=TRUE, compact=TRUE, header_show_n=1:2)
+  as_flextable(keep_id=TRUE, compact=TRUE, header_show_n=2)
 
 ```
+
+
+:::{.fragment fragment-index=3 real-fragment-index=3}
+![](media/boom-mind-blown.gif){.absolute bottom=0 right=0}
+![](media/boom-mind-blown.gif){.absolute bottom=0 left=0}
+:::
 
 ## Arguments principaux
 
