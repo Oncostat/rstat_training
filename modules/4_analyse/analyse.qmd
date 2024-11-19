@@ -419,20 +419,21 @@ Dire que dans un module futur on verra `officer`
 
 ## Modèles
 
-lm, glm logistique, coxph (comparaison avec les arguments et outputs
+TODO lm, glm logistique, coxph (comparaison avec les arguments et outputs
 SAS)
 
 ## Kaplan Meier
 
-package ggsurvfit (et surtout pas survminer !) —\>
+TODO package ggsurvfit (et surtout pas survminer !) —\>
 https://www.danieldsjoberg.com/ggsurvfit/articles/gallery.html#kmunicate
 
 ## Vérification des hypothèses
 
-Blablablabla
+TODO Blablablabla
 
 ## Cox
 
+TODO 
 -   HPP : survival::cox.zph()
 -   Linéarité : débrouillez vous!
 
@@ -441,10 +442,12 @@ R ?
 
 ## glm
 
+TODO 
 https://sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html qqplot ?
 
 ## Output
 
+TODO 
 -   broom::tidy() output standardisé des modèles
 -   gtsummary présentation résultats modèles en table HTML
 
