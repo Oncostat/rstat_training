@@ -4,16 +4,18 @@ format:
     theme: simple
     css: assets/style.css
     pagetitle: "Oncostat R - analyses"
-    template-partials: 
+    template-partials:
      - title-slide.html
     title: "Équipe ONCOSTAT <br> Modules de cours de R"
     subtitle: "Analyse descriptive & Analyse statistique"
     author: "Dan Chaltiel"
     description: "🎯 Décrire et analyser vos données efficacement !"
-    # incremental: true
+    incremental: true
+    controls: true
+    keyboard: true
     # embed-resources: true
     # scrollable: true
-    # toc: tru e
+    # toc: true
     slide-number: true
     smaller: true
     preview-links: auto
@@ -32,7 +34,7 @@ knitr:
     comment: "#>" 
     R.options:
       crosstable_compact: true
-      width: 100
+      width: 105
 editor: 
   markdown: 
     wrap: 72
@@ -51,15 +53,26 @@ editor:
 
 ## Le package `crosstable`
 
+
+:::::  {.columns}
+
+::: {.column style="width:70%; border-right:none;"}
 -   Package permettant de générer des tableaux descriptifs
--   Gère quasiment tous les types de variables (continues, discrètes,
+-   Gère quasiment tous les types de variables <br> (continues, discrètes,
     ...)
 -   Très flexible: adaptabilité des calculs descriptifs
 -   Permet de calculer automatiquement des tailles d'effet, voire des
     test statistiques
 -   S'intègre avec d'autre outils comme `officer` ou `quarto`
+:::
 
-![](media/logo_crosstable.png){fig-align="right" width="120"}
+::: {.column width="30%"}
+![](media/logo_crosstable.png)
+:::
+
+::::: 
+
+
 
 ## Fonctions
 
