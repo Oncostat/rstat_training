@@ -103,14 +103,20 @@ et
 
 ## Dataset `mtcars2`
 
+Dataset d'exemple utilisé dans le package (qui décrit 32 voitures de collection)
+
 ```{r}
-#| df-print: paged
-#| echo: !expr c(1,2,4,5)
 library(tidyverse)
 library(crosstable)
-head(mtcars2)
+head(mtcars2, 4)
+```
+<br>
+
+::: {.fragment}
+```{r}
 get_label(mtcars2)
 ```
+:::
 
 ## Exemple simple
 
