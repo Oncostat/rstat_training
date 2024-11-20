@@ -13,6 +13,14 @@ const init = function(event) {
 
   console.log("custom.js -> init")
 
+
+  // tous les callouts deviennent des fragments non incrémentaux
+  callouts = $(".callout")
+  callouts.forEach(element => {
+      element.parentElement.classList.add('fragment', 'nonincremental');
+      element.classList.add('nonincremental');
+  });
+
   // tous les chunks et leur output deviennent des fragments
   code_chunks = selectNonNested(".sourceCode")
   code_chunks.forEach(element => {
@@ -22,12 +30,6 @@ const init = function(event) {
   code_output = selectNonNested(".cell-output-display")
   code_output.forEach(element => {
       element.classList.add('fragment');
-  });
-
-  // tous les callouts deviennent des fragments non incrémentaux
-  callouts = $(".callout")
-  callouts.forEach(element => {
-      element.classList.add('fragment', 'nonincremental');
   });
 
 }
