@@ -252,7 +252,7 @@ mtcars2 %>%
 
 - L'argument `unique_numeric=3` permet de décider à partir de combien ça a du sens.
 
-- S'il vaut `0` c'est toujours numérique, s'il vaut `Inf` c'est toujour factor.
+- S'il vaut `0` c'est toujours numérique, s'il vaut `Inf` c'est toujours factor.
 
 :::::  {.columns}
 
@@ -304,7 +304,7 @@ crosstable(mtcars2, cols=c(am, vs),
 
 ::: {.callout-warning title="Attention"}
 Si `total=TRUE`, il faut un pattern pour les totaux. Voir la syntaxe
-dans la vignette
+dans la vignette.
 :::
 
 ## Arguments : `funs` & `funs_arg`
