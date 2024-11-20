@@ -57,7 +57,7 @@ window.addEventListener("ready", (event) => {
     console.log("EVENT: slidechanged")
   });
 
-  setTimeout(later, 500); //in ms
+  setTimeout(later, 1000); //in ms
   init()
 });
 
