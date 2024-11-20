@@ -203,7 +203,7 @@ Documentation dans le help
 
 -   `matches()` : colonnes qui correspondent à une expression régulière
 
-::: {.callout-tip title="Astuces"}
+::: {.callout-tip title="Astuces" fragment-index=4}
 - Utilisez `ignore.case = TRUE` pour que la sélection ignore les
 majuscules.  
 - Utilisez <https://regex101.com>{target="_blank"} pour écrire vos regex.
@@ -232,13 +232,13 @@ iris %>%
 
 -   `rename_with_labels()`, utile pour les plots
 
-```{r}
+```{r attr.source="fragment-index=3"}
 mtcars2 %>% 
   select(1:5) %>% 
   rename_with_labels() %>% names()
 ```
 
-::: {.callout-tip title="Astuce"}
+::: {.callout-tip title="Astuce" fragment-index=5}
 - Liste des fonctions dans la documentation : [index.html#labelling](https://danchaltiel.github.io/crosstable/reference/index.html#labelling) 
 - Aussi compatible avec les packages
 [labelled](https://larmarange.github.io/labelled/) et
@@ -256,7 +256,7 @@ mtcars2 %>%
 
 :::::  {.columns}
 
-::: {.column width="50%"}
+::: {.column .nosep width="50%"}
 ```{r}
 tibble(x=rep(1:3, 100)) %>% crosstable()
 #
@@ -282,7 +282,7 @@ tibble(x=rep(1:4, 100)) %>%
 
 :::::  {.columns}
 
-::: {.column width="50%"}
+::: {.column .nosep width="50%"}
 ```{r}
 # Valeur par défaut : `"{n} ({p_row})"`
 #  si pas de groupe, `p_col` sinon.
@@ -291,7 +291,7 @@ crosstable(mtcars2, cols=c(am, vs)) %>%
 ```
 :::
 
-::: {.column width="50%"}
+::: {.column  width="50%"}
 ```{r}
 crosstable(mtcars2, cols=c(am, vs), 
            percent_pattern="N={n} (pct={p_row})", 
@@ -314,7 +314,7 @@ numériques
 
 :::::  {.columns}
 
-::: {.column .smallP width="50%"}
+::: {.column .fragment .smallP width="50%"}
 `funs_arg` permet d'ajouter des arguments à `funs`.
 
 ```{r}
@@ -327,7 +327,7 @@ crosstable(mtcars2, cols=c(mpg, wt),
 ```
 :::
 
-::: {.column .smallP width="50%"}
+::: {.column .fragment .smallP width="50%"}
 Mais il vaut mieux faire une fonction custom.
 ```{r}
 my_summary_function = function(x){
@@ -344,20 +344,20 @@ crosstable(mtcars2, cols=c(mpg, wt)) %>%
 ## Arguments : `effect` & `test`
 
 :::::  {.columns}
-::: {.column width="50%"}
+::: {.column .fragment width="50%"}
 Les effect-sizes, c'est cool 😊
 ```{r}
-crosstable(mtcars2, c(vs, qsec), by=am, funs=mean, 
-           effect=TRUE) %>% 
+crosstable(mtcars2, c(vs, qsec), by=am, 
+           funs=mean, effect=TRUE) %>% 
   as_flextable()
 ```
 :::
 
-:::: {.column width="50%"}
+:::: {.column .fragment width="50%"}
 Les tests automatiques, c'est pas cool 😫
 ```{r}
-crosstable(mtcars2, c(vs, qsec), by=am, funs=mean, 
-           test=TRUE) %>% 
+crosstable(mtcars2, c(vs, qsec), by=am, 
+           funs=mean, test=TRUE) %>% 
   as_flextable()
 ```
 ::: {.callout-warning title="Attention"}
