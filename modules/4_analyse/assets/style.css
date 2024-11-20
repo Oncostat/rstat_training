@@ -36,14 +36,15 @@
   font-size: 80%;
 }
 
-.column:first-child {
+.cell-output-display .flextable-shadow-host {
+  margin-top: 10px;
+}
+
+.column:first-child:not(.nosep) {
   border-right: 1px solid grey;
   box-sizing: border-box;
 }
 
-.cell-output-display .flextable-shadow-host {
-  margin-top: 10px;
-}
 
 /*
 .reveal a {
