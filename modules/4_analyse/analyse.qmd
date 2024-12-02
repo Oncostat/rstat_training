@@ -465,9 +465,14 @@ ct %>%
 
 ## Conclusion
 
-TODO Trouver un GIF marrant
+- Le package crosstable permet de faire des tableaux très variés
 
-Dire que dans un module futur on verra `officer`
+- Ajoutez une issue sur GitHub si vous avez un bug
+
+- Ajoutez une issue sur GitHub si vous avez une feature request
+
+- Dans un module futur on verra `officer`, pour intégrer les crosstables dans des rapports automatisés <br> ![](media/chris-pratt.gif){fig-align="center" style="width:35%"}
+
 
 # Analyse statistique
 
