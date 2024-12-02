@@ -24,11 +24,13 @@ const init = function(event) {
   // tous les chunks et leur output deviennent des fragments
   code_chunks = selectNonNested(".sourceCode")
   code_chunks.forEach(element => {
+    if(element.closest(".no_fragment") == null)
       element.classList.add('fragment');
   });
 
   code_output = selectNonNested(".cell-output-display")
   code_output.forEach(element => {
+    if(element.closest(".no_fragment") == null)
       element.classList.add('fragment');
   });
 
