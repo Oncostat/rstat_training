@@ -421,8 +421,46 @@ crosstable_options(
 
 ## Post-processing
 
-TODO : crosstable retourne une dataframe, on peut filter et mutate si
-besoin
+`crosstable()` retourne une dataframe, qu'on peut modifier avant de la transformer en `flextable`.
+
+::: {.panel-tabset .no_fragment}
+
+### data
+
+```{r}
+#| code-line-numbers: "1-2|3|4-17"
+set.seed(42)
+f = function(N) sample(c("Yes", "No"), size=N, replace=TRUE)
+df = tibble(id=1:50, q1=f(50), q2=f(50), q3=f(50))
+head(df, n=10)
+```
+
+### crosstable
+
+```{r}
+#| code-line-numbers: "1|2-3|4-13"
+ct = crosstable(df, cols=starts_with("q"), percent_digits=0)
+class(ct) 
+ct
+```
+
+### crosstable flex
+
+```{r}
+ct %>%  
+  as_flextable(compact=FALSE)
+```
+
+### crosstable flex mutée
+
+```{r}
+ct %>% 
+  mutate(variable=ifelse(variable=="Yes", "Oui", "Non")) %>% 
+  filter(variable=="Oui") %>% 
+  as_flextable(compact=FALSE)
+```
+
+:::
 
 
 ## Conclusion
