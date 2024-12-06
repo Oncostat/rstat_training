@@ -1,0 +1,225 @@
+---
+ theme: simple
+    css: assets/style.css
+template-partials:
+     - title-slide.html
+     title: "ONCOSTAT Team <br> Training course R"
+
+subtitle: "Module 1 : Introduction of programming language R and the RStudio interface"
+ description: "Getting started with RStudio"
+author: "Nusaïbah IBRAHIMI"
+ incremental: true
+    controls: true
+    keyboard: true
+date: 2018-05-04
+date-format: short
+affiliation-title: "BBE"
+format: revealjs
+editor: visual
+self-contained: true
+toc-depth: 3
+toc-title: "Table of contents"
+toc: true
+slide-number: true
+ smaller: true
+    preview-links: auto
+    footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+execute:
+  echo: true
+  cache: true
+  code-overflow: wrap
+  warnings: false
+  messages: false
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
+    R.options:
+      crosstable_compact: true
+      width: 105
+---
+
+# Table of contents
+
+-   Interface RStudio
+
+-   Operators
+
+-   Package installation
+
+-   Variables
+
+-   Usual functions
+
+-   Discussion R/SAS
+
+# Interface RStudio
+
+## First look at RStudio
+
+![](interface.PNG){fig-align="center"}
+
+![](images/clipboard-4117190390.png)
+
+There are at least 3 panes. But usually, we create a script R and save it in our folders.
+
+::: notes
+Links:
+
+<https://www.dataquest.io/blog/tutorial-getting-started-with-r-and-rstudio/#tve-jump-173bb2584fe>
+
+RStudio is an open-source tool for programming in R. RStudio is a flexible tool that helps you create readable analyses, and keeps your code, images, comments, and plots together in one place.
+
+Using RStudio for data analysis and programming in R provides many advantages. Here are a few examples of what RStudio provides:
+
+-   An intuitive interface that lets us keep track of saved objects, scripts, and figures
+
+-   A text editor with features like color-coded syntax that helps us write clean scripts
+
+-   Auto complete features save time
+
+-   Tools for creating documents containing a project’s code, notes, and visuals
+
+-   Dedicated Project folders to keep everything in one place
+:::
+
+## In the toolbar
+
+## The console
+
+We use the console to test code immediately. When we type an expression like 1+2, we will see the output below after hitting the enter key.
+
+Message warnings, /!\\ in case of error the code is blocked, unlike SAS /!\\ )
+
+![](images/clipboard-3467131464.png)
+
+::: notes
+Let’s start off by introducing some features of the **Console**. The `Console` is a tab in RStudio where we can run R code.
+
+Notice that the window pane where the console is located contains three tabs: `Console`, `Terminal` and `Jobs` (this may vary depending on the version of RStudio in use). We’ll focus on the Console for now.
+
+When we open RStudio, the console contains information about the version of R we’re working with. Scroll down, and try typing a few expressions like this one. Press the enter key to see the result.
+:::
+
+We can store the output of this command as a variable. To do so, we have to name our variable result.
+
+``` r
+result <- 1+2
+```
+
+The `<-` is called the assignment operator. This operator assigns values to variables. The operator `=` is similar. The operators are presented in a dedicated section.
+
+When we type `result` into the console and hit enter, we see the stored value of `3`:
+
+![](images/clipboard-2511795446.png)
+
+When we create a variable in RStudio, it saves it as an object in the R **global environment**. We’ll discuss the environment and how to view objects stored in the environment in the next section.
+
+## The environment
+
+Saving created objects during this session
+
+You can click to have a view if those objects.
+
+![](images/clipboard-3526065785.png)
+
+::: notes
+We can think of the **global environment** as our workspace. During a programming session in R, any variables we define, or data we import and save in a dataframe, are stored in our global environment. In RStudio, we can see the objects in our global environment in the `Environment` tab at the top right of the interface:
+
+We’ll see any objects we created, such as `result`, under values in the `Environment` tab. Notice that the value, `3`, stored in the variable is displayed.
+
+Sometimes, having too many named objects in the global environment creates confusion. Maybe we’d like to remove all or some of the objects. To remove all objects, click the broom icon at the top of the window:
+
+To remove selected objects from the workspace, select the Grid view from the dropdown menu:
+:::
+
+![](images/clipboard-4117536477.png)
+
+![](Environnement.PNG)
+
+## 
+
+## R script
+
+Coment in editor
+
+``` r
+# script R 
+toto = c(1,2,3,4,5) 
+toto1 = 1:5 
+toto2 = seq(1,5,1)    # function seq() create a sequence of number 
+```
+
+![](images/clipboard-1858809340.png)
+
+Output (Viewer and/or console)
+
+``` r
+# output
+toto == toto1  # == is an logical operator to verify the equality
+## [1] TRUE TRUE TRUE TRUE TRUE
+toto2[6] ## [1] NA  
+toto1[3:5] ## 3 4 5
+
+plot(x = toto, y = 2* toto1)
+```
+
+## Plots, Viewer
+
+The figures and tables are displayed in the Plots tab or Viewer tab.
+
+From the tab, you can zoom in or save it as PDF or as Image.
+
+![](Plot.PNG)
+
+## Packages, help
+
+The tab Packages contains all installed packages in R.
+
+To load them, you have either click on the box or run the code library("name_XXX").
+
+To have the documentation of the package, you click on the package name.
+
+To have the help of a function, you can use the Help tab or run the code ?function_name_XXX, you will find usually the description of the function that means the aim, the arguments, details of output and examples.
+
+# Package installation
+
+# Operators
+
+![](images/clipboard-1075189407.png)
+
+# Variable
+
+## Creation of variable
+
+dans la console ou dans le script. Sauvegarde dans l'environnemnt
+
+## Type of variable
+
+caractère
+
+numérique
+
+logique
+
+factor
+
+## Class of variable
+
+vecteur
+
+matrice
+
+Data frame Element de R qui est courant car c'est une table de données
+
+liste
+
+# Function
+
+## Usual function
+
+liste de fonctions de base avec exemple
+
+## Creation of a new function (input, output)
