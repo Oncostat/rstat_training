@@ -1,48 +1,177 @@
 ---
-format:
+title: "Data Manipulation"
+subtitle: "Introduction to the Tidyverse"
+author: "Charlotte Bargain"
+date: last-modified
+date-format: "DD/MM/YYYY"
+format: 
   revealjs:
-    css: style.css 
-    theme: simple
-    # incremental: true
+    css: style.css
+    theme: simple 
+    slide-number: c/t
+    slide-level: 3
+    transition: slide
+    progress: true
+    toc: true
+    toc-depth: 1
+    smaller: true
     embed-resources: true
-    slide-number: true
     preview-links: auto
     footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
 execute:
   echo: true
+  cache: true
   code-overflow: wrap
-keywords: ["r", "rstat", "training", "course", "module"]
 mouse-wheel: true
 editor: 
   markdown: 
     wrap: 72
+logo: /media/logo_gustaveroussy.png
 ---
 
+# Import data bases
 
-# Équipe ONCOSTAT - Modules de cours de R <br> Données {style="text-align: center;"}
+## Data bases type
 
-<br> Charlotte Bargain
+-   Text files **.txt**
+-   CSV files **.csv**
+-   Excel files **.xls** / **.xlsx**
+-   SAS files **.sas7bdat** **xpt** (pour Trialmaster)
 
-une petite phrase
+Pour chaque type de fichier, montrer à quoi il ressemble et les
+informations à regarder (séparateurs, virgule ou point pour les
+décimaux, feuilles/sheet pour excel, ..)
 
-![](../media/logo_gustaveroussy.png){fig-align="center" width="189"}
-![](../media/logo_cesp.png){fig-align="center" width="120"}
+Pour afficher le code sans le compiler :
 
-## Introduction
-
-Quarto enables you to weave together content and executable code into a finished presentation. To learn more about Quarto presentations see <https://quarto.org/docs/presentations/>.
-
-## Bullets
-
-When you click the **Render** button a document will be generated that includes:
-
--   Content authored with markdown
--   Output from executable code
-
-## Code
-
-When you click the **Render** button a presentation will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
+```         
+new_data <- data
 ```
+
+## Import data bases
+
+Exemples d'importations de fichiers txt, csv, .. : Expliciter une seule
+fonction pour chaque type de données
+
+## Visualize data frames
+
+View avec un vrai exemple (soit txt, soit csv pour faire simple) Montrer
+les tri par colonne et "les filtres" dans le view directement pour
+montrer que ça existe. Montrer aussi le "déroulé" des data frames dans
+l'environnement avec le nom des colonnes et le type (ou str en console).
+
+# Manipulate data frame
+
+## Introduction to the tidyverse
+
+Tidyverse regroupe différents packages pour manipuler les données avec
+une syntaxe commune et "propre". Lorsqu'on charge le package tidyverse,
+on charge ses extensions : - ggplot2 (visualisation) - dplyr
+(manipulation des données) - tidyr (remise en forme des données) - purrr
+(programmation) - tibble (tableaux de données) - forcats (variables
+qualitatives) - stringr (chaînes de caractères) - lubridate
+(manipulation de dates)
+
+### Clean/Rename column names
+
+janitor::clean_names
+
+rename each column name : dplyr::rename(.data, old_name_col_1 =
+new_name_col_1, old_name_col_2 = new_name_col_2)
+
+rename column name with a function : dplyr::rename(.data, .fn = toupper)
+
+### Filter lines
+
+Keep rows that match one or several condition : dplyr::filter(.data,
+sexe == 1 & age \>= 50)
+
+### Select columns
+
+Extract columns of interest as a table : dplyr::select(.data, id, age,
+sexe)
+
+Keep all columns except "comment" : dplyr::select(.data, - comment)
+
+### Mutate columns
+
+Create new columns : dplyr::mutate(.data, new_col =
+as.numeric\*(old_col))
+
+Modify existing columns : dplyr::mutate(.data, col_1 = as.factor(col_1),
+col_2 = as.numeric(col_2))
+
+### Grouping operations
+
+Apply operations separately to different group of columns (pas clair,
+mettre schéma)
+
+## Sequence of operations
+
+On enchaine différentes commandes avec le "pipe" %\>% new_data \<-
+old_data %\>% dplyr::select(id, age, sexe) %\>% dplyr::mutate(sexe =
+as.numeric(sexe)) %\>% dplyr::filter(sexe == 1 & age \>= 50)
+
+# Recode variables
+
+## stringr
+
+## forcats
+
+## lubridate
+
+## case_when
+
+# Pivot data
+
+## Pivot from wide to long
+
+One row for each observation
+
+## Pivot data from long to wide
+
+One row for each id patient
+
+# Join data frames
+
+## left_join
+
+## right_join
+
+## full_join
+
+## inner_join
+
+...
+
+::: notes
+Créer exercice de TP où on lit importe un fichier, on clean les données,
+on créé des variables dérivées, on merge différentes bases, ...
+:::
+
+::: notes
+```{=html}
+<!--
+Module 2 - données 
+
+import: base::read.csv2(), readxl::read_xlsx(), haven::read_sas(), haven::read_xpt()export: base::write.csv2(), openxlsx ::write.xlsx()
+plus simple pour les débutants/feignants : rio une seule fonction « import() » et il appelle la bonne fonction selon l’extension du fichier
+la table apparaît dans l’environnement. aperçu de la table avec la fonction View() ou il suffit de cliquer sur le nom de la table (+ summary)
+nettoyage en amont: janitor::clean_names() + as_tibble() en bonne pratique. rename() ou rename_with() avec expressions régulières
+
+manipulation des tables de données avec tidyverse: 
+dplyr: select, filter, mutate, summarise, count, drop_na, slice, xxx_join
+tidyr: pivot_longer (voir vignette)
+
+manipulation des vecteurs/colonnes avec tidyverse (dans un mutate ?) : 
+stringr : str_detect, str_extract, str_trim, str_split, str_remove, str_starts, str_subset, str_to_xxx, str_wrap (pour les plots)
+lubridate : ymd/dmy, interval, addition/soustraction de jours/mois/années (days, months, years()) ?
+forcats : fct_relevel, fct_infreq, fct_rev, fct_recode, fct_drop, fct_na_value_to_level, as_factor 
+dplyr: case_when, if_else, n_distinct, between... 
+
+
+
+J'ai besoin de créer une présentation de type powerpoint mais avec Quarto sur RStudio, avec revealjs, dont la thématique est l'apprentissage du traitement et de la manipulation des données R avec le tidyverse. En première section il faut expliquer comment importer différents types de bases de données (txt, csv, excel, sas) dans r avec les fonctions d'import. Il faut expliquer comment visualiser les data frames dans l'environnement de travail, comment renommer le nom des colonnes avec rename et rename_with utilisant des expressions régulières. En seconde section, il faut expliquer de façon illustrée comment manipuler les data frames avec les différents verbes du tidyverse et le pipe. Dans une troisième partie, il faut expliquer de façon illustrée comment fusionner des tables de données avec dplyr. En dernière section, il faut expliquer comment transformer des colonnes à l'aide de la fonction mutate, pour recoder les variables en facteur, utiliser lubridate, forcats, stringr, case_when, n_distinct...
+-->
+```
+:::
