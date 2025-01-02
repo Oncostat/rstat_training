@@ -5,7 +5,7 @@ format:
     css: assets/style.css
     pagetitle: "Oncostat R - analyses"
     template-partials:
-     - title-slide.html
+     - assets/title-slide.html
     title: "Équipe ONCOSTAT <br> Modules de cours de R"
     subtitle: "Analyse descriptive & Analyse statistique"
     author: "Dan Chaltiel"
