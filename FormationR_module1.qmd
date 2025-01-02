@@ -1,29 +1,32 @@
 ---
- theme: simple
+format: 
+  revealjs: 
+    theme: simple
     css: assets/style.css
-template-partials:
-     - title-slide.html
-     title: "ONCOSTAT Team <br> Training course R"
+    # template-partials:
+    #  - title-slide.html
+    
+title: "ONCOSTAT Team <br> Training course R"
 
 subtitle: "Module 1 : Introduction of programming language R and the RStudio interface"
- description: "Getting started with RStudio"
+description: "Getting started with RStudio"
 author: "Nusaïbah IBRAHIMI"
- incremental: true
-    controls: true
-    keyboard: true
-date: 2018-05-04
-date-format: short
+incremental: true
+controls: true
+keyboard: true
+date: today
+date-format: full
 affiliation-title: "BBE"
-format: revealjs
+
 editor: visual
 self-contained: true
 toc-depth: 3
 toc-title: "Table of contents"
 toc: true
 slide-number: true
- smaller: true
-    preview-links: auto
-    footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+smaller: true
+preview-links: auto
+footer: "The source code for this presentation is available [on GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
 execute:
   echo: true
   cache: true
@@ -59,11 +62,13 @@ knitr:
 
 ## First look at RStudio
 
-![](interface.PNG){fig-align="center"}
+When we open RStudio, R is launched as well. For the first time, we will probably see a layout like this.
 
-![](images/clipboard-4117190390.png)
+![](images/interface-03.PNG)
 
 There are at least 3 panes. But usually, we create a script R and save it in our folders.
+
+![](images/clipboard-4117190390.png)
 
 ::: notes
 Links:
@@ -85,22 +90,22 @@ Using RStudio for data analysis and programming in R provides many advantages. H
 -   Dedicated Project folders to keep everything in one place
 :::
 
-## In the toolbar
+## <!--In the toolbar-->
 
 ## The console
 
-We use the console to test code immediately. When we type an expression like 1+2, we will see the output below after hitting the enter key.
+The *Console* is a tab in RStudio where we can run R code. The *Console* is a tab in RStudio where we can run R code. We use the *Console* to test code immediately. When we type an expression like 1+2, we will see the result below after pressing the enter key.
 
 Message warnings, /!\\ in case of error the code is blocked, unlike SAS /!\\ )
 
 ![](images/clipboard-3467131464.png)
 
 ::: notes
-Let’s start off by introducing some features of the **Console**. The `Console` is a tab in RStudio where we can run R code.
+Let’s start off by introducing some features of the **Console**.
 
 Notice that the window pane where the console is located contains three tabs: `Console`, `Terminal` and `Jobs` (this may vary depending on the version of RStudio in use). We’ll focus on the Console for now.
 
-When we open RStudio, the console contains information about the version of R we’re working with. Scroll down, and try typing a few expressions like this one. Press the enter key to see the result.
+Scroll down, and try typing a few expressions like this one. Press the enter key to see the result.
 :::
 
 We can store the output of this command as a variable. To do so, we have to name our variable result.
@@ -109,15 +114,19 @@ We can store the output of this command as a variable. To do so, we have to name
 result <- 1+2
 ```
 
-The `<-` is called the assignment operator. This operator assigns values to variables. The operator `=` is similar. The operators are presented in a dedicated section.
+The `<-` is called the assignment operator. This operator assigns values to variables. The operator `=` is similar. The main operators will be presented in a dedicated section.
 
-When we type `result` into the console and hit enter, we see the stored value of `3`:
+When we type `result` into the *Console* and press the enter key, we see the stored value of `3`:
 
 ![](images/clipboard-2511795446.png)
 
-When we create a variable in RStudio, it saves it as an object in the R **global environment**. We’ll discuss the environment and how to view objects stored in the environment in the next section.
+When we create a variable in RStudio, it saves it as an object in the R **global environment**. We will discuss the environment and how to view objects stored in the environment in the next section.
 
 ## The environment
+
+During a programming session in R, any variables we define, or data we import and save in a dataframe, are stored in our global environment. In RStudio, we can see the objects in our global environment in the *Environment* tab at the top right of the interface.
+
+We will see any objects we created; such as result, under values in the *Environment* tab.
 
 Saving created objects during this session
 
@@ -126,24 +135,26 @@ You can click to have a view if those objects.
 ![](images/clipboard-3526065785.png)
 
 ::: notes
-We can think of the **global environment** as our workspace. During a programming session in R, any variables we define, or data we import and save in a dataframe, are stored in our global environment. In RStudio, we can see the objects in our global environment in the `Environment` tab at the top right of the interface:
+We can think of the **global environment** as our workspace.
 
-We’ll see any objects we created, such as `result`, under values in the `Environment` tab. Notice that the value, `3`, stored in the variable is displayed.
+Notice that the value, `3`, stored in the variable is displayed.
 
-Sometimes, having too many named objects in the global environment creates confusion. Maybe we’d like to remove all or some of the objects. To remove all objects, click the broom icon at the top of the window:
-
-To remove selected objects from the workspace, select the Grid view from the dropdown menu:
+Sometimes, having too many named objects in the global environment creates confusion. Maybe we’d like to remove all or some of the objects.
 :::
+
+To remove all objects, click the broom icon at the top of the window.
+
+To remove selected objects from the workspace, select the Grid view from the dropdown menu. Here we can check the boxes of the objects we would like to remove and use the broom icon to clear them from our `Global Environment`.
 
 ![](images/clipboard-4117536477.png)
 
-![](Environnement.PNG)
+![](images/Environnement.PNG)
 
 ## 
 
 ## R script
 
-Coment in editor
+Comment in editor
 
 ``` r
 # script R 
@@ -172,17 +183,74 @@ The figures and tables are displayed in the Plots tab or Viewer tab.
 
 From the tab, you can zoom in or save it as PDF or as Image.
 
-![](Plot.PNG)
+![](images/Plot.PNG)
 
-## Packages, help
+## Packages
 
-The tab Packages contains all installed packages in R.
+In the window at the bottom right of the *Console*, the *Packages* tab contains all installed packages in R.
+
+![](images/clipboard-1302393951.png)
 
 To load them, you have either click on the box or run the code library("name_XXX").
 
-To have the documentation of the package, you click on the package name.
+We can search for packages, and checking the box next to a package loads it (the code appears in the console). Otherwise, to load a package you run the code library("name_XXX").
+
+``` r
+install.packages("stringr")
+library("stringr")
+```
+
+## Help on a Package
+
+::: notes
+We’ve learned how to install and load packages. But what if we’d like to learn more about a package that we’ve installed? That’s easy! Clicking the package name in the `Packages` tab takes us to the `Help` tab for the selected package. Here’s what we see if we click the `tidyr` package
+:::
+
+To have the documentation of the package, you click on the package name, in the *Packages* tab. It takes us to the *Help* tab.
+
+![](images/clipboard-2119875930.png)
+
+![](images/clipboard-3183408281.png)
+
+Alternatively, we can type this command into the console and achieve the same result:
+
+\`\`\`r
+
+```         
+help(package = "stringr")
+```
+
+\`\`\`
+
+The help page for a package provides quick access to documentation for each function included in a package. From the main help page for a package you can also access “vignettes” when they are available. Vignettes provide brief introductions, tutorials, or other reference information about a package, or how to use specific functions in a package.
+
+```         
+vignette(package = "stringr")
+```
+
+Which results in this list of available options:
+
+From there, we can select a particular vignette to view:
+
+Now we see the Pivot vignette is displayed in the `Help` tab. This is one example of why RStudio is a powerful tool for programming in R. We can access function and package documentation and tutorials without leaving RStudio!
+
+## Help on a function
 
 To have the help of a function, you can use the Help tab or run the code ?function_name_XXX, you will find usually the description of the function that means the aim, the arguments, details of output and examples.
+
+![](images/clipboard-440183010.png)
+
+As we learned in the last section, we can get help on a function by clicking the package name in `Packages` and then click on a function name to see the help file. Here we see the str_to_lower`()` function from the `stringr` package is at the top of this list:
+
+We can achieve the same results in the `Console` with any of these function calls:
+
+```         
+help("str_to_lower") 
+help(str_to_lower) 
+?str_to_lower
+```
+
+Note that the specific `Help` tab for the str_to_lower`()` function (or any function we’re interested in) may not be the default result if the package that contains the function is not loaded into memory yet. In general it’s best to ensure a specific package is loaded before seeking help on a function.
 
 # Package installation
 
