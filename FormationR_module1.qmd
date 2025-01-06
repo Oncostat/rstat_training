@@ -3,10 +3,10 @@ format:
   revealjs: 
     theme: simple
     css: assets/style.css
-    # template-partials:
-    #  - title-slide.html
+    template-partials:
+     assets/title-slide.html
     
-title: "ONCOSTAT Team <br> Training course R"
+    title: "ONCOSTAT Team <br> Training course R"
 
 subtitle: "Module 1 : Introduction of programming language R and the RStudio interface"
 description: "Getting started with RStudio"
@@ -26,7 +26,7 @@ toc: true
 slide-number: true
 smaller: true
 preview-links: auto
-footer: "The source code for this presentation is available [on GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+    footer: "The source code for this presentation is available [on GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
 execute:
   echo: true
   cache: true
@@ -96,7 +96,7 @@ Using RStudio for data analysis and programming in R provides many advantages. H
 
 The *Console* is a tab in RStudio where we can run R code. The *Console* is a tab in RStudio where we can run R code. We use the *Console* to test code immediately. When we type an expression like 1+2, we will see the result below after pressing the enter key.
 
-Message warnings, /!\\ in case of error the code is blocked, unlike SAS /!\\ )
+Message warnings, /!\\ in case of error the code is blocked, unlike SAS /!\\
 
 ![](images/clipboard-3467131464.png)
 
@@ -121,6 +121,8 @@ When we type `result` into the *Console* and press the enter key, we see the s
 ![](images/clipboard-2511795446.png)
 
 When we create a variable in RStudio, it saves it as an object in the R **global environment**. We will discuss the environment and how to view objects stored in the environment in the next section.
+
+However, the code in the *Console* is unsaved after closing RStudio, which differs from the script R.
 
 ## The environment
 
@@ -154,7 +156,7 @@ To remove selected objects from the workspace, select the Grid view from the dro
 
 ## R script
 
-Comment in editor
+The R script is a file where we write the code and run it on RStudio. The outputs are displayed in the *Console* and the figures in the *Plots tab*. To clarify the script for an outsider, we add comments to explain the aim of the code, example below.
 
 ``` r
 # script R 
@@ -177,6 +179,14 @@ toto1[3:5] ## 3 4 5
 plot(x = toto, y = 2* toto1)
 ```
 
+Shortcuts :
+
+ctrl S : save
+
+crtl enter = to run the line of code,
+
+ctrl i =to indent to code.
+
 ## Plots, Viewer
 
 The figures and tables are displayed in the Plots tab or Viewer tab.
@@ -187,9 +197,41 @@ From the tab, you can zoom in or save it as PDF or as Image.
 
 ## Packages
 
+Packages are shareable collections of code, data, and documentation.
+
+One of the most popular collection of packages in R is known as the “tidyverse”. The tidyverse is a [collection of R packages](https://www.tidyverse.org/packages/) designed for working with data. The tidyverse packages share a common design philosophy, grammar, and data structures. Tidyverse packages “play well together”. The tidyverse enables you to spend less time cleaning data so that you can focus more on analyzing, visualizing, and modeling data.
+
+The most common “core” tidyverse packages are:
+
+-   `readr`, for data import.
+
+-   `ggplot2`, for data visualization.
+
+-   `dplyr`, for data manipulation.
+
+-   `tidyr`, for data tidying.
+
+-   `purrr`, for functional programming.
+
+-   `tibble`, for tibbles, a modern re-imagining of dataframes.
+
+-   `stringr`, for string manipulation.
+
+-   `forcats`, for working with factors (categorical data).
+
+There are many ways to install packages in R, we use the built-in `install.packages()` function in the script R or on the *Console*.
+
+```         
+install.packages("tidyverse")
+```
+
+The `install.packages()` command only needs to be used to download and install packages for the first time. Then, it is stocked in your RStudio. We can find it in the Packages tab.
+
 In the window at the bottom right of the *Console*, the *Packages* tab contains all installed packages in R.
 
 ![](images/clipboard-1302393951.png)
+
+Another way to install a package is to click on the box install and look for the name of the package on the Repository (CRAN). The CRAN [Comprehensive R Archive Network](https://cran.r-project.org/) is a site where you can find nearly everything that enables to code in R. In the case where the packages is not available on the CRAN, you can download the .zip in the website then install it by clicking on the box install and choose the option Package Archive File (zip, tar.gz).
 
 To load them, you have either click on the box or run the code library("name_XXX").
 
@@ -200,7 +242,9 @@ install.packages("stringr")
 library("stringr")
 ```
 
-## Help on a Package
+## Help
+
+### Help on a Package
 
 ::: notes
 We’ve learned how to install and load packages. But what if we’d like to learn more about a package that we’ve installed? That’s easy! Clicking the package name in the `Packages` tab takes us to the `Help` tab for the selected package. Here’s what we see if we click the `tidyr` package
@@ -234,7 +278,7 @@ From there, we can select a particular vignette to view:
 
 Now we see the Pivot vignette is displayed in the `Help` tab. This is one example of why RStudio is a powerful tool for programming in R. We can access function and package documentation and tutorials without leaving RStudio!
 
-## Help on a function
+### Help on a function
 
 To have the help of a function, you can use the Help tab or run the code ?function_name_XXX, you will find usually the description of the function that means the aim, the arguments, details of output and examples.
 
@@ -252,42 +296,209 @@ help(str_to_lower)
 
 Note that the specific `Help` tab for the str_to_lower`()` function (or any function we’re interested in) may not be the default result if the package that contains the function is not loaded into memory yet. In general it’s best to ensure a specific package is loaded before seeking help on a function.
 
-# Package installation
+Shortcut
+
+? : help
+
+F1 on the function : help documentation
+
+Sometimes, two packages may have a function with the same call, but different argument. To avoid the conflict, you precise the package name followed by :: and the name of the function.
 
 # Operators
 
 ![](images/clipboard-1075189407.png)
 
+%% modulo
+
+\*\* : power
+
+\*: multiplication
+
+/ division
+
++addition
+
+-difference
+
 # Variable
 
 ## Creation of variable
 
-dans la console ou dans le script. Sauvegarde dans l'environnemnt
+Variables are containers for storing data values.
+
+R does not have a command for declaring a variable. A variable is created the moment you first assign a value to it. To assign a value to a variable, use the `<- or =` sign.
+
+To output (or print) the variable value, just type the variable name.
 
 ## Type of variable
 
-caractère
+In programming, data type is an important concept.
 
-numérique
+Variables can store data of different types, and different types can do different things.
 
-logique
+In R, variables do not need to be declared with any particular type, and can even change type after they have been set. R has a variety of data types and object classes.
 
-factor
+Basic Data Types:
+
+| type                                              | example                    |
+|---------------------------------------------------|----------------------------|
+| numeric ( real with a point not a dot)            | 1, 10.5, 56                |
+| character (a string)                              | "home", "Where is Bryan?"  |
+| logical (a boolean)                               | TRUE or FALSE              |
+| factor (labeled variable) used to categorize data |                            |
+|                                                   |                            |
+|                                                   |                            |
+
+We use typeof() function to ckeck the data type of a variable
+
+To only print the levels, use the `levels()` function.
 
 ## Class of variable
 
-vecteur
+We can use the `class()` function to check the data type of a variable:
 
-matrice
++--------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| class              | definition                                                                                                                                                                                                | example                                                                                                                                                                          |
++====================+===========================================================================================================================================================================================================+==================================================================================================================================================================================+
+| vector             | object of 1 dimension stocking elements of same type                                                                                                                                                      | vec = c(1,2,3) (equivalent to 1:3 or seq(1,3,1)                                                                                                                                  |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | is.vector()                                                                                                                                                                      |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | as.vector()                                                                                                                                                                      |
++--------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| matrix             | object of 2 dimension stocking                                                                                                                                                                            | mat = matrix(c(1, 2, 3, 11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE, dimnames = list(c("row1", "row2"), c("C.1", "C.2", "C.3")))                                               |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | is.matrix()                                                                                                                                                                      |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | as.matrix()                                                                                                                                                                      |
++--------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| data frame         | object of 2 dimensions tightly coupled collections of variables which share many of the properties of matrices and of lists, used as the fundamental data structure by most of **R**'s modeling software. | df = data.frame("name" = c("Mr Bean","Miss Popping"),                                                                                                                            |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | "gender" = c(1,0) )                                                                                                                                                              |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | as.data.frame()                                                                                                                                                                  |
++--------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| list               | list of objects presented above                                                                                                                                                                           | listing = list("object1"=vec,                                                                                                                                                    |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | "object2"=df)                                                                                                                                                                    |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | is.list()                                                                                                                                                                        |
+|                    |                                                                                                                                                                                                           |                                                                                                                                                                                  |
+|                    |                                                                                                                                                                                                           | as.list()                                                                                                                                                                        |
++--------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-Data frame Element de R qui est courant car c'est une table de données
+To call or assign a value to an element of a vector you have to use the hooks \[ \] or \$. See the following examples :
 
-liste
+```{vec = c("A","B","C")}
+vec[1] # "A"
+
+
+mat = matrix(c(1, 2, 3, 11, 12, 13), nrow = 2, ncol = 3, byrow = TRUE,                dimnames = list(c("row1", "row2"),                                c("C.1", "C.2", "C.3")))
+
+mat[2,3]
+
+df = data.frame("name" = c("Mr Bean","Miss Popping"),
+                "gender" = c(1,0) )
+df$gender = factor(x = df$gender, levels = c(0,1), labels = c("Woman", "Man"))
+
+df$name # "Mr Bean","Miss Popping"
+df[1,"name"] # "Mr Bean"
+df[2,"gender"] # "Woman"
+
+listing = list("object1" = vec, "object2" = df)
+
+listing[[2]]
+listing$object2
+```
 
 # Function
 
 ## Usual function
 
-liste de fonctions de base avec exemple
+Here are the usual functions used in R
 
-## Creation of a new function (input, output)
+paste() to combine two strings
+
+min() , max()
+
+mean() compute the mean of a numeric vector
+
+print() displays an item
+
+table() displays a contingency table,
+
+as.numeric() convert an element to numeric,
+
+as.character() convert an element to character,
+
+summary()
+
+head() display the first rows(by default the 10 first ones) of a table ,
+
+## Creation of a new function
+
+The syntax of a function in R
+
+![](images/clipboard-3123930456.png)
+
+### Syntax instruments
+
+#### if else
+
+if (condition1) {
+
+}else if (condition2){
+
+}else{}
+
+#### loop while
+
+Loops can execute a block of code as long as a specified condition is reached.
+
+Loops are handy because they save time, reduce errors, and they make code more readable.
+
+R has two loop commands:
+
+-   `while` loops
+
+-   `for` loops
+
+With the `while` loop we can execute a set of statements as long as a condition is TRUE:
+
+```{r}
+i <- 1
+while (i < 6) {
+  print(i)
+  i <- i + 1
+}
+```
+
+**Note:** remember to increment i, or else the loop will continue forever.
+
+## Break
+
+With the `break` statement, we can stop the loop even if the while condition is TRUE:
+
+## Next
+
+With the `next` statement, we can skip an iteration without terminating the loop:
+
+#### loop for
+
+A `for` loop is used for iterating over a sequence:
+
+This is less like the `for` keyword in other programming languages, and works more like an iterator method as found in other object-oriented programming languages.
+
+With the `for` loop we can execute a set of statements, once for each item in a vector, array, list, etc..
+
+An example of creating a function
+
+To create a function, use the `function()` keyword:
+
+To call a function, use the function name followed by parenthesis, like **my_function()**:
+
+Information can be passed into functions as arguments.
+
+Arguments are specified after the function name, inside the parentheses. You can add as many arguments as you want, just separate them with a comma.
+
+To let a function return a result, use the `return()` function:
