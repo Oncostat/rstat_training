@@ -1,4 +1,5 @@
 ---
+# This header should be added last
 format:
   revealjs:
     theme: simple
@@ -40,25 +41,3 @@ editor:
   markdown: 
     wrap: 72
 ---
-
-## Plan du module
-1.  [**Analyse descriptive**](#analyse-descriptive)
-    -   Tables descriptives avec `crosstable`
-    -   Formatage avec `flextable`\
-2.  [**Analyse statistique**](#analyse-statistique)
-    -   Modèles logistiques (`glm`) et modèles de Cox (`coxph`)
-    -   Formatage en table
-    -   Tests d'hypothèses
-
-# Analyse descriptive
-
-{{< include _analyse_descriptive.qmd >}}
-
-# Analyse statistique
-
-{{< include _analyse_statistique.qmd >}}
-
-
-{{< include _header.qmd >}}
-
-<script src="assets/custom.js"></script>
