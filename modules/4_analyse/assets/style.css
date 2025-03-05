@@ -100,3 +100,32 @@ code.sourceCode {
   /*font-size: 1.3em;*/
   /* or try font-size: xx-large; */
 }
+
+
+@media (min-width: 30em) {
+
+  .panel-tabset {
+      display: grid;
+      column-gap: 2%;
+      grid-template-columns: 25% 73%;
+  }
+
+  .panel-tabset-tabby {
+     border-bottom: none !important;
+     border-right: 1px solid #bbb;
+  }
+
+  .panel-tabset [role=tab][aria-selected=true] {
+     background-color: transparent;
+     border: 1px solid #bbb !important;
+  }
+
+  .panel-tabset li{
+     display: list-item !important;
+  }
+
+  h3 {
+     margin-top: 0;
+  }
+
+}
