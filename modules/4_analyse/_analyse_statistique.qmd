@@ -1,0 +1,508 @@
+---
+format:
+  revealjs:
+    theme: simple
+    css: assets/style.css
+    pagetitle: "Oncostat R - analyses"
+    template-partials:
+     - assets/title-slide.html
+    title: "Équipe ONCOSTAT <br> Modules de cours de R"
+    subtitle: "Analyse descriptive & Analyse statistique"
+    author: "Dan Chaltiel"
+    description: "🎯 Décrire et analyser vos données efficacement !"
+    incremental: true
+    controls: true
+    keyboard: true
+    code-line-numbers: true
+    # embed-resources: true
+    scrollable: true
+    # toc: true
+    slide-number: true
+    smaller: true
+    preview-links: auto
+    footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+execute:
+  echo: true
+  cache: true
+  code-overflow: wrap
+  warnings: false
+  messages: false
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
+    R.options:
+      crosstable_compact: true
+      width: 105
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+library(crosstable)
+```
+
+## Introduction
+
+-   Un **modèle statistique** décrit la relation entre une ou plusieurs
+    variables explicatives ($X_1, X_2, \dots, X_p$) et une variable
+    réponse ($Y$).
+
+-   On veut prédire $Y$ ou expliquer son lien avec $X$. $$
+    Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
+    $$
+
+-   Selon le type de réponse, on utilisera un modèle de régression
+    différent, avec pour chacun des hypothèses spécifiques à valider.
+
+## Modélisation
+
+-   En R, la modélisation repose sur des fonctions comme `lm()`, `glm()`
+    et `coxph()`.
+
+::: no_fragment
+-   La syntaxe standard est la suivante :
+    ```r
+    formula = y ~ x1 + x2
+    fit = regression_function(formula, data=my_data)
+    ```
+:::
+
+-   L'objet `fit` contient toutes les informations de notre modèle.
+
+-   On peut visualiser le résultat avec la `summary(fit)`, ou mieux avec
+    `broom::tidy(fit)` ou `gtsummary::tbl_regression()`.
+
+## Données d'exemple
+
+-   Pour commencer, on va utiliser les données simulées du dataset `ae` de
+    `grstat_example()` contenant : le grade des adverse events
+    `aegr`, le fait qu'il soit SAE `sae`, et la causalité `aerel`.
+    
+-   On va d'abord modéliser `aegr` (modèle linéaire), puis `sae` (modèle logistique).
+-   Aperçu des données :
+    ```{r}
+    #| classes: "no_fragment"
+    db = grstat::grstat_example(seed=100)
+    db$ae %>% select(subjid, aegr, sae, aerel) %>% print(n=2)
+    ```
+
+
+::: {.callout-warning title="Modèle mixte" fragment-index=5}
+Il y a plusieurs lignes par patient donc il aurait fallu rajouter un effet aléatoire, 
+mais ça dépasse le cadre de ce cours.
+:::
+
+## Modèle linéaire (Y continu)
+
+```{r}
+#| classes: "no_fragment"
+fit = lm(aegr ~ sae + aerel, data=db$ae)
+```
+
+. . . 
+
+<br>
+
+::: {.panel-tabset .no_fragment style="grid-template-columns: 16% 82%;"}
+### fit
+
+```{r}
+fit
+```
+
+### summary()
+
+```{r}
+summary(fit)
+
+confint(fit)
+```
+
+### tidy()
+
+```{r}
+broom::tidy(fit, conf.int=TRUE)
+```
+
+### gtsummary
+
+```{r}
+gtsummary::tbl_regression(fit, conf.int=TRUE)
+```
+:::
+
+## Modèle linéaire : hypothèses
+
+:::::: {.panel-tabset .no_fragment style="grid-template-columns: 25% 73%;"}
+### Linéarité
+
+La relation entre $Y$ et les covariables $X$ doit être linéaire.
+
+Sur la courbe des résidus en fonction des valeurs modélisées, on
+s'attend à une courbe horizontale.
+
+```{r}
+plot(fit, which = 1)
+```
+
+::: notes
+Une courbure indique que la relation entre les prédicteurs et la réponse
+n'est pas linéaire → un terme polynomial ou une transformation pourrait
+être nécessaire. Une forme en entonnoir suggère une hétéroscédasticité
+(voir which = 3).
+:::
+
+### Normalité des résidus
+
+Sur le QQplot, les points doivent suivre la droite diagonale.
+
+```{r}
+plot(fit, which = 2)
+```
+
+::: notes
+Une déviation en queue de distribution (points qui s’écartent de la
+diagonale aux extrémités) indique des résidus non normaux →
+potentiellement des valeurs aberrantes ou une distribution asymétrique.
+Une forte courbure peut suggérer une distribution en cloche trop aplatie
+ou trop pointue.
+:::
+
+### Homoscédasticité
+
+La variance des résidus doit être constante, on s'attend à une courbe
+horizontale.
+
+```{r}
+plot(fit, which = 3)
+lmtest::bptest(fit)
+```
+
+::: notes
+Une forme en entonnoir (dispersion des points qui augmente avec les
+valeurs prédites) indique une hétéroscédasticité → un modèle robuste ou
+une transformation des variables pourrait être nécessaire. Une variation
+systématique des points (ex. un motif en vague) suggère que l'erreur
+dépend des prédicteurs.
+:::
+::::::
+
+## Modèle logistique (Y binaire)
+
+```{r}
+#| classes: "no_fragment"
+fit2 = glm(sae ~ aegr + aerel, data=db$ae, family=binomial(link="logit"))
+#family: binomial (logit, probit...), gaussian (identity, log...), poisson, ...
+```
+
+. . . 
+
+<br>
+
+::: {.panel-tabset .no_fragment style="grid-template-columns: 16% 82%;"}
+### fit
+
+```{r}
+fit2
+```
+
+### summary()
+
+```{r}
+summary(fit2)
+
+confint(fit2)
+```
+
+### tidy()
+
+```{r}
+broom::tidy(fit2, conf.int=TRUE)
+```
+
+### gtsummary
+
+```{r}
+gtsummary::tbl_regression(fit2, conf.int=TRUE)
+```
+:::
+
+## Modèle logistique : hypothèses
+
+::::: {.panel-tabset .fragment .no_fragment}
+### Linéarité
+
+La relation entre $Y$ et les covariables $X$ doit être linéaire.
+
+Sur la courbe des résidus en fonction des valeurs modélisées, on
+s'attend à une courbe horizontale.
+
+```{r}
+plot(fit2, which = 1)
+```
+
+::: notes
+Une courbure indique que la relation entre les prédicteurs et la réponse
+n'est pas linéaire → un terme polynomial ou une transformation pourrait
+être nécessaire. Une forme en entonnoir suggère une hétéroscédasticité
+(voir which = 3).
+:::
+
+### Normalité des résidus
+
+La normalité des résidus n'est **PAS** une hypothèse du modèle
+logistique.
+
+```{r}
+plot(fit2, which = 2)
+```
+
+### Homoscédasticité
+
+La variance des résidus doit être constante, on s'attend à une courbe
+horizontale.
+
+```{r}
+plot(fit2, which = 3)
+```
+
+::: notes
+Une forme en entonnoir (dispersion des points qui augmente avec les
+valeurs prédites) indique une hétéroscédasticité → un modèle robuste ou
+une transformation des variables pourrait être nécessaire. Une variation
+systématique des points (ex. un motif en vague) suggère que l'erreur
+dépend des prédicteurs.
+:::
+:::::
+
+## Analyses de survie
+
+Pour l'exemple, on va simuler des données de survie selon une loi
+exponentielle, avec 3 covariables : le bras de traitement `arm`, un
+biomarqueur binaire `bm1`, et un biomarqueur continu `bm2`.
+
+```{r data-function}
+#| code-fold: true
+#| code-summary: "Show the code for get_df()"
+#| classes: "no_fragment"
+#' Simulated dataset
+#'
+#' @param n number of observations
+#' @param beta_trt,beta_bm1,beta_bm2 the true coefficients
+#' @param eos non-informative censoring (end of study)
+#' @param seed RNG seed
+surv_example = function(n=300, 
+                  beta_trt=log(0.7), beta_bm1=log(1.5), beta_bm2=log(0.8),
+                  eos=30, seed=42){
+  set.seed(seed)
+  # Generate covariates
+  baseline = tibble(
+    subjid = seq(n),
+    arm = rep(c(0,1), each=n/2),   
+    bm1 = rbinom(n, 1, 0.4),
+    bm2 = rnorm(n),
+  )
+
+  rtn = baseline %>%
+    mutate(
+      # Generate exponential survival time
+      log_predlin = beta_trt*arm + beta_bm1*bm1 + beta_bm2*bm2,
+      lambda0 = log(2)/10 / exp(beta_bm1*mean(bm1) + beta_bm2*mean(bm2)),
+      lambda = lambda0 * exp(log_predlin),
+      t_real = rexp(n, rate=lambda),
+
+      # Administrative censorship
+      t = pmin(t_real, eos),
+      event = as.numeric(t_real<=eos),
+
+      # labels
+      arm =  factor(arm,  labels=c("Control", "Treatment")),
+      bm1 = factor(bm1, labels=c("Negative", "Positive")),
+    )
+
+  rtn %>%
+    select(subjid, arm, t, event, bm1, bm2)
+} 
+```
+
+```{r}
+#| classes: "no_fragment"
+df = surv_example()
+df %>% print(n=2)
+```
+
+## Kaplan Meier & Log Rank
+
+::: {.panel-tabset .fragment .no_fragment}
+### survfit
+
+```{r}
+library(survival)
+library(ggsurvfit)
+km = survfit(Surv(t, event) ~ arm, data=df)
+km
+tidy_survfit(km, times=c(12,24)) %>% 
+  select(strata, everything())
+```
+
+### Logrank
+
+```{r}
+survdiff(Surv(t, event) ~ arm, data=df)
+survdiff(Surv(t, event) ~ arm + strata(bm1), data=df)
+```
+
+### KM plot (binaire)
+
+https://www.danieldsjoberg.com/ggsurvfit/articles/gallery.html#kmunicate
+
+```{r}
+survfit2(Surv(t, event) ~ arm, data=df) %>% 
+  ggsurvfit(, linetype_aes = TRUE) +
+  add_confidence_interval() +
+  add_risktable(
+    risktable_stats = c("n.risk", "cum.censor", "cum.event")
+  ) +
+  theme_ggsurvfit_KMunicate() +
+  scale_y_continuous(limits = c(0, 1)) +
+  scale_x_continuous(expand = c(0.02, 0)) +
+  theme(legend.position="inside", legend.position.inside = c(0.85, 0.85))
+```
+
+### KM plot (continu)
+
+```{r}
+model <- coxph(Surv(t, event) ~ bm2, data=df, x=TRUE)
+contsurvplot::plot_surv_area(time="t", status="event", variable="bm2", data=df, model=model)
+```
+:::
+
+## Modèle de Cox (Y survie)
+
+```{r}
+#| classes: "no_fragment"
+fit_bare  = coxph(Surv(t, event) ~ arm, data=df)
+fit_adj = coxph(Surv(t, event) ~ arm + bm1 + bm2, data=df)
+fit_strat = coxph(Surv(t, event) ~ arm + strata(bm1) + bm2, data=df)
+```
+
+::: {.panel-tabset .no_fragment}
+### fit
+
+```{r}
+fit_adj
+```
+
+### summary()
+
+```{r}
+summary(fit_adj)
+
+confint(fit_adj)
+```
+
+### tidy()
+
+```{r}
+broom::tidy(fit_adj, conf.int=TRUE)
+```
+
+### fit_strat
+
+```{r}
+broom::tidy(fit_strat, conf.int=TRUE)
+```
+:::
+
+### gtsummary
+
+```{r}
+gtsummary::tbl_regression(fit_adj, conf.int=TRUE)
+```
+
+## Modèle de Cox: hypothèses
+
+::: {.panel-tabset .no_fragment}
+### HHP table
+
+```{r}
+cox.zph(fit_adj)
+```
+
+### HHP plot
+
+```{r}
+cox.zph(fit_adj) %>% survminer::ggcoxzph()
+```
+
+### Linearity spline
+
+```{r}
+fit_spline = coxph(Surv(t, event) ~ pspline(bm2), data=df)
+broom::tidy(fit_spline)
+```
+
+### Linearity plot
+
+```{r}
+fit_num = coxph(Surv(t, event) ~ bm2, data=df)
+survminer::ggcoxfunctional(fit_num)
+```
+:::
+
+## Test de modèles emboîtés
+
+-   La plupart des modèles donnent un test de Wald pour chaque élément.
+
+-   Pour les variables catégorielles, on peut être intéressé par un test
+    du rapport de vraissemblance qui teste la variable globalement (pas
+    les niveaux indépendemment).
+
+-   Il faut alors utiliser la fonction `anova()` sur deux modèles
+    emboîtés.
+
+```{r}
+fit1  = coxph(Surv(t, event) ~ arm + bm1, data=df)
+fit2 = coxph(Surv(t, event) ~ arm + bm1 + bm2, data=df)
+anova(fit1, fit2)
+```
+
+## Conclusion
+
+-   Il y a beaucoup de façons de faire des modèles de régression en R.
+
+-   Il y a **beaucoup** de packages différents.
+
+    -   Possibilités infinies
+    -   On peut parfois s'y perdre un peu
+
+-   Attention à la validité des packages, qui reste difficile à
+    démontrer
+
+##  {#merci .center data-menu-title="Merci !" visibility="uncounted"}
+
+::::: columns
+::: {.column width="60%"}
+![](media/bob.jpg){fig-align="center"}
+:::
+
+::: {.column width="40%"}
+![](media/keep_calm.jpeg){fig-align="center"}
+:::
+:::::
+
+# Backup {.appendix visibility="uncounted"}
+
+## Modèles mixtes {visibility="uncounted"}
+
+(lme4, nlme, mmrm), betareg
+
+```{=html}
+<script src="assets/custom.js"></script>
+```
