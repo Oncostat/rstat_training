@@ -17,14 +17,15 @@ format:
     code-line-numbers: true
     # embed-resources: true
     scrollable: true
-    # toc: true
+    number-sections: true
+    number-depth: 1
     slide-number: true
     smaller: true
     preview-links: auto
     footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
 execute:
   echo: true
-  cache: true
+  cache: false
   code-overflow: wrap
   warnings: false
   messages: false

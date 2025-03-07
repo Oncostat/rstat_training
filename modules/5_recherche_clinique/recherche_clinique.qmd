@@ -16,14 +16,15 @@ format:
     code-line-numbers: true
     # embed-resources: true
     scrollable: true
-    # toc: true
+    number-sections: true
+    number-depth: 1
     slide-number: true
     smaller: true
     preview-links: auto
     footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
 execute:
   echo: true
-  cache: true
+  cache: false
   code-overflow: wrap
   warnings: false
   messages: false
@@ -57,6 +58,20 @@ editor:
 # Générer du contenu avec 📦 {grstat}
 
 {{< include _grstat.qmd >}}
+
+
+# {#merci .center data-menu-title="Merci !" visibility="uncounted"}
+
+::::: columns
+::: {.column width="60%"}
+![](media/bob.jpg){fig-align="center"}
+:::
+
+::: {.column width="40%"}
+![](media/keep_calm.jpeg){fig-align="center"}
+:::
+:::::
+
 
 
 {{< include _header.qmd >}}

@@ -18,8 +18,10 @@ const init = function(event) {
   //*
   callouts = $(".callout")
   callouts.forEach(element => {
+    if(element.closest(".no_fragment") == null) {
       element.parentElement.classList.add('fragment', 'nonincremental');
       element.classList.add('nonincremental');
+    }
   });
   //*/
 

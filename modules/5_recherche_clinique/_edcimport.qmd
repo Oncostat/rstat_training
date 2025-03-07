@@ -1,0 +1,639 @@
+---
+format:
+  revealjs:
+    theme: simple
+    css: assets/style.css
+    pagetitle: "Oncostat R - recherche clinique"
+    template-partials:
+     - assets/title-slide.html
+    title: "Équipe ONCOSTAT <br> Modules de cours de R"
+    subtitle: "Import et check de bases & tables standards"
+    author: "Dan Chaltiel"
+    description: "📦 {EDCimport} et 📦 {grstat}"
+    incremental: true
+    controls: true
+    keyboard: true
+    code-line-numbers: true
+    # embed-resources: true
+    scrollable: true
+    number-sections: true
+    number-depth: 1
+    slide-number: true
+    smaller: true
+    preview-links: auto
+    footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+execute:
+  echo: true
+  cache: false
+  code-overflow: wrap
+  warnings: false
+  messages: false
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
+    R.options:
+      crosstable_compact: true
+      width: 105
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+```{r}
+#| include: false
+#| cache: false
+library(tidyverse)
+library(EDCimport)
+get_label = function(x) map_chr(x, ~attr(.x, "label"))
+```
+
+# Introduction
+
+EDCimport : Framework pour l'analyse de bases de données en recherche
+clinique
+
+## Le package `EDCimport`
+
+::::: columns
+::: {.column .largeULMargin style="width:70%; border-right:none;"}
+-   Package permettant de charger nos bases de données de recherche
+    clinique
+-   Initialement centré sur TrialMaster, mais maintenant plus large
+-   Permet aussi le data-checking et la visualisation
+:::
+
+::: {.column width="30%"}
+![](media/logo_edcimport.png)
+:::
+:::::
+
+
+## Documentation
+
+Accessible dans RStudio et [en
+ligne](https://danchaltiel.github.io/EDCimport/index.html):
+
+<iframe src="https://danchaltiel.github.io/EDCimport/index.html" style="width:1000px; height:500px">
+
+</iframe>
+
+## Vocabulaire dans `EDCimport`
+
+-   **database** : la base de donnée entière, avec ses métadonnées
+-   **dataset** : une table de données
+-   **métadonnées** : les caractéristiques de la base (date
+    d'extraction, nom du projet...)
+-   **lookup** : tableau récapitulatif de la database
+
+::: {.callout-note title="Version"}
+Cette présentation a été réalisée avec `EDCimport` version
+`{r} packageVersion("EDCimport")`
+:::
+
+## Plan de la présentation
+
+1.  [Introduction](#introduction)
+
+2.  [Importer ses datas](#importer-ses-datas)
+
+3.  [Nettoyer ses datas](#nettoyer-ses-datas)
+
+4.  [Vérifier ses datas](#verifier-ses-datas)
+
+5.  [Visualiser ses datas](#visualiser-ses-datas)
+
+6.  [Utilitaires]
+
+# Importer ses datas
+
+<br>
+
+![](media/this%20is%20fine.jpg){width="722"}
+
+## Fonctions
+
+Selon le type de fichiers présents dans votre export, vous devez
+utiliser :
+
+-   **`read_all_sas()`** : pour lire les fichiers `.sas7bdat`
+
+-   **`read_all_xpt()`** : pour lire les fichiers `.xpt`
+
+-   **`read_all_csv()`** : pour lire les fichiers `.csv`
+
+-   **`read_trialmaster()`** : pour lire une archive zip provenant de
+    TrialMaster.
+
+::: fragment
+On utilise ensuite **`load_database()`** pour charger toutes les tables
+dans l'environnement global.
+:::
+
+## Exemple
+
+
+::::: {.panel-tabset .no_fragment style="grid-template-columns: 16% 82%;"}
+### TrialMaster
+
+C'est le cas le plus simple: un simple Export TrialMaster au format `.zip`.
+
+Il faut exporter au format SASXPORT en cochant la case "codelist". <br><br>
+
+::: no_fragment
+```r
+library(EDCimport)
+zip_tm = "data/MYSTUDY_ExportTemplate_2020_12_31_SAS_XPORT_2024_02_26_10_38.zip"
+db = read_trialmaster(zip_tm, pw="ThePassword", use_cache=TRUE)
+```
+:::
+
+### SAS
+
+Autre possibilité, on nous envoie un dossier de fichiers`.sas7bdat`, avec les formats dans un
+fichier à part.<br><br>
+
+
+::: no_fragment
+```r
+library(EDCimport)
+dir_sas = "data/MYSTUDYDATA/" 
+db = read_all_sas(dir_sas, format_file="formats.sas7bdat") 
+```
+:::
+
+:::::
+
+## Utilisation
+
+Pour l'exemple, on utilisera la base de données `edc_example()` qui mime le résultat d'une fonction d'import.
+
+::: no_fragment
+```{r}
+#| message: true
+db = edc_example()
+db
+
+load_database(db)
+ae
+```
+:::
+
+## Formats
+
+::: {.callout-tip .nonincremental title="Formats" fragment-index="2" real-fragment-index="2"}
+Les formats peuvent être issus :
+
+-   d'une table d'association `.sas7bdat`,
+-   d'une table d'association `.csv`,
+-   d'un fichier `procformat.sas` (comme avec TrialMaster),
+-   d'un fichier catalogue `.sas7bcat`
+:::
+
+::: {.callout-tip title="CNTLOUT" appearance="simple" fragment-index="3" real-fragment-index="3"}
+La `PROC FORMAT` avec option `CNTLOUT` permet de générer une table
+d'association en `.sas7bdat`.
+:::
+
+## Lookup
+
+Les métadonnées associées au projet sont stockées dans l'environnement
+du package et sont visibles grâce à la fonction `edc_lookup()`.
+
+```{r}
+#| attr-source: "style='max-height: 450px !important;'"
+edc_lookup()
+```
+
+## Recherche
+
+-   On peut chercher une **colonne** en particulier
+
+```{r}
+#| include: false
+db = edc_example()
+load_database(db)
+```
+
+```{r attr.source="real-fragment-index=0.5"}
+edc_find_column("date") %>% head()
+```
+
+-   On peut chercher une **valeur** en particulier
+
+```{r}
+#| attr-source: "real-fragment-index=3 style='max-height: 250px !important;'"
+edc_find_value("disorder") %>% head()
+edc_find_value("2010") %>% head()
+```
+
+## Appli shiny: `edc_viewer()`
+
+::: no_fragment
+``` r
+edc_viewer()
+```
+:::
+
+{{< video media/edc_viewer.mp4 width=1000 height=500 aspect-ratio="21x9">}}
+
+# Nettoyer ses datas
+
+<br>
+
+![](media/pika_rawdata.jpg){width="421"}
+
+## Harmoniser les `SUBJID`
+
+L'identifiant du patient `SUBJID` est généralement un `numeric` ou un
+`character`, et peut prendre différentes formes selon les datasets.
+
+```{r attr.source="real-fragment-index=1"}
+db = edc_example()
+head(db$ae$subjid) #numeric
+```
+
+::: {.fragment real-fragment-index="2"}
+Avec `edc_unify_subjid()`, on peut en faire un `factor` avec des levels
+unifiés :
+:::
+
+```{r attr.source="real-fragment-index=3"}
+#| message: true
+db =  edc_example() %>% 
+  edc_unify_subjid()
+nrow(db$enrol) #50 lignes
+head(db$ae$subjid) #factor à 50 levels
+```
+
+::: {.callout-tip title="Jointures" real-fragment-index="4"}
+C'est très pratique pour les jointures qui peuvent échouer si une table
+considère `SUBJID` comme un `numeric` et l'autre comme un `character`.
+:::
+
+## Nettoyer les noms de colonnes
+
+- R peut être très tatillon sur les noms de colonnes. 
+
+- Avec `edc_clean_names()`, on peut nettoyer les noms de toutes les
+colonnes, dans tous les datasets.
+
+- Par défaut, ça donne des noms ne contenant que des **minuscules**,
+**nombres**, et **underscores**, mais on peut aussi choisir une fonction custom.
+
+. . .
+
+```{r}
+#| classes: no_fragment
+db =  edc_example() %>% 
+  edc_clean_names()
+names(db$enrol) #en minuscules
+```
+
+. . .
+
+```{r}
+#| classes: no_fragment
+#| attr-source: 'style="margin-top:10px"'
+db =  edc_example() %>% 
+  edc_clean_names(clean_fun=toupper)
+names(db$enrol) #en majuscules
+```
+
+. . .
+
+::: {.callout-tip .no_fragment title="Utilité"}
+C'est surtout utile en cas de base, notamment `.csv`, avec des noms
+contenant des accents, espaces, ou autres caractères spéciaux.
+:::
+
+## Séparer les données long/short
+
+-   Dans les CRF complexes, on peut avoir des données `short` (1 ligne
+    par patient) et `long` (plusieurs lignes par patient) dans le même
+    dataset.
+
+-   Avec `edc_split_mixed()`, on peut séparer les 2 types de données
+    <br><br>
+
+-   Exemple avec le dataset `ae` (adverse events) :
+
+    -   les colonnes `crfname` et `n_ae` sont short (nombre d'AE par patient)
+    -   les colonnes `aesoc`, `aegr`, et `sae` sont longues (détail de
+        chaque AE)
+
+```{r}
+db = edc_example() %>% 
+  edc_split_mixed(ae)
+
+names(db$ae_short)
+
+names(db$ae_long)
+```
+
+## All at once!
+
+On peut bien sûr combiner ces 3 fonctions :
+
+```{r}
+#| message: true
+db = edc_example() %>% 
+  edc_clean_names() %>% 
+  edc_split_mixed(ae) %>% 
+  edc_unify_subjid()
+db
+```
+
+```{r}
+#| include: false
+db = edc_example()
+load_database(db)
+```
+
+
+# Vérifier <br> ses datas
+
+![](media/buttons.jpg){style="position: fixed; top: 30px; right: 100px; height:600px"}
+
+## Warnings
+
+-   Pour vérifier les données, `EDCimport` propose un système de
+    warnings.
+-   On filtre une table pour identifier les lignes problématiques et on
+    applique `edc_data_warn()`.
+-   Si le résultat n'est pas vide, un warning apparait dans la console.
+-   Une table récapitulative est disponible avec `edc_data_warnings()`
+    pour partager avec le DM.
+
+::: {.callout-tip title="Bonnes pratiques" fragment-index="4"}
+-   Mettre tous les checks dans un fichier `check.R` qui sera lancé
+    après `read.R`
+-   Si le problème est résolu dans un nouvel export, le warning
+    n'apparaitra plus
+-   Si le problème réapparait, le warning reviendra
+:::
+
+## Warnings: exemple
+
+Exemple de checks
+
+```{r}
+#| warning: true
+#| class: "no_fragment"
+#| code-line-numbers: "1-4|6-9|11-13|15-17|10-24"
+enrol %>% 
+  filter(age>70 | age<25) %>% 
+  edc_data_warn("Age should be 25-70", issue_n=1)
+
+ae %>% 
+  filter(is.na(aegr)) %>% 
+  edc_data_warn("AE: Grade manquant", issue_n=2)
+
+data1 %>% 
+  filter(n()>1, .by=subjid) %>% 
+  edc_data_warn("Duplicated patients in `data1` ({nrow(.data)} rows)", issue_n=3)
+  
+ae %>% 
+  filter(aegr<1 | aegr>5) %>% 
+  edc_data_stop("Grade AE invalide !")
+
+edc_data_warnings()
+```
+
+## Warnings: export `.csv`
+
+Si on a besoin de plus de détails que le `SUBJID`, on peut exporter la table en `.csv`.
+
+```{r}
+#| warning: true
+
+enrol %>% 
+  filter(age<25) %>% 
+  select(subjid, age, arm, enrol_date) %>% 
+  edc_data_warn("Age should not be <25", csv_path="check/check_age_25.csv")
+
+read.csv2("check/check_age_25.csv")
+```
+
+```{r}
+#| include: false
+if(dir.exists("check")) fs::dir_delete("check")
+```
+
+
+::: {.callout-tip title="Communication" real-fragment-index="2"}
+Parfait pour la communication DM/Stat. <br>
+Par contre les modalités de partage/update du fichier ne sont pas encore parfaites...
+:::
+
+
+## Dernières nouvelles
+
+-   Pour les analyses de survie, le calcul de la date de dernières
+    nouvelles est crucial.
+-   La fonction `lastnews_table()` permet de récupérer la dernière date
+    pour chaque patient (à partir de tous les datasets)
+-   Il faut enlever les dates administratives avec `except=xxx`
+-   Il faut préciser les dates "préférées" avec `prefer=xxx` <br> (Par
+    exemple : tables de followup, fin d'étude...)
+
+::: {.callout-warning title="OS/PFS" fragment-index="4"}
+-   La pertinence de cette fonction dépend de l'endpoint de survie.
+-   Si un patient a eu un AE après son last-followup, il est forcément
+    en vie, mais son statut de progression est inconnu.
+:::
+
+::: {.callout-note title="Erreurs" fragment-index="6"}
+-   Permet aussi de détecter des erreurs de date
+:::
+
+## Dernières nouvelles: exemple
+
+L'option `show_delta=TRUE` permet d'identifier des erreurs de date. 
+
+```{r}
+#| code-line-numbers: "1-3|5-20"
+#| classes: no_fragment
+lastnews = lastnews_table(except=c("date10"), 
+                          prefer=c("data3$date9"),
+                          show_delta=TRUE)
+
+lastnews %>% 
+  filter(delta>0) %>% 
+  arrange(desc(delta)) %>% 
+  head(10)
+```
+
+## Duplicate checking
+
+-   Une erreur très commune et potentiellement grave est la duplication
+    de patients lors des jointures.
+
+-   Si je veux une table "short" en résultat, `assert_no_duplicate()`
+    permet de toujours être certain que le format est correct.
+
+-   **Exemple :** Je veux compter le nombre de patients par bras, mais je fais une jointure malencontreuse
+
+```{r}
+#| error: true
+enrol %>% 
+  assert_no_duplicate() %>% 
+  count(arm)
+
+enrol %>% 
+  edc_left_join(ae) %>% #oopsie
+  assert_no_duplicate() %>% 
+  count(arm)
+```
+
+# Visualiser ses datas
+
+<br>
+
+![](media/boromir.jpg){width="600"}
+
+## Swimmerplot
+
+Permet de détecter les erreurs de date
+
+::: {.panel-tabset .no_fragment}
+### Défaut
+
+```{r}
+#| include: false
+db = edc_example()
+load_database(db)
+```
+
+```{r}
+edc_swimmerplot()
+```
+
+### Include/exclude
+
+```{r}
+edc_swimmerplot(include=c("enrol", "data1", "data2"), 
+                exclude=c("visitdt"))
+```
+
+### Origin
+
+```{r}
+edc_swimmerplot(include=c("enrol", "data1", "data2"), 
+                exclude=c("visitdt"), 
+                origin="enrol$enrol_date", time_unit="weeks")
+```
+
+### Group
+
+```{r}
+edc_swimmerplot(include=c("enrol", "data1", "data2"), 
+                exclude=c("visitdt"), 
+                origin="enrol$enrol_date", time_unit="years",
+                group="enrol$arm")
+```
+
+### Plotly
+
+```{r}
+#| out-width: "800px"
+#| out-height: "300px"
+edc_swimmerplot(include=c("enrol", "data1", "data2"), 
+                exclude=c("visitdt"), 
+                origin="enrol$enrol_date", time_unit="years",
+                plotly=TRUE)
+```
+:::
+
+::: notes
+Pour le plotly, on pourrait mettre EOSDT en origin pour voir tout ce qui
+vient après
+:::
+
+## Remplissage CRF
+
+La fonction `edc_crf_plot()` montre le taux de remplissage du CRF:
+
+```{r}
+edc_crf_plot()
+```
+
+## Gridplot Patient/dataset
+
+La fonction `edc_patient_gridplot()` montre la présence de chaque
+patient dans les datasets
+
+::: no_fragment
+```{r}
+edc_patient_gridplot()
+```
+:::
+
+# Utilitaires
+
+![](media/slap.jpg){width="400"}
+
+## Jointures
+
+-   Nos jointures sont très souvent les mêmes : on joint sur `SUBJID` et
+    on suffixe avec le nom du 2ème dataset.
+
+-   Avec `edc_left_join()` (existe aussi en `right` et `full`), on a la même
+    syntaxe que dans `dplyr`, mais ce sont les arguments par défaut !
+
+```{r}
+data_xx = enrol %>% 
+  edc_left_join(data1) %>% 
+  edc_right_join(data2) %>% 
+  edc_full_join(ae)
+
+dim(data_xx)
+
+names(data_xx) %>% str_subset("crfname") #suffixes automatiques
+```
+
+## Yes/No
+
+-   On utilise beaucoup de variables binaires et Oui/Non qui seront
+    décrites en Yes/No (avec Yes en premier)
+
+-   La fonction `fct_yesno()` permet de générer des factors
+    automatiquement
+
+```{r}
+#| include: false
+library(crosstable)
+crosstable_options(percent_digits=0, compact=FALSE, padding_v=0, 
+                   fontsize_body=8, fontsize_header=8)
+```
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+library(crosstable)
+data = data.frame(a=c("No", "Yes"), 
+                  b=c("Non", "Oui"), 
+                  c=c(0, 1), 
+                  d=c(TRUE, FALSE))
+
+data
+
+fct_yesno(data$b)
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+data %>% 
+  mutate_all(fct_yesno) %>% 
+  crosstable() %>% 
+  as_flextable()
+```
+:::
+:::::
+
+```{=html}
+<script src="assets/custom.js"></script>
+```
