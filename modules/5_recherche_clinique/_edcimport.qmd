@@ -382,7 +382,7 @@ Exemple de checks
 ```{r}
 #| warning: true
 #| class: "no_fragment"
-#| code-line-numbers: "1-4|6-9|11-13|15-17|10-24"
+#| code-line-numbers: "1-4|6-9|10-13|15-17|19-24"
 enrol %>% 
   filter(age>70 | age<25) %>% 
   edc_data_warn("Age should be 25-70", issue_n=1)
@@ -454,7 +454,7 @@ Par contre les modalités de partage/update du fichier ne sont pas encore parfai
 L'option `show_delta=TRUE` permet d'identifier des erreurs de date. 
 
 ```{r}
-#| code-line-numbers: "1-3|5-20"
+#| code-line-numbers: "1-3|5-21"
 #| classes: no_fragment
 lastnews = lastnews_table(except=c("date10"), 
                           prefer=c("data3$date9"),
