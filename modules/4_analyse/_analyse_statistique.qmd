@@ -49,6 +49,115 @@ library(crosstable)
 
 ## Introduction
 
+-   Pour les analyses statistiques, on utilise généralement des tests stats et des modèles de régression
+
+-   Dans ce cours, on verra :
+
+    -  Les tests pour variables numériques et catégorielles
+    -  Les modèles linéaires, logistiques, et de Cox
+
+## Tests : variables numériques
+
+Pour les variables numériques, on utilise soit le t-test, soit le test de Wilcoxon.
+    
+. . . 
+
+<br>
+
+::: {.panel-tabset .no_fragment style="grid-template-columns: 23% 75%;"}
+
+### Data
+
+```{r}
+db = mtcars2 %>% 
+  select(mpg, am)
+db
+```
+
+### 2-sample t-test
+
+```{r}
+t = t.test(mpg ~ am, data=db)
+t
+
+t$p.value
+```
+
+### 1-sample t-test
+
+```{r}
+t = t.test(mpg~1, mu=17, data=db)
+t
+
+t$p.value
+```
+
+### 2-sample Wilcoxon test
+
+```{r}
+w = wilcox.test(mpg ~ am, data=db)
+w
+
+w$p.value
+```
+
+### Attention!
+
+L'interface traditionnelle est à risque d'erreur!
+
+```{r}
+t.test(mtcars$mpg, mtcars$am)
+```
+Ici, `am` est binaire `0`/`1` et est traité comme une valeur numérique (moyenne 0.4).
+
+:::   
+
+## Tests : variables catégorielles
+
+Pour les variables catégorielles, on utilise soit le test du Chi², soit le test exact de Fisher.
+    
+. . . 
+
+<br>
+
+::: {.panel-tabset .no_fragment style="grid-template-columns: 23% 75%;"}
+
+### Data
+
+```{r}
+db = mtcars2 %>% 
+  select(am, vs)
+db
+```
+
+### 2-sample Chi-squared test
+
+```{r}
+tbl = table(db$am, db$vs)
+tbl
+
+cs = chisq.test(tbl)
+cs
+
+cs$p.value
+```
+
+### 2-sample Fisher exact test
+
+```{r}
+tbl = table(db$am, db$vs)
+cs = fisher.test(tbl)
+cs
+
+cs$p.value
+```
+
+
+:::  
+
+
+## Modélisation
+
 -   Un **modèle statistique** décrit la relation entre une ou plusieurs
     variables explicatives ($X_1, X_2, \dots, X_p$) et une variable
     réponse ($Y$).
@@ -60,7 +169,7 @@ library(crosstable)
 -   Selon le type de réponse, on utilisera un modèle de régression
     différent, avec pour chacun des hypothèses spécifiques à valider.
 
-## Modélisation
+## Modélisation en R
 
 -   En R, la modélisation repose sur des fonctions comme `lm()`, `glm()`
     et `coxph()`.
