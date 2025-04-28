@@ -4,7 +4,9 @@
 .Ruserdata
 
 *_files*
-*.html
 *_cache*
+
+*.html
+!title-slide.html
 
 modules/test*
