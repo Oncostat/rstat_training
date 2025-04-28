@@ -643,12 +643,4 @@ anova(fit1, fit2)
 :::
 :::::
 
-# Backup {.appendix visibility="uncounted"}
 
-## Modèles mixtes {visibility="uncounted"}
-
-(lme4, nlme, mmrm), betareg
-
-```{=html}
-<script src="assets/custom.js"></script>
-```
