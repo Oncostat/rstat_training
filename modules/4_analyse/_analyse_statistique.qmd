@@ -45,6 +45,7 @@ editor:
 #| include: false
 library(tidyverse)
 library(crosstable)
+stopifnot(packageVersion("grstat")>="0.1.0.9009")
 ```
 
 ## Introduction
@@ -176,6 +177,7 @@ cs$p.value
 
 ::: no_fragment
 -   La syntaxe standard est la suivante :
+
     ```r
     formula = y ~ x1 + x2
     fit = regression_function(formula, data=my_data)
@@ -229,7 +231,11 @@ fit
 
 ```{r}
 summary(fit)
+```
 
+### confint()
+
+```{r}
 confint(fit)
 ```
 
@@ -314,7 +320,7 @@ fit2 = glm(sae ~ aegr + aerel, data=db$ae, family=binomial(link="logit"))
 
 <br>
 
-::: {.panel-tabset .no_fragment style="grid-template-columns: 16% 82%;"}
+::: {.panel-tabset .no_fragment style="grid-template-columns: 17% 82%;"}
 ### fit
 
 ```{r}
@@ -325,7 +331,11 @@ fit2
 
 ```{r}
 summary(fit2)
+```
 
+### confint()
+
+```{r}
 confint(fit2)
 ```
 
@@ -345,6 +355,7 @@ gtsummary::tbl_regression(fit2, conf.int=TRUE)
 ## Modèle logistique : hypothèses
 
 ::::: {.panel-tabset .fragment .no_fragment}
+
 ### Linéarité
 
 La relation entre $Y$ et les covariables $X$ doit être linéaire.
@@ -443,7 +454,7 @@ surv_example = function(n=300,
 ```{r}
 #| classes: "no_fragment"
 df = surv_example()
-df %>% print(n=2)
+df
 ```
 
 ## Kaplan Meier & Log Rank
@@ -454,8 +465,10 @@ df %>% print(n=2)
 ```{r}
 library(survival)
 library(ggsurvfit)
+
 km = survfit(Surv(t, event) ~ arm, data=df)
 km
+
 tidy_survfit(km, times=c(12,24)) %>% 
   select(strata, everything())
 ```
@@ -464,12 +477,13 @@ tidy_survfit(km, times=c(12,24)) %>%
 
 ```{r}
 survdiff(Surv(t, event) ~ arm, data=df)
+
 survdiff(Surv(t, event) ~ arm + strata(bm_bin), data=df)
 ```
 
 ### KM plot (binaire)
 
-https://www.danieldsjoberg.com/ggsurvfit/articles/gallery.html#kmunicate
+Documentation: [https://www.danieldsjoberg.com](https://www.danieldsjoberg.com/ggsurvfit/articles/gallery.html#kmunicate)
 
 ```{r}
 survfit2(Surv(t, event) ~ arm, data=df) %>% 
@@ -527,13 +541,14 @@ broom::tidy(fit_adj, conf.int=TRUE)
 ```{r}
 broom::tidy(fit_strat, conf.int=TRUE)
 ```
-:::
 
 ### gtsummary
 
 ```{r}
 gtsummary::tbl_regression(fit_adj, conf.int=TRUE)
 ```
+
+:::
 
 ## Modèle de Cox: hypothèses
 
@@ -565,6 +580,27 @@ survminer::ggcoxfunctional(fit_num)
 ```
 :::
 
+## Choix des groupes de référence
+
+Le groupe de référence est le premier niveau de la variable. Si ce n'est pas un facteur, R prendra le premier par ordre alphabétique.
+
+
+```{r}
+df2 = df %>% 
+  mutate(arm = fct_relevel(arm, "Treatment"),
+         bm_bin = fct_relevel(bm_bin, "Positive"))
+levels(df$arm)
+levels(df2$arm)
+``` 
+
+```{r}
+m1 = coxph(Surv(t, event) ~ arm + bm_bin, data=df)
+m2 = coxph(Surv(t, event) ~ arm + bm_bin, data=df2)
+coef(m1)
+coef(m2)
+```
+
+
 ## Test de modèles emboîtés
 
 -   La plupart des modèles donnent un test de Wald pour chaque élément.
@@ -579,6 +615,7 @@ survminer::ggcoxfunctional(fit_num)
 ```{r}
 fit1 = coxph(Surv(t, event) ~ arm + bm_bin, data=df)
 fit2 = coxph(Surv(t, event) ~ arm + bm_bin + bm_cont, data=df)
+
 anova(fit1, fit2)
 ```
 
