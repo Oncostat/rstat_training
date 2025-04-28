@@ -394,7 +394,7 @@ dépend des prédicteurs.
 
 Pour l'exemple, on va simuler des données de survie selon une loi
 exponentielle, avec 3 covariables : le bras de traitement `arm`, un
-biomarqueur binaire `bm1`, et un biomarqueur continu `bm2`.
+biomarqueur binaire `bm_bin`, et un biomarqueur continu `bm_cont`.
 
 ```{r data-function}
 #| code-fold: true
@@ -403,26 +403,26 @@ biomarqueur binaire `bm1`, et un biomarqueur continu `bm2`.
 #' Simulated dataset
 #'
 #' @param n number of observations
-#' @param beta_trt,beta_bm1,beta_bm2 the true coefficients
+#' @param beta_trt,beta_bm_cont,beta_bm_cont the true coefficients
 #' @param eos non-informative censoring (end of study)
 #' @param seed RNG seed
 surv_example = function(n=300, 
-                  beta_trt=log(0.7), beta_bm1=log(1.5), beta_bm2=log(0.8),
+                  beta_trt=log(0.7), beta_bm_bin=log(1.5), beta_bm_cont=log(0.8),
                   eos=30, seed=42){
   set.seed(seed)
   # Generate covariates
   baseline = tibble(
     subjid = seq(n),
     arm = rep(c(0,1), each=n/2),   
-    bm1 = rbinom(n, 1, 0.4),
-    bm2 = rnorm(n),
+    bm_bin = rbinom(n, 1, 0.4),
+    bm_cont = rnorm(n),
   )
 
   rtn = baseline %>%
     mutate(
       # Generate exponential survival time
-      log_predlin = beta_trt*arm + beta_bm1*bm1 + beta_bm2*bm2,
-      lambda0 = log(2)/10 / exp(beta_bm1*mean(bm1) + beta_bm2*mean(bm2)),
+      log_predlin = beta_trt*arm + beta_bm_bin*bm_bin + beta_bm_cont*bm_cont,
+      lambda0 = log(2)/10 / exp(beta_bm_bin*mean(bm_bin) + beta_bm_cont*mean(bm_cont)),
       lambda = lambda0 * exp(log_predlin),
       t_real = rexp(n, rate=lambda),
 
@@ -432,11 +432,11 @@ surv_example = function(n=300,
 
       # labels
       arm =  factor(arm,  labels=c("Control", "Treatment")),
-      bm1 = factor(bm1, labels=c("Negative", "Positive")),
+      bm_bin = factor(bm_bin, labels=c("Negative", "Positive")),
     )
 
   rtn %>%
-    select(subjid, arm, t, event, bm1, bm2)
+    select(subjid, arm, t, event, bm_bin, bm_cont)
 } 
 ```
 
@@ -464,7 +464,7 @@ tidy_survfit(km, times=c(12,24)) %>%
 
 ```{r}
 survdiff(Surv(t, event) ~ arm, data=df)
-survdiff(Surv(t, event) ~ arm + strata(bm1), data=df)
+survdiff(Surv(t, event) ~ arm + strata(bm_bin), data=df)
 ```
 
 ### KM plot (binaire)
@@ -487,8 +487,8 @@ survfit2(Surv(t, event) ~ arm, data=df) %>%
 ### KM plot (continu)
 
 ```{r}
-model <- coxph(Surv(t, event) ~ bm2, data=df, x=TRUE)
-contsurvplot::plot_surv_area(time="t", status="event", variable="bm2", data=df, model=model)
+model <- coxph(Surv(t, event) ~ bm_cont, data=df, x=TRUE)
+contsurvplot::plot_surv_area(time="t", status="event", variable="bm_cont", data=df, model=model)
 ```
 :::
 
@@ -497,8 +497,8 @@ contsurvplot::plot_surv_area(time="t", status="event", variable="bm2", data=df, 
 ```{r}
 #| classes: "no_fragment"
 fit_bare  = coxph(Surv(t, event) ~ arm, data=df)
-fit_adj = coxph(Surv(t, event) ~ arm + bm1 + bm2, data=df)
-fit_strat = coxph(Surv(t, event) ~ arm + strata(bm1) + bm2, data=df)
+fit_adj = coxph(Surv(t, event) ~ arm + bm_bin + bm_cont, data=df)
+fit_strat = coxph(Surv(t, event) ~ arm + strata(bm_bin) + bm_cont, data=df)
 ```
 
 ::: {.panel-tabset .no_fragment}
@@ -553,14 +553,14 @@ cox.zph(fit_adj) %>% survminer::ggcoxzph()
 ### Linearity spline
 
 ```{r}
-fit_spline = coxph(Surv(t, event) ~ pspline(bm2), data=df)
+fit_spline = coxph(Surv(t, event) ~ pspline(bm_cont), data=df)
 broom::tidy(fit_spline)
 ```
 
 ### Linearity plot
 
 ```{r}
-fit_num = coxph(Surv(t, event) ~ bm2, data=df)
+fit_num = coxph(Surv(t, event) ~ bm_cont, data=df)
 survminer::ggcoxfunctional(fit_num)
 ```
 :::
@@ -577,8 +577,8 @@ survminer::ggcoxfunctional(fit_num)
     emboîtés.
 
 ```{r}
-fit1  = coxph(Surv(t, event) ~ arm + bm1, data=df)
-fit2 = coxph(Surv(t, event) ~ arm + bm1 + bm2, data=df)
+fit1 = coxph(Surv(t, event) ~ arm + bm_bin, data=df)
+fit2 = coxph(Surv(t, event) ~ arm + bm_bin + bm_cont, data=df)
 anova(fit1, fit2)
 ```
 
