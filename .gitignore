@@ -6,7 +6,6 @@
 *_files*
 *_cache*
 
-*.html
-!title-slide.html
+_*.html
 
 modules/test*
