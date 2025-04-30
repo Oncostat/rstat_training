@@ -933,6 +933,198 @@
 <section id="introduction" class="slide level2">
 <h2>Introduction</h2>
 <ul>
+<li class="fragment"><p>Pour les analyses statistiques, on utilise généralement des tests stats et des modèles de régression</p></li>
+<li class="fragment"><p>Dans ce cours, on verra :</p>
+<ul>
+<li class="fragment">Les tests pour variables numériques et catégorielles</li>
+<li class="fragment">Les modèles linéaires, logistiques, et de Cox</li>
+</ul></li>
+</ul>
+</section>
+<section id="tests-variables-numériques" class="slide level2">
+<h2>Tests : variables numériques</h2>
+<p>Pour les variables numériques, on utilise soit le t-test, soit le test de Wilcoxon.</p>
+<div class="fragment">
+<p><br></p>
+<div class="panel-tabset no_fragment" style="grid-template-columns: 23% 75%;">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Data</a></li><li><a href="#tabset-2-2">2-sample t-test</a></li><li><a href="#tabset-2-3">1-sample t-test</a></li><li><a href="#tabset-2-4">2-sample Wilcoxon test</a></li><li><a href="#tabset-2-5">Attention!</a></li></ul>
+<div class="tab-content no_fragment" style="grid-template-columns: 23% 75%;">
+<div id="tabset-2-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>db <span class="ot">=</span> mtcars2 <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href=""></a>  <span class="fu">select</span>(mpg, am)</span>
+<span id="cb22-3"><a href=""></a>db</span>
+<span id="cb22-4"><a href=""></a><span class="co">#&gt; # A tibble: 32 × 2</span></span>
+<span id="cb22-5"><a href=""></a><span class="co">#&gt;    mpg        am        </span></span>
+<span id="cb22-6"><a href=""></a><span class="co">#&gt;    &lt;labelled&gt; &lt;labelled&gt;</span></span>
+<span id="cb22-7"><a href=""></a><span class="co">#&gt;  1 21.0       manual    </span></span>
+<span id="cb22-8"><a href=""></a><span class="co">#&gt;  2 21.0       manual    </span></span>
+<span id="cb22-9"><a href=""></a><span class="co">#&gt;  3 22.8       manual    </span></span>
+<span id="cb22-10"><a href=""></a><span class="co">#&gt;  4 21.4       auto      </span></span>
+<span id="cb22-11"><a href=""></a><span class="co">#&gt;  5 18.7       auto      </span></span>
+<span id="cb22-12"><a href=""></a><span class="co">#&gt;  6 18.1       auto      </span></span>
+<span id="cb22-13"><a href=""></a><span class="co">#&gt;  7 14.3       auto      </span></span>
+<span id="cb22-14"><a href=""></a><span class="co">#&gt;  8 24.4       auto      </span></span>
+<span id="cb22-15"><a href=""></a><span class="co">#&gt;  9 22.8       auto      </span></span>
+<span id="cb22-16"><a href=""></a><span class="co">#&gt; 10 19.2       auto      </span></span>
+<span id="cb22-17"><a href=""></a><span class="co">#&gt; # ℹ 22 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>t <span class="ot">=</span> <span class="fu">t.test</span>(mpg <span class="sc">~</span> am, <span class="at">data=</span>db)</span>
+<span id="cb23-2"><a href=""></a>t</span>
+<span id="cb23-3"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb23-4"><a href=""></a><span class="co">#&gt;  Welch Two Sample t-test</span></span>
+<span id="cb23-5"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb23-6"><a href=""></a><span class="co">#&gt; data:  mpg by am</span></span>
+<span id="cb23-7"><a href=""></a><span class="co">#&gt; t = -3.7671, df = 18.332, p-value = 0.001374</span></span>
+<span id="cb23-8"><a href=""></a><span class="co">#&gt; alternative hypothesis: true difference in means between group auto and group manual is not equal to 0</span></span>
+<span id="cb23-9"><a href=""></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb23-10"><a href=""></a><span class="co">#&gt;  -11.280194  -3.209684</span></span>
+<span id="cb23-11"><a href=""></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb23-12"><a href=""></a><span class="co">#&gt;   mean in group auto mean in group manual </span></span>
+<span id="cb23-13"><a href=""></a><span class="co">#&gt;             17.14737             24.39231</span></span>
+<span id="cb23-14"><a href=""></a></span>
+<span id="cb23-15"><a href=""></a>t<span class="sc">$</span>p.value</span>
+<span id="cb23-16"><a href=""></a><span class="co">#&gt; [1] 0.001373638</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-3">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>t <span class="ot">=</span> <span class="fu">t.test</span>(mpg<span class="sc">~</span><span class="dv">1</span>, <span class="at">mu=</span><span class="dv">17</span>, <span class="at">data=</span>db)</span>
+<span id="cb24-2"><a href=""></a>t</span>
+<span id="cb24-3"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb24-4"><a href=""></a><span class="co">#&gt;  One Sample t-test</span></span>
+<span id="cb24-5"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb24-6"><a href=""></a><span class="co">#&gt; data:  mpg</span></span>
+<span id="cb24-7"><a href=""></a><span class="co">#&gt; t = 2.9008, df = 31, p-value = 0.006788</span></span>
+<span id="cb24-8"><a href=""></a><span class="co">#&gt; alternative hypothesis: true mean is not equal to 17</span></span>
+<span id="cb24-9"><a href=""></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb24-10"><a href=""></a><span class="co">#&gt;  17.91768 22.26357</span></span>
+<span id="cb24-11"><a href=""></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb24-12"><a href=""></a><span class="co">#&gt; mean of x </span></span>
+<span id="cb24-13"><a href=""></a><span class="co">#&gt;  20.09062</span></span>
+<span id="cb24-14"><a href=""></a></span>
+<span id="cb24-15"><a href=""></a>t<span class="sc">$</span>p.value</span>
+<span id="cb24-16"><a href=""></a><span class="co">#&gt; [1] 0.00678831</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-4">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>w <span class="ot">=</span> <span class="fu">wilcox.test</span>(mpg <span class="sc">~</span> am, <span class="at">data=</span>db)</span>
+<span id="cb25-2"><a href=""></a>w</span>
+<span id="cb25-3"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb25-4"><a href=""></a><span class="co">#&gt;  Wilcoxon rank sum test with continuity correction</span></span>
+<span id="cb25-5"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb25-6"><a href=""></a><span class="co">#&gt; data:  mpg by am</span></span>
+<span id="cb25-7"><a href=""></a><span class="co">#&gt; W = 42, p-value = 0.001871</span></span>
+<span id="cb25-8"><a href=""></a><span class="co">#&gt; alternative hypothesis: true location shift is not equal to 0</span></span>
+<span id="cb25-9"><a href=""></a></span>
+<span id="cb25-10"><a href=""></a>w<span class="sc">$</span>p.value</span>
+<span id="cb25-11"><a href=""></a><span class="co">#&gt; [1] 0.001871391</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-5">
+<p>L’interface traditionnelle est à risque d’erreur!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a><span class="fu">t.test</span>(mtcars<span class="sc">$</span>mpg, mtcars<span class="sc">$</span>am)</span>
+<span id="cb26-2"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb26-3"><a href=""></a><span class="co">#&gt;  Welch Two Sample t-test</span></span>
+<span id="cb26-4"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb26-5"><a href=""></a><span class="co">#&gt; data:  mtcars$mpg and mtcars$am</span></span>
+<span id="cb26-6"><a href=""></a><span class="co">#&gt; t = 18.413, df = 31.425, p-value &lt; 2.2e-16</span></span>
+<span id="cb26-7"><a href=""></a><span class="co">#&gt; alternative hypothesis: true difference in means is not equal to 0</span></span>
+<span id="cb26-8"><a href=""></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb26-9"><a href=""></a><span class="co">#&gt;  17.50519 21.86356</span></span>
+<span id="cb26-10"><a href=""></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb26-11"><a href=""></a><span class="co">#&gt; mean of x mean of y </span></span>
+<span id="cb26-12"><a href=""></a><span class="co">#&gt;  20.09062   0.40625</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ici, <code>am</code> est binaire <code>0</code>/<code>1</code> et est traité comme une valeur numérique (moyenne 0.4).</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="tests-variables-catégorielles" class="slide level2">
+<h2>Tests : variables catégorielles</h2>
+<p>Pour les variables catégorielles, on utilise soit le test du Chi², soit le test exact de Fisher.</p>
+<div class="fragment">
+<p><br></p>
+<div class="panel-tabset no_fragment" style="grid-template-columns: 23% 75%;">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Data</a></li><li><a href="#tabset-3-2">2-sample Chi-squared test</a></li><li><a href="#tabset-3-3">2-sample Fisher exact test</a></li></ul>
+<div class="tab-content no_fragment" style="grid-template-columns: 23% 75%;">
+<div id="tabset-3-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>db <span class="ot">=</span> mtcars2 <span class="sc">%&gt;%</span> </span>
+<span id="cb27-2"><a href=""></a>  <span class="fu">select</span>(am, vs)</span>
+<span id="cb27-3"><a href=""></a>db</span>
+<span id="cb27-4"><a href=""></a><span class="co">#&gt; # A tibble: 32 × 2</span></span>
+<span id="cb27-5"><a href=""></a><span class="co">#&gt;    am         vs        </span></span>
+<span id="cb27-6"><a href=""></a><span class="co">#&gt;    &lt;labelled&gt; &lt;labelled&gt;</span></span>
+<span id="cb27-7"><a href=""></a><span class="co">#&gt;  1 manual     vshaped   </span></span>
+<span id="cb27-8"><a href=""></a><span class="co">#&gt;  2 manual     vshaped   </span></span>
+<span id="cb27-9"><a href=""></a><span class="co">#&gt;  3 manual     straight  </span></span>
+<span id="cb27-10"><a href=""></a><span class="co">#&gt;  4 auto       straight  </span></span>
+<span id="cb27-11"><a href=""></a><span class="co">#&gt;  5 auto       vshaped   </span></span>
+<span id="cb27-12"><a href=""></a><span class="co">#&gt;  6 auto       straight  </span></span>
+<span id="cb27-13"><a href=""></a><span class="co">#&gt;  7 auto       vshaped   </span></span>
+<span id="cb27-14"><a href=""></a><span class="co">#&gt;  8 auto       straight  </span></span>
+<span id="cb27-15"><a href=""></a><span class="co">#&gt;  9 auto       straight  </span></span>
+<span id="cb27-16"><a href=""></a><span class="co">#&gt; 10 auto       straight  </span></span>
+<span id="cb27-17"><a href=""></a><span class="co">#&gt; # ℹ 22 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-3-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>tbl <span class="ot">=</span> <span class="fu">table</span>(db<span class="sc">$</span>am, db<span class="sc">$</span>vs)</span>
+<span id="cb28-2"><a href=""></a>tbl</span>
+<span id="cb28-3"><a href=""></a><span class="co">#&gt;         </span></span>
+<span id="cb28-4"><a href=""></a><span class="co">#&gt;          straight vshaped</span></span>
+<span id="cb28-5"><a href=""></a><span class="co">#&gt;   auto          7      12</span></span>
+<span id="cb28-6"><a href=""></a><span class="co">#&gt;   manual        7       6</span></span>
+<span id="cb28-7"><a href=""></a></span>
+<span id="cb28-8"><a href=""></a>cs <span class="ot">=</span> <span class="fu">chisq.test</span>(tbl)</span>
+<span id="cb28-9"><a href=""></a>cs</span>
+<span id="cb28-10"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb28-11"><a href=""></a><span class="co">#&gt;  Pearson's Chi-squared test with Yates' continuity correction</span></span>
+<span id="cb28-12"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb28-13"><a href=""></a><span class="co">#&gt; data:  tbl</span></span>
+<span id="cb28-14"><a href=""></a><span class="co">#&gt; X-squared = 0.34754, df = 1, p-value = 0.5555</span></span>
+<span id="cb28-15"><a href=""></a></span>
+<span id="cb28-16"><a href=""></a>cs<span class="sc">$</span>p.value</span>
+<span id="cb28-17"><a href=""></a><span class="co">#&gt; [1] 0.5555115</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-3-3">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>tbl <span class="ot">=</span> <span class="fu">table</span>(db<span class="sc">$</span>am, db<span class="sc">$</span>vs)</span>
+<span id="cb29-2"><a href=""></a>cs <span class="ot">=</span> <span class="fu">fisher.test</span>(tbl)</span>
+<span id="cb29-3"><a href=""></a>cs</span>
+<span id="cb29-4"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb29-5"><a href=""></a><span class="co">#&gt;  Fisher's Exact Test for Count Data</span></span>
+<span id="cb29-6"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb29-7"><a href=""></a><span class="co">#&gt; data:  tbl</span></span>
+<span id="cb29-8"><a href=""></a><span class="co">#&gt; p-value = 0.4727</span></span>
+<span id="cb29-9"><a href=""></a><span class="co">#&gt; alternative hypothesis: true odds ratio is not equal to 1</span></span>
+<span id="cb29-10"><a href=""></a><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span id="cb29-11"><a href=""></a><span class="co">#&gt;  0.09441436 2.61414549</span></span>
+<span id="cb29-12"><a href=""></a><span class="co">#&gt; sample estimates:</span></span>
+<span id="cb29-13"><a href=""></a><span class="co">#&gt; odds ratio </span></span>
+<span id="cb29-14"><a href=""></a><span class="co">#&gt;   0.511233</span></span>
+<span id="cb29-15"><a href=""></a></span>
+<span id="cb29-16"><a href=""></a>cs<span class="sc">$</span>p.value</span>
+<span id="cb29-17"><a href=""></a><span class="co">#&gt; [1] 0.4726974</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="modélisation" class="slide level2">
+<h2>Modélisation</h2>
+<ul>
 <li class="fragment"><p>Un <strong>modèle statistique</strong> décrit la relation entre une ou plusieurs variables explicatives (<span class="math inline">\(X_1, X_2, \dots, X_p\)</span>) et une variable réponse (<span class="math inline">\(Y\)</span>).</p></li>
 <li class="fragment"><p>On veut prédire <span class="math inline">\(Y\)</span> ou expliquer son lien avec <span class="math inline">\(X\)</span>. <span class="math display">\[
 Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
@@ -940,14 +1132,16 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <li class="fragment"><p>Selon le type de réponse, on utilisera un modèle de régression différent, avec pour chacun des hypothèses spécifiques à valider.</p></li>
 </ul>
 </section>
-<section id="modélisation" class="slide level2">
-<h2>Modélisation</h2>
+<section id="modélisation-en-r" class="slide level2">
+<h2>Modélisation en R</h2>
 <ul>
 <li class="fragment">En R, la modélisation repose sur des fonctions comme <code>lm()</code>, <code>glm()</code> et <code>coxph()</code>.</li>
 </ul>
 <div class="no_fragment">
 <ul>
-<li class="fragment">La syntaxe standard est la suivante : <code>r     formula = y ~ x1 + x2     fit = regression_function(formula, data=my_data)</code></li>
+<li class="fragment"><p>La syntaxe standard est la suivante :</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a>formula <span class="ot">=</span> y <span class="sc">~</span> x1 <span class="sc">+</span> x2</span>
+<span id="cb30-2"><a href=""></a>fit <span class="ot">=</span> <span class="fu">regression_function</span>(formula, <span class="at">data=</span>my_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
 </ul>
 </div>
 <ul>
@@ -962,14 +1156,14 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <li class="fragment"><p>On va d’abord modéliser <code>aegr</code> (modèle linéaire), puis <code>sae</code> (modèle logistique).</p></li>
 <li class="fragment"><p>Aperçu des données :</p>
 <div class="cell no_fragment">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>db <span class="ot">=</span> grstat<span class="sc">::</span><span class="fu">grstat_example</span>(<span class="at">seed=</span><span class="dv">100</span>)</span>
-<span id="cb22-2"><a href=""></a>db<span class="sc">$</span>ae <span class="sc">%&gt;%</span> <span class="fu">select</span>(subjid, aegr, sae, aerel) <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n=</span><span class="dv">2</span>)</span>
-<span id="cb22-3"><a href=""></a><span class="co">#&gt; # A tibble: 606 × 4</span></span>
-<span id="cb22-4"><a href=""></a><span class="co">#&gt;   subjid  aegr sae   aerel       </span></span>
-<span id="cb22-5"><a href=""></a><span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;fct&gt; &lt;chr&gt;       </span></span>
-<span id="cb22-6"><a href=""></a><span class="co">#&gt; 1      1     4 No    Radiotherapy</span></span>
-<span id="cb22-7"><a href=""></a><span class="co">#&gt; 2      1     2 No    Radiotherapy</span></span>
-<span id="cb22-8"><a href=""></a><span class="co">#&gt; # ℹ 604 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>db <span class="ot">=</span> grstat<span class="sc">::</span><span class="fu">grstat_example</span>(<span class="at">seed=</span><span class="dv">100</span>)</span>
+<span id="cb31-2"><a href=""></a>db<span class="sc">$</span>ae <span class="sc">%&gt;%</span> <span class="fu">select</span>(subjid, aegr, sae, aerel) <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n=</span><span class="dv">2</span>)</span>
+<span id="cb31-3"><a href=""></a><span class="co">#&gt; # A tibble: 607 × 4</span></span>
+<span id="cb31-4"><a href=""></a><span class="co">#&gt;   subjid  aegr sae   aerel                 </span></span>
+<span id="cb31-5"><a href=""></a><span class="co">#&gt;    &lt;int&gt; &lt;dbl&gt; &lt;fct&gt; &lt;chr&gt;                 </span></span>
+<span id="cb31-6"><a href=""></a><span class="co">#&gt; 1      1     1 No    Standard treatment    </span></span>
+<span id="cb31-7"><a href=""></a><span class="co">#&gt; 2      1     3 No    Experimental treatment</span></span>
+<span id="cb31-8"><a href=""></a><span class="co">#&gt; # ℹ 605 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></li>
 </ul>
 <div title="Modèle mixte" data-fragment-index="5">
@@ -991,98 +1185,101 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <section id="modèle-linéaire-y-continu" class="slide level2">
 <h2>Modèle linéaire (Y continu)</h2>
 <div class="cell no_fragment">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>fit <span class="ot">=</span> <span class="fu">lm</span>(aegr <span class="sc">~</span> sae <span class="sc">+</span> aerel, <span class="at">data=</span>db<span class="sc">$</span>ae)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>fit <span class="ot">=</span> <span class="fu">lm</span>(aegr <span class="sc">~</span> sae <span class="sc">+</span> aerel, <span class="at">data=</span>db<span class="sc">$</span>ae)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p><br></p>
 <div class="panel-tabset no_fragment" style="grid-template-columns: 16% 82%;">
-<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">fit</a></li><li><a href="#tabset-2-2">summary()</a></li><li><a href="#tabset-2-3">tidy()</a></li><li><a href="#tabset-2-4">gtsummary</a></li></ul>
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">fit</a></li><li><a href="#tabset-4-2">summary()</a></li><li><a href="#tabset-4-3">confint()</a></li><li><a href="#tabset-4-4">tidy()</a></li><li><a href="#tabset-4-5">gtsummary</a></li></ul>
 <div class="tab-content no_fragment" style="grid-template-columns: 16% 82%;">
-<div id="tabset-2-1">
+<div id="tabset-4-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>fit</span>
-<span id="cb24-2"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb24-3"><a href=""></a><span class="co">#&gt; Call:</span></span>
-<span id="cb24-4"><a href=""></a><span class="co">#&gt; lm(formula = aegr ~ sae + aerel, data = db$ae)</span></span>
-<span id="cb24-5"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb24-6"><a href=""></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb24-7"><a href=""></a><span class="co">#&gt;                 (Intercept)                        saeNo  aerelExperimental treatment  </span></span>
-<span id="cb24-8"><a href=""></a><span class="co">#&gt;                     2.66664                     -0.95142                      0.02929  </span></span>
-<span id="cb24-9"><a href=""></a><span class="co">#&gt;                  aerelOther            aerelRadiotherapy      aerelStandard treatment  </span></span>
-<span id="cb24-10"><a href=""></a><span class="co">#&gt;                    -0.06962                     -0.02662                     -0.07004</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>fit</span>
+<span id="cb33-2"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb33-3"><a href=""></a><span class="co">#&gt; Call:</span></span>
+<span id="cb33-4"><a href=""></a><span class="co">#&gt; lm(formula = aegr ~ sae + aerel, data = db$ae)</span></span>
+<span id="cb33-5"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb33-6"><a href=""></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb33-7"><a href=""></a><span class="co">#&gt;                 (Intercept)                        saeNo  aerelExperimental treatment  </span></span>
+<span id="cb33-8"><a href=""></a><span class="co">#&gt;                     2.82451                     -1.16459                     -0.17298  </span></span>
+<span id="cb33-9"><a href=""></a><span class="co">#&gt;                  aerelOther            aerelRadiotherapy      aerelStandard treatment  </span></span>
+<span id="cb33-10"><a href=""></a><span class="co">#&gt;                    -0.04057                     -0.17588                      0.11078</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-2-2">
+<div id="tabset-4-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a><span class="fu">summary</span>(fit)</span>
-<span id="cb25-2"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb25-3"><a href=""></a><span class="co">#&gt; Call:</span></span>
-<span id="cb25-4"><a href=""></a><span class="co">#&gt; lm(formula = aegr ~ sae + aerel, data = db$ae)</span></span>
-<span id="cb25-5"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb25-6"><a href=""></a><span class="co">#&gt; Residuals:</span></span>
-<span id="cb25-7"><a href=""></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
-<span id="cb25-8"><a href=""></a><span class="co">#&gt; -1.6959 -0.6886 -0.6452  0.3544  3.3548 </span></span>
-<span id="cb25-9"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb25-10"><a href=""></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb25-11"><a href=""></a><span class="co">#&gt;                             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span id="cb25-12"><a href=""></a><span class="co">#&gt; (Intercept)                  2.66664    0.14944  17.844  &lt; 2e-16 ***</span></span>
-<span id="cb25-13"><a href=""></a><span class="co">#&gt; saeNo                       -0.95142    0.13460  -7.069 4.37e-12 ***</span></span>
-<span id="cb25-14"><a href=""></a><span class="co">#&gt; aerelExperimental treatment  0.02929    0.12824   0.228    0.819    </span></span>
-<span id="cb25-15"><a href=""></a><span class="co">#&gt; aerelOther                  -0.06962    0.12828  -0.543    0.588    </span></span>
-<span id="cb25-16"><a href=""></a><span class="co">#&gt; aerelRadiotherapy           -0.02662    0.12491  -0.213    0.831    </span></span>
-<span id="cb25-17"><a href=""></a><span class="co">#&gt; aerelStandard treatment     -0.07004    0.12886  -0.544    0.587    </span></span>
-<span id="cb25-18"><a href=""></a><span class="co">#&gt; ---</span></span>
-<span id="cb25-19"><a href=""></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span id="cb25-20"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb25-21"><a href=""></a><span class="co">#&gt; Residual standard error: 0.985 on 600 degrees of freedom</span></span>
-<span id="cb25-22"><a href=""></a><span class="co">#&gt; Multiple R-squared:  0.07785,    Adjusted R-squared:  0.07016 </span></span>
-<span id="cb25-23"><a href=""></a><span class="co">#&gt; F-statistic: 10.13 on 5 and 600 DF,  p-value: 2.5e-09</span></span>
-<span id="cb25-24"><a href=""></a></span>
-<span id="cb25-25"><a href=""></a><span class="fu">confint</span>(fit)</span>
-<span id="cb25-26"><a href=""></a><span class="co">#&gt;                                  2.5 %     97.5 %</span></span>
-<span id="cb25-27"><a href=""></a><span class="co">#&gt; (Intercept)                  2.3731462  2.9601320</span></span>
-<span id="cb25-28"><a href=""></a><span class="co">#&gt; saeNo                       -1.2157688 -0.6870811</span></span>
-<span id="cb25-29"><a href=""></a><span class="co">#&gt; aerelExperimental treatment -0.2225645  0.2811367</span></span>
-<span id="cb25-30"><a href=""></a><span class="co">#&gt; aerelOther                  -0.3215431  0.1823044</span></span>
-<span id="cb25-31"><a href=""></a><span class="co">#&gt; aerelRadiotherapy           -0.2719339  0.2186922</span></span>
-<span id="cb25-32"><a href=""></a><span class="co">#&gt; aerelStandard treatment     -0.3231122  0.1830387</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">summary</span>(fit)</span>
+<span id="cb34-2"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb34-3"><a href=""></a><span class="co">#&gt; Call:</span></span>
+<span id="cb34-4"><a href=""></a><span class="co">#&gt; lm(formula = aegr ~ sae + aerel, data = db$ae)</span></span>
+<span id="cb34-5"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb34-6"><a href=""></a><span class="co">#&gt; Residuals:</span></span>
+<span id="cb34-7"><a href=""></a><span class="co">#&gt;     Min      1Q  Median      3Q     Max </span></span>
+<span id="cb34-8"><a href=""></a><span class="co">#&gt; -1.9353 -0.6193 -0.4840  0.5131  3.2293 </span></span>
+<span id="cb34-9"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb34-10"><a href=""></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb34-11"><a href=""></a><span class="co">#&gt;                             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span id="cb34-12"><a href=""></a><span class="co">#&gt; (Intercept)                  2.82451    0.13442  21.012   &lt;2e-16 ***</span></span>
+<span id="cb34-13"><a href=""></a><span class="co">#&gt; saeNo                       -1.16459    0.11763  -9.901   &lt;2e-16 ***</span></span>
+<span id="cb34-14"><a href=""></a><span class="co">#&gt; aerelExperimental treatment -0.17298    0.11399  -1.517    0.130    </span></span>
+<span id="cb34-15"><a href=""></a><span class="co">#&gt; aerelOther                  -0.04057    0.11414  -0.355    0.722    </span></span>
+<span id="cb34-16"><a href=""></a><span class="co">#&gt; aerelRadiotherapy           -0.17588    0.11720  -1.501    0.134    </span></span>
+<span id="cb34-17"><a href=""></a><span class="co">#&gt; aerelStandard treatment      0.11078    0.11489   0.964    0.335    </span></span>
+<span id="cb34-18"><a href=""></a><span class="co">#&gt; ---</span></span>
+<span id="cb34-19"><a href=""></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb34-20"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb34-21"><a href=""></a><span class="co">#&gt; Residual standard error: 0.8936 on 601 degrees of freedom</span></span>
+<span id="cb34-22"><a href=""></a><span class="co">#&gt; Multiple R-squared:  0.1517, Adjusted R-squared:  0.1446 </span></span>
+<span id="cb34-23"><a href=""></a><span class="co">#&gt; F-statistic: 21.49 on 5 and 601 DF,  p-value: &lt; 2.2e-16</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-2-3">
+<div id="tabset-4-3">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span>
-<span id="cb26-2"><a href=""></a><span class="co">#&gt; # A tibble: 6 × 7</span></span>
-<span id="cb26-3"><a href=""></a><span class="co">#&gt;   term                        estimate std.error statistic  p.value conf.low conf.high</span></span>
-<span id="cb26-4"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;                          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span id="cb26-5"><a href=""></a><span class="co">#&gt; 1 (Intercept)                   2.67       0.149    17.8   1.89e-57    2.37      2.96 </span></span>
-<span id="cb26-6"><a href=""></a><span class="co">#&gt; 2 saeNo                        -0.951      0.135    -7.07  4.37e-12   -1.22     -0.687</span></span>
-<span id="cb26-7"><a href=""></a><span class="co">#&gt; 3 aerelExperimental treatment   0.0293     0.128     0.228 8.19e- 1   -0.223     0.281</span></span>
-<span id="cb26-8"><a href=""></a><span class="co">#&gt; 4 aerelOther                   -0.0696     0.128    -0.543 5.88e- 1   -0.322     0.182</span></span>
-<span id="cb26-9"><a href=""></a><span class="co">#&gt; 5 aerelRadiotherapy            -0.0266     0.125    -0.213 8.31e- 1   -0.272     0.219</span></span>
-<span id="cb26-10"><a href=""></a><span class="co">#&gt; 6 aerelStandard treatment      -0.0700     0.129    -0.544 5.87e- 1   -0.323     0.183</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a><span class="fu">confint</span>(fit)</span>
+<span id="cb35-2"><a href=""></a><span class="co">#&gt;                                  2.5 %      97.5 %</span></span>
+<span id="cb35-3"><a href=""></a><span class="co">#&gt; (Intercept)                  2.5605086  3.08850368</span></span>
+<span id="cb35-4"><a href=""></a><span class="co">#&gt; saeNo                       -1.3956025 -0.93358527</span></span>
+<span id="cb35-5"><a href=""></a><span class="co">#&gt; aerelExperimental treatment -0.3968406  0.05089016</span></span>
+<span id="cb35-6"><a href=""></a><span class="co">#&gt; aerelOther                  -0.2647280  0.18359100</span></span>
+<span id="cb35-7"><a href=""></a><span class="co">#&gt; aerelRadiotherapy           -0.4060427  0.05428351</span></span>
+<span id="cb35-8"><a href=""></a><span class="co">#&gt; aerelStandard treatment     -0.1148522  0.33641907</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-2-4">
+<div id="tabset-4-4">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(fit, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span>
+<span id="cb36-2"><a href=""></a><span class="co">#&gt; # A tibble: 6 × 7</span></span>
+<span id="cb36-3"><a href=""></a><span class="co">#&gt;   term                        estimate std.error statistic  p.value conf.low conf.high</span></span>
+<span id="cb36-4"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;                          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb36-5"><a href=""></a><span class="co">#&gt; 1 (Intercept)                   2.82       0.134    21.0   6.57e-74    2.56     3.09  </span></span>
+<span id="cb36-6"><a href=""></a><span class="co">#&gt; 2 saeNo                        -1.16       0.118    -9.90  1.65e-21   -1.40    -0.934 </span></span>
+<span id="cb36-7"><a href=""></a><span class="co">#&gt; 3 aerelExperimental treatment  -0.173      0.114    -1.52  1.30e- 1   -0.397    0.0509</span></span>
+<span id="cb36-8"><a href=""></a><span class="co">#&gt; 4 aerelOther                   -0.0406     0.114    -0.355 7.22e- 1   -0.265    0.184 </span></span>
+<span id="cb36-9"><a href=""></a><span class="co">#&gt; 5 aerelRadiotherapy            -0.176      0.117    -1.50  1.34e- 1   -0.406    0.0543</span></span>
+<span id="cb36-10"><a href=""></a><span class="co">#&gt; 6 aerelStandard treatment       0.111      0.115     0.964 3.35e- 1   -0.115    0.336</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-4-5">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(fit, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="uoujwutcdj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#uoujwutcdj table {
+<div id="mplvdazikk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mplvdazikk table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#uoujwutcdj thead, #uoujwutcdj tbody, #uoujwutcdj tfoot, #uoujwutcdj tr, #uoujwutcdj td, #uoujwutcdj th {
+#mplvdazikk thead, #mplvdazikk tbody, #mplvdazikk tfoot, #mplvdazikk tr, #mplvdazikk td, #mplvdazikk th {
   border-style: none;
 }
 
-#uoujwutcdj p {
+#mplvdazikk p {
   margin: 0;
   padding: 0;
 }
 
-#uoujwutcdj .gt_table {
+#mplvdazikk .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1108,12 +1305,12 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-left-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_caption {
+#mplvdazikk .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#uoujwutcdj .gt_title {
+#mplvdazikk .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1125,7 +1322,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-bottom-width: 0;
 }
 
-#uoujwutcdj .gt_subtitle {
+#mplvdazikk .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1137,7 +1334,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-top-width: 0;
 }
 
-#uoujwutcdj .gt_heading {
+#mplvdazikk .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1149,13 +1346,13 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-right-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_bottom_border {
+#mplvdazikk .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_col_headings {
+#mplvdazikk .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1170,7 +1367,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-right-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_col_heading {
+#mplvdazikk .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1190,7 +1387,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   overflow-x: hidden;
 }
 
-#uoujwutcdj .gt_column_spanner_outer {
+#mplvdazikk .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1202,15 +1399,15 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 4px;
 }
 
-#uoujwutcdj .gt_column_spanner_outer:first-child {
+#mplvdazikk .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#uoujwutcdj .gt_column_spanner_outer:last-child {
+#mplvdazikk .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#uoujwutcdj .gt_column_spanner {
+#mplvdazikk .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1222,11 +1419,11 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   width: 100%;
 }
 
-#uoujwutcdj .gt_spanner_row {
+#mplvdazikk .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#uoujwutcdj .gt_group_heading {
+#mplvdazikk .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1252,7 +1449,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   text-align: left;
 }
 
-#uoujwutcdj .gt_empty_group_heading {
+#mplvdazikk .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1267,15 +1464,15 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   vertical-align: middle;
 }
 
-#uoujwutcdj .gt_from_md > :first-child {
+#mplvdazikk .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#uoujwutcdj .gt_from_md > :last-child {
+#mplvdazikk .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#uoujwutcdj .gt_row {
+#mplvdazikk .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1294,7 +1491,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   overflow-x: hidden;
 }
 
-#uoujwutcdj .gt_stub {
+#mplvdazikk .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1307,7 +1504,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#uoujwutcdj .gt_stub_row_group {
+#mplvdazikk .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1321,15 +1518,15 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   vertical-align: top;
 }
 
-#uoujwutcdj .gt_row_group_first td {
+#mplvdazikk .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#uoujwutcdj .gt_row_group_first th {
+#mplvdazikk .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#uoujwutcdj .gt_summary_row {
+#mplvdazikk .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1339,16 +1536,16 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#uoujwutcdj .gt_first_summary_row {
+#mplvdazikk .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_first_summary_row.thick {
+#mplvdazikk .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#uoujwutcdj .gt_last_summary_row {
+#mplvdazikk .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1358,7 +1555,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-bottom-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_grand_summary_row {
+#mplvdazikk .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1368,7 +1565,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#uoujwutcdj .gt_first_grand_summary_row {
+#mplvdazikk .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1378,7 +1575,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-top-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_last_grand_summary_row_top {
+#mplvdazikk .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1388,11 +1585,11 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-bottom-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_striped {
+#mplvdazikk .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#uoujwutcdj .gt_table_body {
+#mplvdazikk .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1401,7 +1598,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-bottom-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_footnotes {
+#mplvdazikk .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1415,7 +1612,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-right-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_footnote {
+#mplvdazikk .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1424,7 +1621,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#uoujwutcdj .gt_sourcenotes {
+#mplvdazikk .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1438,7 +1635,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-right-color: #D3D3D3;
 }
 
-#uoujwutcdj .gt_sourcenote {
+#mplvdazikk .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1446,72 +1643,72 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#uoujwutcdj .gt_left {
+#mplvdazikk .gt_left {
   text-align: left;
 }
 
-#uoujwutcdj .gt_center {
+#mplvdazikk .gt_center {
   text-align: center;
 }
 
-#uoujwutcdj .gt_right {
+#mplvdazikk .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#uoujwutcdj .gt_font_normal {
+#mplvdazikk .gt_font_normal {
   font-weight: normal;
 }
 
-#uoujwutcdj .gt_font_bold {
+#mplvdazikk .gt_font_bold {
   font-weight: bold;
 }
 
-#uoujwutcdj .gt_font_italic {
+#mplvdazikk .gt_font_italic {
   font-style: italic;
 }
 
-#uoujwutcdj .gt_super {
+#mplvdazikk .gt_super {
   font-size: 65%;
 }
 
-#uoujwutcdj .gt_footnote_marks {
+#mplvdazikk .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#uoujwutcdj .gt_asterisk {
+#mplvdazikk .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#uoujwutcdj .gt_indent_1 {
+#mplvdazikk .gt_indent_1 {
   text-indent: 5px;
 }
 
-#uoujwutcdj .gt_indent_2 {
+#mplvdazikk .gt_indent_2 {
   text-indent: 10px;
 }
 
-#uoujwutcdj .gt_indent_3 {
+#mplvdazikk .gt_indent_3 {
   text-indent: 15px;
 }
 
-#uoujwutcdj .gt_indent_4 {
+#mplvdazikk .gt_indent_4 {
   text-indent: 20px;
 }
 
-#uoujwutcdj .gt_indent_5 {
+#mplvdazikk .gt_indent_5 {
   text-indent: 25px;
 }
 
-#uoujwutcdj .katex-display {
+#mplvdazikk .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#uoujwutcdj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mplvdazikk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1550,8 +1747,8 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;No</td>
-<td class="gt_row gt_center" headers="estimate">-0.95</td>
-<td class="gt_row gt_center" headers="conf.low">-1.2, -0.69</td>
+<td class="gt_row gt_center" headers="estimate">-1.2</td>
+<td class="gt_row gt_center" headers="conf.low">-1.4, -0.93</td>
 <td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
 </tr>
 <tr class="even">
@@ -1572,27 +1769,27 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Experimental treatment</td>
-<td class="gt_row gt_center" headers="estimate">0.03</td>
-<td class="gt_row gt_center" headers="conf.low">-0.22, 0.28</td>
-<td class="gt_row gt_center" headers="p.value">0.8</td>
+<td class="gt_row gt_center" headers="estimate">-0.17</td>
+<td class="gt_row gt_center" headers="conf.low">-0.40, 0.05</td>
+<td class="gt_row gt_center" headers="p.value">0.13</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
-<td class="gt_row gt_center" headers="estimate">-0.07</td>
-<td class="gt_row gt_center" headers="conf.low">-0.32, 0.18</td>
-<td class="gt_row gt_center" headers="p.value">0.6</td>
+<td class="gt_row gt_center" headers="estimate">-0.04</td>
+<td class="gt_row gt_center" headers="conf.low">-0.26, 0.18</td>
+<td class="gt_row gt_center" headers="p.value">0.7</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Radiotherapy</td>
-<td class="gt_row gt_center" headers="estimate">-0.03</td>
-<td class="gt_row gt_center" headers="conf.low">-0.27, 0.22</td>
-<td class="gt_row gt_center" headers="p.value">0.8</td>
+<td class="gt_row gt_center" headers="estimate">-0.18</td>
+<td class="gt_row gt_center" headers="conf.low">-0.41, 0.05</td>
+<td class="gt_row gt_center" headers="p.value">0.13</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Standard treatment</td>
-<td class="gt_row gt_center" headers="estimate">-0.07</td>
-<td class="gt_row gt_center" headers="conf.low">-0.32, 0.18</td>
-<td class="gt_row gt_center" headers="p.value">0.6</td>
+<td class="gt_row gt_center" headers="estimate">0.11</td>
+<td class="gt_row gt_center" headers="conf.low">-0.11, 0.34</td>
+<td class="gt_row gt_center" headers="p.value">0.3</td>
 </tr>
 </tbody><tfoot class="gt_sourcenotes">
 <tr class="even">
@@ -1613,17 +1810,17 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <section id="modèle-linéaire-hypothèses" class="slide level2">
 <h2>Modèle linéaire : hypothèses</h2>
 <div class="panel-tabset no_fragment" style="grid-template-columns: 25% 73%;">
-<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">Linéarité</a></li><li><a href="#tabset-3-2">Normalité des résidus</a></li><li><a href="#tabset-3-3">Homoscédasticité</a></li></ul>
+<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Linéarité</a></li><li><a href="#tabset-5-2">Normalité des résidus</a></li><li><a href="#tabset-5-3">Homoscédasticité</a></li></ul>
 <div class="tab-content no_fragment" style="grid-template-columns: 25% 73%;">
-<div id="tabset-3-1">
+<div id="tabset-5-1">
 <p>La relation entre <span class="math inline">\(Y\)</span> et les covariables <span class="math inline">\(X\)</span> doit être linéaire.</p>
 <p>Sur la courbe des résidus en fonction des valeurs modélisées, on s’attend à une courbe horizontale.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a><span class="fu">plot</span>(fit, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">plot</span>(fit, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-29-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-38-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -1642,14 +1839,14 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
           display:block!important;
       }</style></aside>
 </div>
-<div id="tabset-3-2">
+<div id="tabset-5-2">
 <p>Sur le QQplot, les points doivent suivre la droite diagonale.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a><span class="fu">plot</span>(fit, <span class="at">which =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">plot</span>(fit, <span class="at">which =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-30-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-39-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -1668,23 +1865,23 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
           display:block!important;
       }</style></aside>
 </div>
-<div id="tabset-3-3">
+<div id="tabset-5-3">
 <p>La variance des résidus doit être constante, on s’attend à une courbe horizontale.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">plot</span>(fit, <span class="at">which =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="fu">plot</span>(fit, <span class="at">which =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-31-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-40-1.png" width="960"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(fit)</span>
-<span id="cb31-2"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb31-3"><a href=""></a><span class="co">#&gt;  studentized Breusch-Pagan test</span></span>
-<span id="cb31-4"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb31-5"><a href=""></a><span class="co">#&gt; data:  fit</span></span>
-<span id="cb31-6"><a href=""></a><span class="co">#&gt; BP = 12.98, df = 5, p-value = 0.02356</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a>lmtest<span class="sc">::</span><span class="fu">bptest</span>(fit)</span>
+<span id="cb41-2"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb41-3"><a href=""></a><span class="co">#&gt;  studentized Breusch-Pagan test</span></span>
+<span id="cb41-4"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb41-5"><a href=""></a><span class="co">#&gt; data:  fit</span></span>
+<span id="cb41-6"><a href=""></a><span class="co">#&gt; BP = 22.181, df = 5, p-value = 0.0004836</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <aside class="notes">
 <p>Une forme en entonnoir (dispersion des points qui augmente avec les valeurs prédites) indique une hétéroscédasticité → un modèle robuste ou une transformation des variables pourrait être nécessaire. Une variation systématique des points (ex. un motif en vague) suggère que l’erreur dépend des prédicteurs.</p>
@@ -1706,104 +1903,107 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <section id="modèle-logistique-y-binaire" class="slide level2">
 <h2>Modèle logistique (Y binaire)</h2>
 <div class="cell no_fragment">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a>fit2 <span class="ot">=</span> <span class="fu">glm</span>(sae <span class="sc">~</span> aegr <span class="sc">+</span> aerel, <span class="at">data=</span>db<span class="sc">$</span>ae, <span class="at">family=</span><span class="fu">binomial</span>(<span class="at">link=</span><span class="st">"logit"</span>))</span>
-<span id="cb32-2"><a href=""></a><span class="co">#family: binomial (logit, probit...), gaussian (identity, log...), poisson, ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a>fit2 <span class="ot">=</span> <span class="fu">glm</span>(sae <span class="sc">~</span> aegr <span class="sc">+</span> aerel, <span class="at">data=</span>db<span class="sc">$</span>ae, <span class="at">family=</span><span class="fu">binomial</span>(<span class="at">link=</span><span class="st">"logit"</span>))</span>
+<span id="cb42-2"><a href=""></a><span class="co">#family: binomial (logit, probit...), gaussian (identity, log...), poisson, ...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p><br></p>
-<div class="panel-tabset no_fragment" style="grid-template-columns: 16% 82%;">
-<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1">fit</a></li><li><a href="#tabset-4-2">summary()</a></li><li><a href="#tabset-4-3">tidy()</a></li><li><a href="#tabset-4-4">gtsummary</a></li></ul>
-<div class="tab-content no_fragment" style="grid-template-columns: 16% 82%;">
-<div id="tabset-4-1">
+<div class="panel-tabset no_fragment" style="grid-template-columns: 17% 82%;">
+<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">fit</a></li><li><a href="#tabset-6-2">summary()</a></li><li><a href="#tabset-6-3">confint()</a></li><li><a href="#tabset-6-4">tidy()</a></li><li><a href="#tabset-6-5">gtsummary</a></li></ul>
+<div class="tab-content no_fragment" style="grid-template-columns: 17% 82%;">
+<div id="tabset-6-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>fit2</span>
-<span id="cb33-2"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb33-3"><a href=""></a><span class="co">#&gt; Call:  glm(formula = sae ~ aegr + aerel, family = binomial(link = "logit"), </span></span>
-<span id="cb33-4"><a href=""></a><span class="co">#&gt;     data = db$ae)</span></span>
-<span id="cb33-5"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb33-6"><a href=""></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb33-7"><a href=""></a><span class="co">#&gt;                 (Intercept)                         aegr  aerelExperimental treatment  </span></span>
-<span id="cb33-8"><a href=""></a><span class="co">#&gt;                      3.6240                      -0.7305                       0.7356  </span></span>
-<span id="cb33-9"><a href=""></a><span class="co">#&gt;                  aerelOther            aerelRadiotherapy      aerelStandard treatment  </span></span>
-<span id="cb33-10"><a href=""></a><span class="co">#&gt;                     -0.3606                       0.2361                       0.2495  </span></span>
-<span id="cb33-11"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb33-12"><a href=""></a><span class="co">#&gt; Degrees of Freedom: 605 Total (i.e. Null);  600 Residual</span></span>
-<span id="cb33-13"><a href=""></a><span class="co">#&gt; Null Deviance:       391.4 </span></span>
-<span id="cb33-14"><a href=""></a><span class="co">#&gt; Residual Deviance: 346.8     AIC: 358.8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a>fit2</span>
+<span id="cb43-2"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb43-3"><a href=""></a><span class="co">#&gt; Call:  glm(formula = sae ~ aegr + aerel, family = binomial(link = "logit"), </span></span>
+<span id="cb43-4"><a href=""></a><span class="co">#&gt;     data = db$ae)</span></span>
+<span id="cb43-5"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb43-6"><a href=""></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb43-7"><a href=""></a><span class="co">#&gt;                 (Intercept)                         aegr  aerelExperimental treatment  </span></span>
+<span id="cb43-8"><a href=""></a><span class="co">#&gt;                     4.57293                     -1.03193                     -0.11915  </span></span>
+<span id="cb43-9"><a href=""></a><span class="co">#&gt;                  aerelOther            aerelRadiotherapy      aerelStandard treatment  </span></span>
+<span id="cb43-10"><a href=""></a><span class="co">#&gt;                    -0.51926                     -0.64915                      0.09883  </span></span>
+<span id="cb43-11"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb43-12"><a href=""></a><span class="co">#&gt; Degrees of Freedom: 606 Total (i.e. Null);  601 Residual</span></span>
+<span id="cb43-13"><a href=""></a><span class="co">#&gt; Null Deviance:       413.2 </span></span>
+<span id="cb43-14"><a href=""></a><span class="co">#&gt; Residual Deviance: 339.3     AIC: 351.3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-4-2">
+<div id="tabset-6-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">summary</span>(fit2)</span>
-<span id="cb34-2"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb34-3"><a href=""></a><span class="co">#&gt; Call:</span></span>
-<span id="cb34-4"><a href=""></a><span class="co">#&gt; glm(formula = sae ~ aegr + aerel, family = binomial(link = "logit"), </span></span>
-<span id="cb34-5"><a href=""></a><span class="co">#&gt;     data = db$ae)</span></span>
-<span id="cb34-6"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb34-7"><a href=""></a><span class="co">#&gt; Coefficients:</span></span>
-<span id="cb34-8"><a href=""></a><span class="co">#&gt;                             Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
-<span id="cb34-9"><a href=""></a><span class="co">#&gt; (Intercept)                   3.6240     0.4314   8.401  &lt; 2e-16 ***</span></span>
-<span id="cb34-10"><a href=""></a><span class="co">#&gt; aegr                         -0.7305     0.1171  -6.240 4.38e-10 ***</span></span>
-<span id="cb34-11"><a href=""></a><span class="co">#&gt; aerelExperimental treatment   0.7356     0.5025   1.464    0.143    </span></span>
-<span id="cb34-12"><a href=""></a><span class="co">#&gt; aerelOther                   -0.3606     0.4109  -0.877    0.380    </span></span>
-<span id="cb34-13"><a href=""></a><span class="co">#&gt; aerelRadiotherapy             0.2361     0.4394   0.537    0.591    </span></span>
-<span id="cb34-14"><a href=""></a><span class="co">#&gt; aerelStandard treatment       0.2495     0.4602   0.542    0.588    </span></span>
-<span id="cb34-15"><a href=""></a><span class="co">#&gt; ---</span></span>
-<span id="cb34-16"><a href=""></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span id="cb34-17"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb34-18"><a href=""></a><span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span></span>
-<span id="cb34-19"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb34-20"><a href=""></a><span class="co">#&gt;     Null deviance: 391.36  on 605  degrees of freedom</span></span>
-<span id="cb34-21"><a href=""></a><span class="co">#&gt; Residual deviance: 346.78  on 600  degrees of freedom</span></span>
-<span id="cb34-22"><a href=""></a><span class="co">#&gt; AIC: 358.78</span></span>
-<span id="cb34-23"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb34-24"><a href=""></a><span class="co">#&gt; Number of Fisher Scoring iterations: 5</span></span>
-<span id="cb34-25"><a href=""></a></span>
-<span id="cb34-26"><a href=""></a><span class="fu">confint</span>(fit2)</span>
-<span id="cb34-27"><a href=""></a><span class="co">#&gt;                                  2.5 %     97.5 %</span></span>
-<span id="cb34-28"><a href=""></a><span class="co">#&gt; (Intercept)                  2.8229887  4.5202857</span></span>
-<span id="cb34-29"><a href=""></a><span class="co">#&gt; aegr                        -0.9636990 -0.5029897</span></span>
-<span id="cb34-30"><a href=""></a><span class="co">#&gt; aerelExperimental treatment -0.2238604  1.7736458</span></span>
-<span id="cb34-31"><a href=""></a><span class="co">#&gt; aerelOther                  -1.1819895  0.4403776</span></span>
-<span id="cb34-32"><a href=""></a><span class="co">#&gt; aerelRadiotherapy           -0.6279850  1.1101385</span></span>
-<span id="cb34-33"><a href=""></a><span class="co">#&gt; aerelStandard treatment     -0.6482995  1.1742253</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">summary</span>(fit2)</span>
+<span id="cb44-2"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb44-3"><a href=""></a><span class="co">#&gt; Call:</span></span>
+<span id="cb44-4"><a href=""></a><span class="co">#&gt; glm(formula = sae ~ aegr + aerel, family = binomial(link = "logit"), </span></span>
+<span id="cb44-5"><a href=""></a><span class="co">#&gt;     data = db$ae)</span></span>
+<span id="cb44-6"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb44-7"><a href=""></a><span class="co">#&gt; Coefficients:</span></span>
+<span id="cb44-8"><a href=""></a><span class="co">#&gt;                             Estimate Std. Error z value Pr(&gt;|z|)    </span></span>
+<span id="cb44-9"><a href=""></a><span class="co">#&gt; (Intercept)                  4.57293    0.48331   9.462  &lt; 2e-16 ***</span></span>
+<span id="cb44-10"><a href=""></a><span class="co">#&gt; aegr                        -1.03193    0.12936  -7.977  1.5e-15 ***</span></span>
+<span id="cb44-11"><a href=""></a><span class="co">#&gt; aerelExperimental treatment -0.11915    0.49665  -0.240    0.810    </span></span>
+<span id="cb44-12"><a href=""></a><span class="co">#&gt; aerelOther                  -0.51926    0.44605  -1.164    0.244    </span></span>
+<span id="cb44-13"><a href=""></a><span class="co">#&gt; aerelRadiotherapy           -0.64915    0.46449  -1.398    0.162    </span></span>
+<span id="cb44-14"><a href=""></a><span class="co">#&gt; aerelStandard treatment      0.09883    0.48102   0.205    0.837    </span></span>
+<span id="cb44-15"><a href=""></a><span class="co">#&gt; ---</span></span>
+<span id="cb44-16"><a href=""></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb44-17"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb44-18"><a href=""></a><span class="co">#&gt; (Dispersion parameter for binomial family taken to be 1)</span></span>
+<span id="cb44-19"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb44-20"><a href=""></a><span class="co">#&gt;     Null deviance: 413.22  on 606  degrees of freedom</span></span>
+<span id="cb44-21"><a href=""></a><span class="co">#&gt; Residual deviance: 339.33  on 601  degrees of freedom</span></span>
+<span id="cb44-22"><a href=""></a><span class="co">#&gt; AIC: 351.33</span></span>
+<span id="cb44-23"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb44-24"><a href=""></a><span class="co">#&gt; Number of Fisher Scoring iterations: 5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-4-3">
+<div id="tabset-6-3">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit2, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span>
-<span id="cb35-2"><a href=""></a><span class="co">#&gt; # A tibble: 6 × 7</span></span>
-<span id="cb35-3"><a href=""></a><span class="co">#&gt;   term                        estimate std.error statistic  p.value conf.low conf.high</span></span>
-<span id="cb35-4"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;                          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span id="cb35-5"><a href=""></a><span class="co">#&gt; 1 (Intercept)                    3.62      0.431     8.40  4.41e-17    2.82      4.52 </span></span>
-<span id="cb35-6"><a href=""></a><span class="co">#&gt; 2 aegr                          -0.730     0.117    -6.24  4.38e-10   -0.964    -0.503</span></span>
-<span id="cb35-7"><a href=""></a><span class="co">#&gt; 3 aerelExperimental treatment    0.736     0.502     1.46  1.43e- 1   -0.224     1.77 </span></span>
-<span id="cb35-8"><a href=""></a><span class="co">#&gt; 4 aerelOther                    -0.361     0.411    -0.877 3.80e- 1   -1.18      0.440</span></span>
-<span id="cb35-9"><a href=""></a><span class="co">#&gt; 5 aerelRadiotherapy              0.236     0.439     0.537 5.91e- 1   -0.628     1.11 </span></span>
-<span id="cb35-10"><a href=""></a><span class="co">#&gt; 6 aerelStandard treatment        0.250     0.460     0.542 5.88e- 1   -0.648     1.17</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a><span class="fu">confint</span>(fit2)</span>
+<span id="cb45-2"><a href=""></a><span class="co">#&gt;                                 2.5 %     97.5 %</span></span>
+<span id="cb45-3"><a href=""></a><span class="co">#&gt; (Intercept)                  3.680755  5.5830484</span></span>
+<span id="cb45-4"><a href=""></a><span class="co">#&gt; aegr                        -1.293290 -0.7843601</span></span>
+<span id="cb45-5"><a href=""></a><span class="co">#&gt; aerelExperimental treatment -1.101789  0.8660883</span></span>
+<span id="cb45-6"><a href=""></a><span class="co">#&gt; aerelOther                  -1.419946  0.3425664</span></span>
+<span id="cb45-7"><a href=""></a><span class="co">#&gt; aerelRadiotherapy           -1.583149  0.2534234</span></span>
+<span id="cb45-8"><a href=""></a><span class="co">#&gt; aerelStandard treatment     -0.854833  1.0485189</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-4-4">
+<div id="tabset-6-4">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(fit2, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit2, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span>
+<span id="cb46-2"><a href=""></a><span class="co">#&gt; # A tibble: 6 × 7</span></span>
+<span id="cb46-3"><a href=""></a><span class="co">#&gt;   term                        estimate std.error statistic  p.value conf.low conf.high</span></span>
+<span id="cb46-4"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;                          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb46-5"><a href=""></a><span class="co">#&gt; 1 (Intercept)                   4.57       0.483     9.46  3.03e-21    3.68      5.58 </span></span>
+<span id="cb46-6"><a href=""></a><span class="co">#&gt; 2 aegr                         -1.03       0.129    -7.98  1.50e-15   -1.29     -0.784</span></span>
+<span id="cb46-7"><a href=""></a><span class="co">#&gt; 3 aerelExperimental treatment  -0.119      0.497    -0.240 8.10e- 1   -1.10      0.866</span></span>
+<span id="cb46-8"><a href=""></a><span class="co">#&gt; 4 aerelOther                   -0.519      0.446    -1.16  2.44e- 1   -1.42      0.343</span></span>
+<span id="cb46-9"><a href=""></a><span class="co">#&gt; 5 aerelRadiotherapy            -0.649      0.464    -1.40  1.62e- 1   -1.58      0.253</span></span>
+<span id="cb46-10"><a href=""></a><span class="co">#&gt; 6 aerelStandard treatment       0.0988     0.481     0.205 8.37e- 1   -0.855     1.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-6-5">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(fit2, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div id="eonsjwmbls" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#eonsjwmbls table {
+<div id="dhoclyodrl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#dhoclyodrl table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#eonsjwmbls thead, #eonsjwmbls tbody, #eonsjwmbls tfoot, #eonsjwmbls tr, #eonsjwmbls td, #eonsjwmbls th {
+#dhoclyodrl thead, #dhoclyodrl tbody, #dhoclyodrl tfoot, #dhoclyodrl tr, #dhoclyodrl td, #dhoclyodrl th {
   border-style: none;
 }
 
-#eonsjwmbls p {
+#dhoclyodrl p {
   margin: 0;
   padding: 0;
 }
 
-#eonsjwmbls .gt_table {
+#dhoclyodrl .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1829,12 +2029,12 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-left-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_caption {
+#dhoclyodrl .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#eonsjwmbls .gt_title {
+#dhoclyodrl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1846,7 +2046,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-bottom-width: 0;
 }
 
-#eonsjwmbls .gt_subtitle {
+#dhoclyodrl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1858,7 +2058,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-top-width: 0;
 }
 
-#eonsjwmbls .gt_heading {
+#dhoclyodrl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1870,13 +2070,13 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-right-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_bottom_border {
+#dhoclyodrl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_col_headings {
+#dhoclyodrl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1891,7 +2091,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-right-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_col_heading {
+#dhoclyodrl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1911,7 +2111,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   overflow-x: hidden;
 }
 
-#eonsjwmbls .gt_column_spanner_outer {
+#dhoclyodrl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1923,15 +2123,15 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 4px;
 }
 
-#eonsjwmbls .gt_column_spanner_outer:first-child {
+#dhoclyodrl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#eonsjwmbls .gt_column_spanner_outer:last-child {
+#dhoclyodrl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#eonsjwmbls .gt_column_spanner {
+#dhoclyodrl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1943,11 +2143,11 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   width: 100%;
 }
 
-#eonsjwmbls .gt_spanner_row {
+#dhoclyodrl .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#eonsjwmbls .gt_group_heading {
+#dhoclyodrl .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1973,7 +2173,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   text-align: left;
 }
 
-#eonsjwmbls .gt_empty_group_heading {
+#dhoclyodrl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1988,15 +2188,15 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   vertical-align: middle;
 }
 
-#eonsjwmbls .gt_from_md > :first-child {
+#dhoclyodrl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#eonsjwmbls .gt_from_md > :last-child {
+#dhoclyodrl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#eonsjwmbls .gt_row {
+#dhoclyodrl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2015,7 +2215,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   overflow-x: hidden;
 }
 
-#eonsjwmbls .gt_stub {
+#dhoclyodrl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2028,7 +2228,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#eonsjwmbls .gt_stub_row_group {
+#dhoclyodrl .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2042,15 +2242,15 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   vertical-align: top;
 }
 
-#eonsjwmbls .gt_row_group_first td {
+#dhoclyodrl .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#eonsjwmbls .gt_row_group_first th {
+#dhoclyodrl .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#eonsjwmbls .gt_summary_row {
+#dhoclyodrl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2060,16 +2260,16 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#eonsjwmbls .gt_first_summary_row {
+#dhoclyodrl .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_first_summary_row.thick {
+#dhoclyodrl .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#eonsjwmbls .gt_last_summary_row {
+#dhoclyodrl .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2079,7 +2279,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-bottom-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_grand_summary_row {
+#dhoclyodrl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2089,7 +2289,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#eonsjwmbls .gt_first_grand_summary_row {
+#dhoclyodrl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2099,7 +2299,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-top-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_last_grand_summary_row_top {
+#dhoclyodrl .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2109,11 +2309,11 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-bottom-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_striped {
+#dhoclyodrl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#eonsjwmbls .gt_table_body {
+#dhoclyodrl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2122,7 +2322,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-bottom-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_footnotes {
+#dhoclyodrl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2136,7 +2336,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-right-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_footnote {
+#dhoclyodrl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2145,7 +2345,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#eonsjwmbls .gt_sourcenotes {
+#dhoclyodrl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2159,7 +2359,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   border-right-color: #D3D3D3;
 }
 
-#eonsjwmbls .gt_sourcenote {
+#dhoclyodrl .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2167,72 +2367,72 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
   padding-right: 5px;
 }
 
-#eonsjwmbls .gt_left {
+#dhoclyodrl .gt_left {
   text-align: left;
 }
 
-#eonsjwmbls .gt_center {
+#dhoclyodrl .gt_center {
   text-align: center;
 }
 
-#eonsjwmbls .gt_right {
+#dhoclyodrl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#eonsjwmbls .gt_font_normal {
+#dhoclyodrl .gt_font_normal {
   font-weight: normal;
 }
 
-#eonsjwmbls .gt_font_bold {
+#dhoclyodrl .gt_font_bold {
   font-weight: bold;
 }
 
-#eonsjwmbls .gt_font_italic {
+#dhoclyodrl .gt_font_italic {
   font-style: italic;
 }
 
-#eonsjwmbls .gt_super {
+#dhoclyodrl .gt_super {
   font-size: 65%;
 }
 
-#eonsjwmbls .gt_footnote_marks {
+#dhoclyodrl .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#eonsjwmbls .gt_asterisk {
+#dhoclyodrl .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#eonsjwmbls .gt_indent_1 {
+#dhoclyodrl .gt_indent_1 {
   text-indent: 5px;
 }
 
-#eonsjwmbls .gt_indent_2 {
+#dhoclyodrl .gt_indent_2 {
   text-indent: 10px;
 }
 
-#eonsjwmbls .gt_indent_3 {
+#dhoclyodrl .gt_indent_3 {
   text-indent: 15px;
 }
 
-#eonsjwmbls .gt_indent_4 {
+#dhoclyodrl .gt_indent_4 {
   text-indent: 20px;
 }
 
-#eonsjwmbls .gt_indent_5 {
+#dhoclyodrl .gt_indent_5 {
   text-indent: 25px;
 }
 
-#eonsjwmbls .katex-display {
+#dhoclyodrl .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#eonsjwmbls div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#dhoclyodrl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2255,8 +2455,8 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_left" headers="label">AE grade</td>
-<td class="gt_row gt_center" headers="estimate">-0.73</td>
-<td class="gt_row gt_center" headers="conf.low">-0.96, -0.50</td>
+<td class="gt_row gt_center" headers="estimate">-1.0</td>
+<td class="gt_row gt_center" headers="conf.low">-1.3, -0.78</td>
 <td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
 </tr>
 <tr class="even">
@@ -2277,27 +2477,27 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Experimental treatment</td>
-<td class="gt_row gt_center" headers="estimate">0.74</td>
-<td class="gt_row gt_center" headers="conf.low">-0.22, 1.8</td>
-<td class="gt_row gt_center" headers="p.value">0.14</td>
+<td class="gt_row gt_center" headers="estimate">-0.12</td>
+<td class="gt_row gt_center" headers="conf.low">-1.1, 0.87</td>
+<td class="gt_row gt_center" headers="p.value">0.8</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Other</td>
-<td class="gt_row gt_center" headers="estimate">-0.36</td>
-<td class="gt_row gt_center" headers="conf.low">-1.2, 0.44</td>
-<td class="gt_row gt_center" headers="p.value">0.4</td>
+<td class="gt_row gt_center" headers="estimate">-0.52</td>
+<td class="gt_row gt_center" headers="conf.low">-1.4, 0.34</td>
+<td class="gt_row gt_center" headers="p.value">0.2</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Radiotherapy</td>
-<td class="gt_row gt_center" headers="estimate">0.24</td>
-<td class="gt_row gt_center" headers="conf.low">-0.63, 1.1</td>
-<td class="gt_row gt_center" headers="p.value">0.6</td>
+<td class="gt_row gt_center" headers="estimate">-0.65</td>
+<td class="gt_row gt_center" headers="conf.low">-1.6, 0.25</td>
+<td class="gt_row gt_center" headers="p.value">0.2</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Standard treatment</td>
-<td class="gt_row gt_center" headers="estimate">0.25</td>
-<td class="gt_row gt_center" headers="conf.low">-0.65, 1.2</td>
-<td class="gt_row gt_center" headers="p.value">0.6</td>
+<td class="gt_row gt_center" headers="estimate">0.10</td>
+<td class="gt_row gt_center" headers="conf.low">-0.85, 1.0</td>
+<td class="gt_row gt_center" headers="p.value">0.8</td>
 </tr>
 </tbody><tfoot class="gt_sourcenotes">
 <tr class="even">
@@ -2318,17 +2518,17 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <section id="modèle-logistique-hypothèses" class="slide level2">
 <h2>Modèle logistique : hypothèses</h2>
 <div class="panel-tabset fragment no_fragment">
-<ul id="tabset-5" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-5-1">Linéarité</a></li><li><a href="#tabset-5-2">Normalité des résidus</a></li><li><a href="#tabset-5-3">Homoscédasticité</a></li></ul>
+<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">Linéarité</a></li><li><a href="#tabset-7-2">Normalité des résidus</a></li><li><a href="#tabset-7-3">Homoscédasticité</a></li></ul>
 <div class="tab-content fragment no_fragment">
-<div id="tabset-5-1">
+<div id="tabset-7-1">
 <p>La relation entre <span class="math inline">\(Y\)</span> et les covariables <span class="math inline">\(X\)</span> doit être linéaire.</p>
 <p>Sur la courbe des résidus en fonction des valeurs modélisées, on s’attend à une courbe horizontale.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a><span class="fu">plot</span>(fit2, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="fu">plot</span>(fit2, <span class="at">which =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-37-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-47-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -2347,27 +2547,27 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
           display:block!important;
       }</style></aside>
 </div>
-<div id="tabset-5-2">
+<div id="tabset-7-2">
 <p>La normalité des résidus n’est <strong>PAS</strong> une hypothèse du modèle logistique.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">plot</span>(fit2, <span class="at">which =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a><span class="fu">plot</span>(fit2, <span class="at">which =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-38-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-48-1.png" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<div id="tabset-5-3">
+<div id="tabset-7-3">
 <p>La variance des résidus doit être constante, on s’attend à une courbe horizontale.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">plot</span>(fit2, <span class="at">which =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a><span class="fu">plot</span>(fit2, <span class="at">which =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-39-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-49-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -2391,142 +2591,153 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 </section>
 <section id="analyses-de-survie" class="slide level2">
 <h2>Analyses de survie</h2>
-<p>Pour l’exemple, on va simuler des données de survie selon une loi exponentielle, avec 3 covariables : le bras de traitement <code>arm</code>, un biomarqueur binaire <code>bm1</code>, et un biomarqueur continu <code>bm2</code>.</p>
+<p>Pour l’exemple, on va simuler des données de survie selon une loi exponentielle, avec 3 covariables : le bras de traitement <code>arm</code>, un biomarqueur binaire <code>bm_bin</code>, et un biomarqueur continu <code>bm_cont</code>.</p>
 <div class="cell no_fragment">
 <details class="code-fold">
 <summary>Show the code for get_df()</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href=""></a><span class="co">#' Simulated dataset</span></span>
-<span id="cb40-2"><a href=""></a><span class="co">#'</span></span>
-<span id="cb40-3"><a href=""></a><span class="co">#' @param n number of observations</span></span>
-<span id="cb40-4"><a href=""></a><span class="co">#' @param beta_trt,beta_bm1,beta_bm2 the true coefficients</span></span>
-<span id="cb40-5"><a href=""></a><span class="co">#' @param eos non-informative censoring (end of study)</span></span>
-<span id="cb40-6"><a href=""></a><span class="co">#' @param seed RNG seed</span></span>
-<span id="cb40-7"><a href=""></a>surv_example <span class="ot">=</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">300</span>, </span>
-<span id="cb40-8"><a href=""></a>                  <span class="at">beta_trt=</span><span class="fu">log</span>(<span class="fl">0.7</span>), <span class="at">beta_bm1=</span><span class="fu">log</span>(<span class="fl">1.5</span>), <span class="at">beta_bm2=</span><span class="fu">log</span>(<span class="fl">0.8</span>),</span>
-<span id="cb40-9"><a href=""></a>                  <span class="at">eos=</span><span class="dv">30</span>, <span class="at">seed=</span><span class="dv">42</span>){</span>
-<span id="cb40-10"><a href=""></a>  <span class="fu">set.seed</span>(seed)</span>
-<span id="cb40-11"><a href=""></a>  <span class="co"># Generate covariates</span></span>
-<span id="cb40-12"><a href=""></a>  baseline <span class="ot">=</span> <span class="fu">tibble</span>(</span>
-<span id="cb40-13"><a href=""></a>    <span class="at">subjid =</span> <span class="fu">seq</span>(n),</span>
-<span id="cb40-14"><a href=""></a>    <span class="at">arm =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each=</span>n<span class="sc">/</span><span class="dv">2</span>),   </span>
-<span id="cb40-15"><a href=""></a>    <span class="at">bm1 =</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span>),</span>
-<span id="cb40-16"><a href=""></a>    <span class="at">bm2 =</span> <span class="fu">rnorm</span>(n),</span>
-<span id="cb40-17"><a href=""></a>  )</span>
-<span id="cb40-18"><a href=""></a></span>
-<span id="cb40-19"><a href=""></a>  rtn <span class="ot">=</span> baseline <span class="sc">%&gt;%</span></span>
-<span id="cb40-20"><a href=""></a>    <span class="fu">mutate</span>(</span>
-<span id="cb40-21"><a href=""></a>      <span class="co"># Generate exponential survival time</span></span>
-<span id="cb40-22"><a href=""></a>      <span class="at">log_predlin =</span> beta_trt<span class="sc">*</span>arm <span class="sc">+</span> beta_bm1<span class="sc">*</span>bm1 <span class="sc">+</span> beta_bm2<span class="sc">*</span>bm2,</span>
-<span id="cb40-23"><a href=""></a>      <span class="at">lambda0 =</span> <span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span><span class="dv">10</span> <span class="sc">/</span> <span class="fu">exp</span>(beta_bm1<span class="sc">*</span><span class="fu">mean</span>(bm1) <span class="sc">+</span> beta_bm2<span class="sc">*</span><span class="fu">mean</span>(bm2)),</span>
-<span id="cb40-24"><a href=""></a>      <span class="at">lambda =</span> lambda0 <span class="sc">*</span> <span class="fu">exp</span>(log_predlin),</span>
-<span id="cb40-25"><a href=""></a>      <span class="at">t_real =</span> <span class="fu">rexp</span>(n, <span class="at">rate=</span>lambda),</span>
-<span id="cb40-26"><a href=""></a></span>
-<span id="cb40-27"><a href=""></a>      <span class="co"># Administrative censorship</span></span>
-<span id="cb40-28"><a href=""></a>      <span class="at">t =</span> <span class="fu">pmin</span>(t_real, eos),</span>
-<span id="cb40-29"><a href=""></a>      <span class="at">event =</span> <span class="fu">as.numeric</span>(t_real<span class="sc">&lt;=</span>eos),</span>
-<span id="cb40-30"><a href=""></a></span>
-<span id="cb40-31"><a href=""></a>      <span class="co"># labels</span></span>
-<span id="cb40-32"><a href=""></a>      <span class="at">arm =</span>  <span class="fu">factor</span>(arm,  <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>)),</span>
-<span id="cb40-33"><a href=""></a>      <span class="at">bm1 =</span> <span class="fu">factor</span>(bm1, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"Negative"</span>, <span class="st">"Positive"</span>)),</span>
-<span id="cb40-34"><a href=""></a>    )</span>
-<span id="cb40-35"><a href=""></a></span>
-<span id="cb40-36"><a href=""></a>  rtn <span class="sc">%&gt;%</span></span>
-<span id="cb40-37"><a href=""></a>    <span class="fu">select</span>(subjid, arm, t, event, bm1, bm2)</span>
-<span id="cb40-38"><a href=""></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a><span class="co">#' Simulated dataset</span></span>
+<span id="cb51-2"><a href=""></a><span class="co">#'</span></span>
+<span id="cb51-3"><a href=""></a><span class="co">#' @param n number of observations</span></span>
+<span id="cb51-4"><a href=""></a><span class="co">#' @param beta_trt,beta_bm_cont,beta_bm_cont the true coefficients</span></span>
+<span id="cb51-5"><a href=""></a><span class="co">#' @param eos non-informative censoring (end of study)</span></span>
+<span id="cb51-6"><a href=""></a><span class="co">#' @param seed RNG seed</span></span>
+<span id="cb51-7"><a href=""></a>surv_example <span class="ot">=</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">300</span>, </span>
+<span id="cb51-8"><a href=""></a>                  <span class="at">beta_trt=</span><span class="fu">log</span>(<span class="fl">0.7</span>), <span class="at">beta_bm_bin=</span><span class="fu">log</span>(<span class="fl">1.5</span>), <span class="at">beta_bm_cont=</span><span class="fu">log</span>(<span class="fl">0.8</span>),</span>
+<span id="cb51-9"><a href=""></a>                  <span class="at">eos=</span><span class="dv">30</span>, <span class="at">seed=</span><span class="dv">42</span>){</span>
+<span id="cb51-10"><a href=""></a>  <span class="fu">set.seed</span>(seed)</span>
+<span id="cb51-11"><a href=""></a>  <span class="co"># Generate covariates</span></span>
+<span id="cb51-12"><a href=""></a>  baseline <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb51-13"><a href=""></a>    <span class="at">subjid =</span> <span class="fu">seq</span>(n),</span>
+<span id="cb51-14"><a href=""></a>    <span class="at">arm =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="at">each=</span>n<span class="sc">/</span><span class="dv">2</span>),   </span>
+<span id="cb51-15"><a href=""></a>    <span class="at">bm_bin =</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.4</span>),</span>
+<span id="cb51-16"><a href=""></a>    <span class="at">bm_cont =</span> <span class="fu">rnorm</span>(n),</span>
+<span id="cb51-17"><a href=""></a>  )</span>
+<span id="cb51-18"><a href=""></a></span>
+<span id="cb51-19"><a href=""></a>  rtn <span class="ot">=</span> baseline <span class="sc">%&gt;%</span></span>
+<span id="cb51-20"><a href=""></a>    <span class="fu">mutate</span>(</span>
+<span id="cb51-21"><a href=""></a>      <span class="co"># Generate exponential survival time</span></span>
+<span id="cb51-22"><a href=""></a>      <span class="at">log_predlin =</span> beta_trt<span class="sc">*</span>arm <span class="sc">+</span> beta_bm_bin<span class="sc">*</span>bm_bin <span class="sc">+</span> beta_bm_cont<span class="sc">*</span>bm_cont,</span>
+<span id="cb51-23"><a href=""></a>      <span class="at">lambda0 =</span> <span class="fu">log</span>(<span class="dv">2</span>)<span class="sc">/</span><span class="dv">10</span> <span class="sc">/</span> <span class="fu">exp</span>(beta_bm_bin<span class="sc">*</span><span class="fu">mean</span>(bm_bin) <span class="sc">+</span> beta_bm_cont<span class="sc">*</span><span class="fu">mean</span>(bm_cont)),</span>
+<span id="cb51-24"><a href=""></a>      <span class="at">lambda =</span> lambda0 <span class="sc">*</span> <span class="fu">exp</span>(log_predlin),</span>
+<span id="cb51-25"><a href=""></a>      <span class="at">t_real =</span> <span class="fu">rexp</span>(n, <span class="at">rate=</span>lambda),</span>
+<span id="cb51-26"><a href=""></a></span>
+<span id="cb51-27"><a href=""></a>      <span class="co"># Administrative censorship</span></span>
+<span id="cb51-28"><a href=""></a>      <span class="at">t =</span> <span class="fu">pmin</span>(t_real, eos),</span>
+<span id="cb51-29"><a href=""></a>      <span class="at">event =</span> <span class="fu">as.numeric</span>(t_real<span class="sc">&lt;=</span>eos),</span>
+<span id="cb51-30"><a href=""></a></span>
+<span id="cb51-31"><a href=""></a>      <span class="co"># labels</span></span>
+<span id="cb51-32"><a href=""></a>      <span class="at">arm =</span>  <span class="fu">factor</span>(arm,  <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>)),</span>
+<span id="cb51-33"><a href=""></a>      <span class="at">bm_bin =</span> <span class="fu">factor</span>(bm_bin, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">"Negative"</span>, <span class="st">"Positive"</span>)),</span>
+<span id="cb51-34"><a href=""></a>    )</span>
+<span id="cb51-35"><a href=""></a></span>
+<span id="cb51-36"><a href=""></a>  rtn <span class="sc">%&gt;%</span></span>
+<span id="cb51-37"><a href=""></a>    <span class="fu">select</span>(subjid, arm, t, event, bm_bin, bm_cont)</span>
+<span id="cb51-38"><a href=""></a>} </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell no_fragment">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href=""></a>df <span class="ot">=</span> <span class="fu">surv_example</span>()</span>
-<span id="cb41-2"><a href=""></a>df <span class="sc">%&gt;%</span> <span class="fu">print</span>(<span class="at">n=</span><span class="dv">2</span>)</span>
-<span id="cb41-3"><a href=""></a><span class="co">#&gt; # A tibble: 300 × 6</span></span>
-<span id="cb41-4"><a href=""></a><span class="co">#&gt;   subjid arm         t event bm1          bm2</span></span>
-<span id="cb41-5"><a href=""></a><span class="co">#&gt;    &lt;int&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;</span></span>
-<span id="cb41-6"><a href=""></a><span class="co">#&gt; 1      1 Control  29.4     1 Positive -0.0407</span></span>
-<span id="cb41-7"><a href=""></a><span class="co">#&gt; 2      2 Control  23.7     1 Positive -1.55  </span></span>
-<span id="cb41-8"><a href=""></a><span class="co">#&gt; # ℹ 298 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a>df <span class="ot">=</span> <span class="fu">surv_example</span>()</span>
+<span id="cb52-2"><a href=""></a>df</span>
+<span id="cb52-3"><a href=""></a><span class="co">#&gt; # A tibble: 300 × 6</span></span>
+<span id="cb52-4"><a href=""></a><span class="co">#&gt;    subjid arm          t event bm_bin    bm_cont</span></span>
+<span id="cb52-5"><a href=""></a><span class="co">#&gt;     &lt;int&gt; &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;       &lt;dbl&gt;</span></span>
+<span id="cb52-6"><a href=""></a><span class="co">#&gt;  1      1 Control 29.4       1 Positive -0.0407 </span></span>
+<span id="cb52-7"><a href=""></a><span class="co">#&gt;  2      2 Control 23.7       1 Positive -1.55   </span></span>
+<span id="cb52-8"><a href=""></a><span class="co">#&gt;  3      3 Control 28.6       1 Negative  1.17   </span></span>
+<span id="cb52-9"><a href=""></a><span class="co">#&gt;  4      4 Control 30         0 Positive -0.274  </span></span>
+<span id="cb52-10"><a href=""></a><span class="co">#&gt;  5      5 Control  1.38      1 Positive -0.468  </span></span>
+<span id="cb52-11"><a href=""></a><span class="co">#&gt;  6      6 Control  2.18      1 Negative -1.24   </span></span>
+<span id="cb52-12"><a href=""></a><span class="co">#&gt;  7      7 Control  0.942     1 Positive -0.00776</span></span>
+<span id="cb52-13"><a href=""></a><span class="co">#&gt;  8      8 Control 30         0 Negative -0.800  </span></span>
+<span id="cb52-14"><a href=""></a><span class="co">#&gt;  9      9 Control  5.31      1 Positive -0.533  </span></span>
+<span id="cb52-15"><a href=""></a><span class="co">#&gt; 10     10 Control  7.79      1 Positive  1.29   </span></span>
+<span id="cb52-16"><a href=""></a><span class="co">#&gt; # ℹ 290 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="kaplan-meier-log-rank" class="slide level2">
 <h2>Kaplan Meier &amp; Log Rank</h2>
 <div class="panel-tabset fragment no_fragment">
-<ul id="tabset-6" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-6-1">survfit</a></li><li><a href="#tabset-6-2">Logrank</a></li><li><a href="#tabset-6-3">KM plot (binaire)</a></li><li><a href="#tabset-6-4">KM plot (continu)</a></li></ul>
+<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">survfit</a></li><li><a href="#tabset-8-2">Logrank</a></li><li><a href="#tabset-8-3">KM plot (binaire)</a></li><li><a href="#tabset-8-4">KM plot (continu)</a></li></ul>
 <div class="tab-content fragment no_fragment">
-<div id="tabset-6-1">
+<div id="tabset-8-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href=""></a><span class="fu">library</span>(survival)</span>
-<span id="cb42-2"><a href=""></a><span class="fu">library</span>(ggsurvfit)</span>
-<span id="cb42-3"><a href=""></a>km <span class="ot">=</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm, <span class="at">data=</span>df)</span>
-<span id="cb42-4"><a href=""></a>km</span>
-<span id="cb42-5"><a href=""></a><span class="co">#&gt; Call: survfit(formula = Surv(t, event) ~ arm, data = df)</span></span>
-<span id="cb42-6"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb42-7"><a href=""></a><span class="co">#&gt;                 n events median 0.95LCL 0.95UCL</span></span>
-<span id="cb42-8"><a href=""></a><span class="co">#&gt; arm=Control   150    126   11.0    7.79    15.9</span></span>
-<span id="cb42-9"><a href=""></a><span class="co">#&gt; arm=Treatment 150    114   15.9   13.99    21.7</span></span>
-<span id="cb42-10"><a href=""></a><span class="fu">tidy_survfit</span>(km, <span class="at">times=</span><span class="fu">c</span>(<span class="dv">12</span>,<span class="dv">24</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-11"><a href=""></a>  <span class="fu">select</span>(strata, <span class="fu">everything</span>())</span>
-<span id="cb42-12"><a href=""></a><span class="co">#&gt; # A tibble: 4 × 16</span></span>
-<span id="cb42-13"><a href=""></a><span class="co">#&gt;   strata         time n.risk n.event n.censor cum.event cum.censor estimate std.error conf.high conf.low</span></span>
-<span id="cb42-14"><a href=""></a><span class="co">#&gt;   &lt;fct&gt;         &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span id="cb42-15"><a href=""></a><span class="co">#&gt; 1 arm=Control      12     70      80        0        80          0    0.467    0.0873     0.554    0.393</span></span>
-<span id="cb42-16"><a href=""></a><span class="co">#&gt; 2 arm=Control      24     39      31        0       111          0    0.260    0.138      0.341    0.198</span></span>
-<span id="cb42-17"><a href=""></a><span class="co">#&gt; 3 arm=Treatment    12     97      53        0        53          0    0.647    0.0604     0.728    0.575</span></span>
-<span id="cb42-18"><a href=""></a><span class="co">#&gt; 4 arm=Treatment    24     54      43        0        96          0    0.360    0.109      0.446    0.291</span></span>
-<span id="cb42-19"><a href=""></a><span class="co">#&gt; # ℹ 5 more variables: estimate_type &lt;chr&gt;, estimate_type_label &lt;chr&gt;, monotonicity_type &lt;chr&gt;,</span></span>
-<span id="cb42-20"><a href=""></a><span class="co">#&gt; #   strata_label &lt;chr&gt;, conf.level &lt;dbl&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a><span class="fu">library</span>(survival)</span>
+<span id="cb53-2"><a href=""></a><span class="fu">library</span>(ggsurvfit)</span>
+<span id="cb53-3"><a href=""></a></span>
+<span id="cb53-4"><a href=""></a>km <span class="ot">=</span> <span class="fu">survfit</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm, <span class="at">data=</span>df)</span>
+<span id="cb53-5"><a href=""></a>km</span>
+<span id="cb53-6"><a href=""></a><span class="co">#&gt; Call: survfit(formula = Surv(t, event) ~ arm, data = df)</span></span>
+<span id="cb53-7"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb53-8"><a href=""></a><span class="co">#&gt;                 n events median 0.95LCL 0.95UCL</span></span>
+<span id="cb53-9"><a href=""></a><span class="co">#&gt; arm=Control   150    126   11.0    7.79    15.9</span></span>
+<span id="cb53-10"><a href=""></a><span class="co">#&gt; arm=Treatment 150    114   15.9   13.99    21.7</span></span>
+<span id="cb53-11"><a href=""></a></span>
+<span id="cb53-12"><a href=""></a><span class="fu">tidy_survfit</span>(km, <span class="at">times=</span><span class="fu">c</span>(<span class="dv">12</span>,<span class="dv">24</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb53-13"><a href=""></a>  <span class="fu">select</span>(strata, <span class="fu">everything</span>())</span>
+<span id="cb53-14"><a href=""></a><span class="co">#&gt; # A tibble: 4 × 16</span></span>
+<span id="cb53-15"><a href=""></a><span class="co">#&gt;   strata         time n.risk n.event n.censor cum.event cum.censor estimate std.error conf.high conf.low</span></span>
+<span id="cb53-16"><a href=""></a><span class="co">#&gt;   &lt;fct&gt;         &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span id="cb53-17"><a href=""></a><span class="co">#&gt; 1 arm=Control      12     70      80        0        80          0    0.467    0.0873     0.554    0.393</span></span>
+<span id="cb53-18"><a href=""></a><span class="co">#&gt; 2 arm=Control      24     39      31        0       111          0    0.260    0.138      0.341    0.198</span></span>
+<span id="cb53-19"><a href=""></a><span class="co">#&gt; 3 arm=Treatment    12     97      53        0        53          0    0.647    0.0604     0.728    0.575</span></span>
+<span id="cb53-20"><a href=""></a><span class="co">#&gt; 4 arm=Treatment    24     54      43        0        96          0    0.360    0.109      0.446    0.291</span></span>
+<span id="cb53-21"><a href=""></a><span class="co">#&gt; # ℹ 5 more variables: estimate_type &lt;chr&gt;, estimate_type_label &lt;chr&gt;, monotonicity_type &lt;chr&gt;,</span></span>
+<span id="cb53-22"><a href=""></a><span class="co">#&gt; #   strata_label &lt;chr&gt;, conf.level &lt;dbl&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-6-2">
+<div id="tabset-8-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href=""></a><span class="fu">survdiff</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm, <span class="at">data=</span>df)</span>
-<span id="cb43-2"><a href=""></a><span class="co">#&gt; Call:</span></span>
-<span id="cb43-3"><a href=""></a><span class="co">#&gt; survdiff(formula = Surv(t, event) ~ arm, data = df)</span></span>
-<span id="cb43-4"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb43-5"><a href=""></a><span class="co">#&gt;                 N Observed Expected (O-E)^2/E (O-E)^2/V</span></span>
-<span id="cb43-6"><a href=""></a><span class="co">#&gt; arm=Control   150      126      106      3.74      6.72</span></span>
-<span id="cb43-7"><a href=""></a><span class="co">#&gt; arm=Treatment 150      114      134      2.96      6.72</span></span>
-<span id="cb43-8"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb43-9"><a href=""></a><span class="co">#&gt;  Chisq= 6.7  on 1 degrees of freedom, p= 0.01</span></span>
-<span id="cb43-10"><a href=""></a><span class="fu">survdiff</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> <span class="fu">strata</span>(bm1), <span class="at">data=</span>df)</span>
-<span id="cb43-11"><a href=""></a><span class="co">#&gt; Call:</span></span>
-<span id="cb43-12"><a href=""></a><span class="co">#&gt; survdiff(formula = Surv(t, event) ~ arm + strata(bm1), data = df)</span></span>
-<span id="cb43-13"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb43-14"><a href=""></a><span class="co">#&gt;                 N Observed Expected (O-E)^2/E (O-E)^2/V</span></span>
-<span id="cb43-15"><a href=""></a><span class="co">#&gt; arm=Control   150      126      109      2.76      5.15</span></span>
-<span id="cb43-16"><a href=""></a><span class="co">#&gt; arm=Treatment 150      114      131      2.29      5.15</span></span>
-<span id="cb43-17"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb43-18"><a href=""></a><span class="co">#&gt;  Chisq= 5.1  on 1 degrees of freedom, p= 0.02</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a><span class="fu">survdiff</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm, <span class="at">data=</span>df)</span>
+<span id="cb54-2"><a href=""></a><span class="co">#&gt; Call:</span></span>
+<span id="cb54-3"><a href=""></a><span class="co">#&gt; survdiff(formula = Surv(t, event) ~ arm, data = df)</span></span>
+<span id="cb54-4"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb54-5"><a href=""></a><span class="co">#&gt;                 N Observed Expected (O-E)^2/E (O-E)^2/V</span></span>
+<span id="cb54-6"><a href=""></a><span class="co">#&gt; arm=Control   150      126      106      3.74      6.72</span></span>
+<span id="cb54-7"><a href=""></a><span class="co">#&gt; arm=Treatment 150      114      134      2.96      6.72</span></span>
+<span id="cb54-8"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb54-9"><a href=""></a><span class="co">#&gt;  Chisq= 6.7  on 1 degrees of freedom, p= 0.01</span></span>
+<span id="cb54-10"><a href=""></a></span>
+<span id="cb54-11"><a href=""></a><span class="fu">survdiff</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> <span class="fu">strata</span>(bm_bin), <span class="at">data=</span>df)</span>
+<span id="cb54-12"><a href=""></a><span class="co">#&gt; Call:</span></span>
+<span id="cb54-13"><a href=""></a><span class="co">#&gt; survdiff(formula = Surv(t, event) ~ arm + strata(bm_bin), data = df)</span></span>
+<span id="cb54-14"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb54-15"><a href=""></a><span class="co">#&gt;                 N Observed Expected (O-E)^2/E (O-E)^2/V</span></span>
+<span id="cb54-16"><a href=""></a><span class="co">#&gt; arm=Control   150      126      109      2.76      5.15</span></span>
+<span id="cb54-17"><a href=""></a><span class="co">#&gt; arm=Treatment 150      114      131      2.29      5.15</span></span>
+<span id="cb54-18"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb54-19"><a href=""></a><span class="co">#&gt;  Chisq= 5.1  on 1 degrees of freedom, p= 0.02</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-6-3">
-<p>https://www.danieldsjoberg.com/ggsurvfit/articles/gallery.html#kmunicate</p>
+<div id="tabset-8-3">
+<p>Documentation: <a href="https://www.danieldsjoberg.com/ggsurvfit/articles/gallery.html#kmunicate">https://www.danieldsjoberg.com</a></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href=""></a><span class="fu">survfit2</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm, <span class="at">data=</span>df) <span class="sc">%&gt;%</span> </span>
-<span id="cb44-2"><a href=""></a>  <span class="fu">ggsurvfit</span>(, <span class="at">linetype_aes =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb44-3"><a href=""></a>  <span class="fu">add_confidence_interval</span>() <span class="sc">+</span></span>
-<span id="cb44-4"><a href=""></a>  <span class="fu">add_risktable</span>(</span>
-<span id="cb44-5"><a href=""></a>    <span class="at">risktable_stats =</span> <span class="fu">c</span>(<span class="st">"n.risk"</span>, <span class="st">"cum.censor"</span>, <span class="st">"cum.event"</span>)</span>
-<span id="cb44-6"><a href=""></a>  ) <span class="sc">+</span></span>
-<span id="cb44-7"><a href=""></a>  <span class="fu">theme_ggsurvfit_KMunicate</span>() <span class="sc">+</span></span>
-<span id="cb44-8"><a href=""></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
-<span id="cb44-9"><a href=""></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
-<span id="cb44-10"><a href=""></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"inside"</span>, <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.85</span>, <span class="fl">0.85</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a><span class="fu">survfit2</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm, <span class="at">data=</span>df) <span class="sc">%&gt;%</span> </span>
+<span id="cb55-2"><a href=""></a>  <span class="fu">ggsurvfit</span>(, <span class="at">linetype_aes =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb55-3"><a href=""></a>  <span class="fu">add_confidence_interval</span>() <span class="sc">+</span></span>
+<span id="cb55-4"><a href=""></a>  <span class="fu">add_risktable</span>(</span>
+<span id="cb55-5"><a href=""></a>    <span class="at">risktable_stats =</span> <span class="fu">c</span>(<span class="st">"n.risk"</span>, <span class="st">"cum.censor"</span>, <span class="st">"cum.event"</span>)</span>
+<span id="cb55-6"><a href=""></a>  ) <span class="sc">+</span></span>
+<span id="cb55-7"><a href=""></a>  <span class="fu">theme_ggsurvfit_KMunicate</span>() <span class="sc">+</span></span>
+<span id="cb55-8"><a href=""></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb55-9"><a href=""></a>  <span class="fu">scale_x_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="fl">0.02</span>, <span class="dv">0</span>)) <span class="sc">+</span></span>
+<span id="cb55-10"><a href=""></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">"inside"</span>, <span class="at">legend.position.inside =</span> <span class="fu">c</span>(<span class="fl">0.85</span>, <span class="fl">0.85</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-43-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-53-1.png" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<div id="tabset-6-4">
+<div id="tabset-8-4">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> bm2, <span class="at">data=</span>df, <span class="at">x=</span><span class="cn">TRUE</span>)</span>
-<span id="cb45-2"><a href=""></a>contsurvplot<span class="sc">::</span><span class="fu">plot_surv_area</span>(<span class="at">time=</span><span class="st">"t"</span>, <span class="at">status=</span><span class="st">"event"</span>, <span class="at">variable=</span><span class="st">"bm2"</span>, <span class="at">data=</span>df, <span class="at">model=</span>model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a>model <span class="ot">&lt;-</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> bm_cont, <span class="at">data=</span>df, <span class="at">x=</span><span class="cn">TRUE</span>)</span>
+<span id="cb56-2"><a href=""></a>contsurvplot<span class="sc">::</span><span class="fu">plot_surv_area</span>(<span class="at">time=</span><span class="st">"t"</span>, <span class="at">status=</span><span class="st">"event"</span>, <span class="at">variable=</span><span class="st">"bm_cont"</span>, <span class="at">data=</span>df, <span class="at">model=</span>model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-44-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-54-1.png" width="960"></p>
 </figure>
 </div>
 </div>
@@ -2538,86 +2749,84 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <section id="modèle-de-cox-y-survie" class="slide level2">
 <h2>Modèle de Cox (Y survie)</h2>
 <div class="cell no_fragment">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href=""></a>fit_bare  <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm, <span class="at">data=</span>df)</span>
-<span id="cb46-2"><a href=""></a>fit_adj <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> bm1 <span class="sc">+</span> bm2, <span class="at">data=</span>df)</span>
-<span id="cb46-3"><a href=""></a>fit_strat <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> <span class="fu">strata</span>(bm1) <span class="sc">+</span> bm2, <span class="at">data=</span>df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href=""></a>fit_bare  <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm, <span class="at">data=</span>df)</span>
+<span id="cb57-2"><a href=""></a>fit_adj <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> bm_bin <span class="sc">+</span> bm_cont, <span class="at">data=</span>df)</span>
+<span id="cb57-3"><a href=""></a>fit_strat <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> <span class="fu">strata</span>(bm_bin) <span class="sc">+</span> bm_cont, <span class="at">data=</span>df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="panel-tabset no_fragment">
-<ul id="tabset-7" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-7-1">fit</a></li><li><a href="#tabset-7-2">summary()</a></li><li><a href="#tabset-7-3">tidy()</a></li><li><a href="#tabset-7-4">fit_strat</a></li></ul>
+<ul id="tabset-9" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-9-1">fit</a></li><li><a href="#tabset-9-2">summary()</a></li><li><a href="#tabset-9-3">tidy()</a></li><li><a href="#tabset-9-4">fit_strat</a></li><li><a href="#tabset-9-5">gtsummary</a></li></ul>
 <div class="tab-content no_fragment">
-<div id="tabset-7-1">
+<div id="tabset-9-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href=""></a>fit_adj</span>
-<span id="cb47-2"><a href=""></a><span class="co">#&gt; Call:</span></span>
-<span id="cb47-3"><a href=""></a><span class="co">#&gt; coxph(formula = Surv(t, event) ~ arm + bm1 + bm2, data = df)</span></span>
-<span id="cb47-4"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb47-5"><a href=""></a><span class="co">#&gt;                  coef exp(coef) se(coef)      z      p</span></span>
-<span id="cb47-6"><a href=""></a><span class="co">#&gt; armTreatment -0.31975   0.72633  0.12998 -2.460 0.0139</span></span>
-<span id="cb47-7"><a href=""></a><span class="co">#&gt; bm1Positive   0.26931   1.30907  0.13201  2.040 0.0413</span></span>
-<span id="cb47-8"><a href=""></a><span class="co">#&gt; bm2          -0.16892   0.84458  0.07046 -2.397 0.0165</span></span>
-<span id="cb47-9"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb47-10"><a href=""></a><span class="co">#&gt; Likelihood ratio test=16.87  on 3 df, p=0.0007502</span></span>
-<span id="cb47-11"><a href=""></a><span class="co">#&gt; n= 300, number of events= 240</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href=""></a>fit_adj</span>
+<span id="cb58-2"><a href=""></a><span class="co">#&gt; Call:</span></span>
+<span id="cb58-3"><a href=""></a><span class="co">#&gt; coxph(formula = Surv(t, event) ~ arm + bm_bin + bm_cont, data = df)</span></span>
+<span id="cb58-4"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb58-5"><a href=""></a><span class="co">#&gt;                    coef exp(coef) se(coef)      z      p</span></span>
+<span id="cb58-6"><a href=""></a><span class="co">#&gt; armTreatment   -0.31975   0.72633  0.12998 -2.460 0.0139</span></span>
+<span id="cb58-7"><a href=""></a><span class="co">#&gt; bm_binPositive  0.26931   1.30907  0.13201  2.040 0.0413</span></span>
+<span id="cb58-8"><a href=""></a><span class="co">#&gt; bm_cont        -0.16892   0.84458  0.07046 -2.397 0.0165</span></span>
+<span id="cb58-9"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb58-10"><a href=""></a><span class="co">#&gt; Likelihood ratio test=16.87  on 3 df, p=0.0007502</span></span>
+<span id="cb58-11"><a href=""></a><span class="co">#&gt; n= 300, number of events= 240</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-7-2">
+<div id="tabset-9-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href=""></a><span class="fu">summary</span>(fit_adj)</span>
-<span id="cb48-2"><a href=""></a><span class="co">#&gt; Call:</span></span>
-<span id="cb48-3"><a href=""></a><span class="co">#&gt; coxph(formula = Surv(t, event) ~ arm + bm1 + bm2, data = df)</span></span>
-<span id="cb48-4"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb48-5"><a href=""></a><span class="co">#&gt;   n= 300, number of events= 240 </span></span>
-<span id="cb48-6"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb48-7"><a href=""></a><span class="co">#&gt;                  coef exp(coef) se(coef)      z Pr(&gt;|z|)  </span></span>
-<span id="cb48-8"><a href=""></a><span class="co">#&gt; armTreatment -0.31975   0.72633  0.12998 -2.460   0.0139 *</span></span>
-<span id="cb48-9"><a href=""></a><span class="co">#&gt; bm1Positive   0.26931   1.30907  0.13201  2.040   0.0413 *</span></span>
-<span id="cb48-10"><a href=""></a><span class="co">#&gt; bm2          -0.16892   0.84458  0.07046 -2.397   0.0165 *</span></span>
-<span id="cb48-11"><a href=""></a><span class="co">#&gt; ---</span></span>
-<span id="cb48-12"><a href=""></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
-<span id="cb48-13"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb48-14"><a href=""></a><span class="co">#&gt;              exp(coef) exp(-coef) lower .95 upper .95</span></span>
-<span id="cb48-15"><a href=""></a><span class="co">#&gt; armTreatment    0.7263     1.3768    0.5630    0.9371</span></span>
-<span id="cb48-16"><a href=""></a><span class="co">#&gt; bm1Positive     1.3091     0.7639    1.0106    1.6956</span></span>
-<span id="cb48-17"><a href=""></a><span class="co">#&gt; bm2             0.8446     1.1840    0.7356    0.9697</span></span>
-<span id="cb48-18"><a href=""></a><span class="co">#&gt; </span></span>
-<span id="cb48-19"><a href=""></a><span class="co">#&gt; Concordance= 0.585  (se = 0.02 )</span></span>
-<span id="cb48-20"><a href=""></a><span class="co">#&gt; Likelihood ratio test= 16.87  on 3 df,   p=8e-04</span></span>
-<span id="cb48-21"><a href=""></a><span class="co">#&gt; Wald test            = 16.82  on 3 df,   p=8e-04</span></span>
-<span id="cb48-22"><a href=""></a><span class="co">#&gt; Score (logrank) test = 16.92  on 3 df,   p=7e-04</span></span>
-<span id="cb48-23"><a href=""></a></span>
-<span id="cb48-24"><a href=""></a><span class="fu">confint</span>(fit_adj)</span>
-<span id="cb48-25"><a href=""></a><span class="co">#&gt;                    2.5 %      97.5 %</span></span>
-<span id="cb48-26"><a href=""></a><span class="co">#&gt; armTreatment -0.57450305 -0.06500688</span></span>
-<span id="cb48-27"><a href=""></a><span class="co">#&gt; bm1Positive   0.01058439  0.52804332</span></span>
-<span id="cb48-28"><a href=""></a><span class="co">#&gt; bm2          -0.30702431 -0.03081770</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href=""></a><span class="fu">summary</span>(fit_adj)</span>
+<span id="cb59-2"><a href=""></a><span class="co">#&gt; Call:</span></span>
+<span id="cb59-3"><a href=""></a><span class="co">#&gt; coxph(formula = Surv(t, event) ~ arm + bm_bin + bm_cont, data = df)</span></span>
+<span id="cb59-4"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb59-5"><a href=""></a><span class="co">#&gt;   n= 300, number of events= 240 </span></span>
+<span id="cb59-6"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb59-7"><a href=""></a><span class="co">#&gt;                    coef exp(coef) se(coef)      z Pr(&gt;|z|)  </span></span>
+<span id="cb59-8"><a href=""></a><span class="co">#&gt; armTreatment   -0.31975   0.72633  0.12998 -2.460   0.0139 *</span></span>
+<span id="cb59-9"><a href=""></a><span class="co">#&gt; bm_binPositive  0.26931   1.30907  0.13201  2.040   0.0413 *</span></span>
+<span id="cb59-10"><a href=""></a><span class="co">#&gt; bm_cont        -0.16892   0.84458  0.07046 -2.397   0.0165 *</span></span>
+<span id="cb59-11"><a href=""></a><span class="co">#&gt; ---</span></span>
+<span id="cb59-12"><a href=""></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span id="cb59-13"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb59-14"><a href=""></a><span class="co">#&gt;                exp(coef) exp(-coef) lower .95 upper .95</span></span>
+<span id="cb59-15"><a href=""></a><span class="co">#&gt; armTreatment      0.7263     1.3768    0.5630    0.9371</span></span>
+<span id="cb59-16"><a href=""></a><span class="co">#&gt; bm_binPositive    1.3091     0.7639    1.0106    1.6956</span></span>
+<span id="cb59-17"><a href=""></a><span class="co">#&gt; bm_cont           0.8446     1.1840    0.7356    0.9697</span></span>
+<span id="cb59-18"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb59-19"><a href=""></a><span class="co">#&gt; Concordance= 0.585  (se = 0.02 )</span></span>
+<span id="cb59-20"><a href=""></a><span class="co">#&gt; Likelihood ratio test= 16.87  on 3 df,   p=8e-04</span></span>
+<span id="cb59-21"><a href=""></a><span class="co">#&gt; Wald test            = 16.82  on 3 df,   p=8e-04</span></span>
+<span id="cb59-22"><a href=""></a><span class="co">#&gt; Score (logrank) test = 16.92  on 3 df,   p=7e-04</span></span>
+<span id="cb59-23"><a href=""></a></span>
+<span id="cb59-24"><a href=""></a><span class="fu">confint</span>(fit_adj)</span>
+<span id="cb59-25"><a href=""></a><span class="co">#&gt;                      2.5 %      97.5 %</span></span>
+<span id="cb59-26"><a href=""></a><span class="co">#&gt; armTreatment   -0.57450305 -0.06500688</span></span>
+<span id="cb59-27"><a href=""></a><span class="co">#&gt; bm_binPositive  0.01058439  0.52804332</span></span>
+<span id="cb59-28"><a href=""></a><span class="co">#&gt; bm_cont        -0.30702431 -0.03081770</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-7-3">
+<div id="tabset-9-3">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit_adj, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span>
-<span id="cb49-2"><a href=""></a><span class="co">#&gt; # A tibble: 3 × 7</span></span>
-<span id="cb49-3"><a href=""></a><span class="co">#&gt;   term         estimate std.error statistic p.value conf.low conf.high</span></span>
-<span id="cb49-4"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span id="cb49-5"><a href=""></a><span class="co">#&gt; 1 armTreatment   -0.320    0.130      -2.46  0.0139  -0.575    -0.0650</span></span>
-<span id="cb49-6"><a href=""></a><span class="co">#&gt; 2 bm1Positive     0.269    0.132       2.04  0.0413   0.0106    0.528 </span></span>
-<span id="cb49-7"><a href=""></a><span class="co">#&gt; 3 bm2            -0.169    0.0705     -2.40  0.0165  -0.307    -0.0308</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit_adj, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span>
+<span id="cb60-2"><a href=""></a><span class="co">#&gt; # A tibble: 3 × 7</span></span>
+<span id="cb60-3"><a href=""></a><span class="co">#&gt;   term           estimate std.error statistic p.value conf.low conf.high</span></span>
+<span id="cb60-4"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb60-5"><a href=""></a><span class="co">#&gt; 1 armTreatment     -0.320    0.130      -2.46  0.0139  -0.575    -0.0650</span></span>
+<span id="cb60-6"><a href=""></a><span class="co">#&gt; 2 bm_binPositive    0.269    0.132       2.04  0.0413   0.0106    0.528 </span></span>
+<span id="cb60-7"><a href=""></a><span class="co">#&gt; 3 bm_cont          -0.169    0.0705     -2.40  0.0165  -0.307    -0.0308</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-7-4">
+<div id="tabset-9-4">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit_strat, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span>
-<span id="cb50-2"><a href=""></a><span class="co">#&gt; # A tibble: 2 × 7</span></span>
-<span id="cb50-3"><a href=""></a><span class="co">#&gt;   term         estimate std.error statistic p.value conf.low conf.high</span></span>
-<span id="cb50-4"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span id="cb50-5"><a href=""></a><span class="co">#&gt; 1 armTreatment   -0.308    0.130      -2.36  0.0181   -0.564   -0.0527</span></span>
-<span id="cb50-6"><a href=""></a><span class="co">#&gt; 2 bm2            -0.175    0.0703     -2.48  0.0130   -0.313   -0.0369</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit_strat, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span>
+<span id="cb61-2"><a href=""></a><span class="co">#&gt; # A tibble: 2 × 7</span></span>
+<span id="cb61-3"><a href=""></a><span class="co">#&gt;   term         estimate std.error statistic p.value conf.low conf.high</span></span>
+<span id="cb61-4"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;</span></span>
+<span id="cb61-5"><a href=""></a><span class="co">#&gt; 1 armTreatment   -0.308    0.130      -2.36  0.0181   -0.564   -0.0527</span></span>
+<span id="cb61-6"><a href=""></a><span class="co">#&gt; 2 bm_cont        -0.175    0.0703     -2.48  0.0130   -0.313   -0.0369</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-</div>
-</div>
-<h3 id="gtsummary-2">gtsummary</h3>
+<div id="tabset-9-5">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(fit_adj, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href=""></a>gtsummary<span class="sc">::</span><span class="fu">tbl_regression</span>(fit_adj, <span class="at">conf.int=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div id="zyysmrjcqu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#zyysmrjcqu table {
@@ -3108,7 +3317,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <td class="gt_row gt_center" headers="p.value">0.014</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">bm1</td>
+<td class="gt_row gt_left" headers="label">bm_bin</td>
 <td class="gt_row gt_center" headers="estimate"><br>
 </td>
 <td class="gt_row gt_center" headers="conf.low"><br>
@@ -3130,7 +3339,7 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <td class="gt_row gt_center" headers="p.value">0.041</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">bm2</td>
+<td class="gt_row gt_left" headers="label">bm_cont</td>
 <td class="gt_row gt_center" headers="estimate">-0.17</td>
 <td class="gt_row gt_center" headers="conf.low">-0.31, -0.03</td>
 <td class="gt_row gt_center" headers="p.value">0.017</td>
@@ -3146,59 +3355,85 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
 </section>
 <section id="modèle-de-cox-hypothèses" class="slide level2">
 <h2>Modèle de Cox: hypothèses</h2>
 <div class="panel-tabset no_fragment">
-<ul id="tabset-8" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-8-1">HHP table</a></li><li><a href="#tabset-8-2">HHP plot</a></li><li><a href="#tabset-8-3">Linearity spline</a></li><li><a href="#tabset-8-4">Linearity plot</a></li></ul>
+<ul id="tabset-10" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-10-1">HHP table</a></li><li><a href="#tabset-10-2">HHP plot</a></li><li><a href="#tabset-10-3">Linearity spline</a></li><li><a href="#tabset-10-4">Linearity plot</a></li></ul>
 <div class="tab-content no_fragment">
-<div id="tabset-8-1">
+<div id="tabset-10-1">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href=""></a><span class="fu">cox.zph</span>(fit_adj)</span>
-<span id="cb52-2"><a href=""></a><span class="co">#&gt;        chisq df     p</span></span>
-<span id="cb52-3"><a href=""></a><span class="co">#&gt; arm     3.74  1 0.053</span></span>
-<span id="cb52-4"><a href=""></a><span class="co">#&gt; bm1     1.88  1 0.171</span></span>
-<span id="cb52-5"><a href=""></a><span class="co">#&gt; bm2     1.33  1 0.249</span></span>
-<span id="cb52-6"><a href=""></a><span class="co">#&gt; GLOBAL  6.55  3 0.088</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href=""></a><span class="fu">cox.zph</span>(fit_adj)</span>
+<span id="cb63-2"><a href=""></a><span class="co">#&gt;         chisq df     p</span></span>
+<span id="cb63-3"><a href=""></a><span class="co">#&gt; arm      3.74  1 0.053</span></span>
+<span id="cb63-4"><a href=""></a><span class="co">#&gt; bm_bin   1.88  1 0.171</span></span>
+<span id="cb63-5"><a href=""></a><span class="co">#&gt; bm_cont  1.33  1 0.249</span></span>
+<span id="cb63-6"><a href=""></a><span class="co">#&gt; GLOBAL   6.55  3 0.088</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-8-2">
+<div id="tabset-10-2">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href=""></a><span class="fu">cox.zph</span>(fit_adj) <span class="sc">%&gt;%</span> survminer<span class="sc">::</span><span class="fu">ggcoxzph</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href=""></a><span class="fu">cox.zph</span>(fit_adj) <span class="sc">%&gt;%</span> survminer<span class="sc">::</span><span class="fu">ggcoxzph</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-52-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-62-1.png" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<div id="tabset-8-3">
+<div id="tabset-10-3">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href=""></a>fit_spline <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> <span class="fu">pspline</span>(bm2), <span class="at">data=</span>df)</span>
-<span id="cb54-2"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit_spline)</span>
-<span id="cb54-3"><a href=""></a><span class="co">#&gt; # A tibble: 2 × 5</span></span>
-<span id="cb54-4"><a href=""></a><span class="co">#&gt;   term                 estimate std.error statistic p.value</span></span>
-<span id="cb54-5"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;                   &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
-<span id="cb54-6"><a href=""></a><span class="co">#&gt; 1 pspline(bm2), linear   -0.166    0.0697      5.68  0.0172</span></span>
-<span id="cb54-7"><a href=""></a><span class="co">#&gt; 2 pspline(bm2), nonlin   NA       NA           1.87  0.607</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href=""></a>fit_spline <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> <span class="fu">pspline</span>(bm_cont), <span class="at">data=</span>df)</span>
+<span id="cb65-2"><a href=""></a>broom<span class="sc">::</span><span class="fu">tidy</span>(fit_spline)</span>
+<span id="cb65-3"><a href=""></a><span class="co">#&gt; # A tibble: 2 × 5</span></span>
+<span id="cb65-4"><a href=""></a><span class="co">#&gt;   term                     estimate std.error statistic p.value</span></span>
+<span id="cb65-5"><a href=""></a><span class="co">#&gt;   &lt;chr&gt;                       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb65-6"><a href=""></a><span class="co">#&gt; 1 pspline(bm_cont), linear   -0.166    0.0697      5.68  0.0172</span></span>
+<span id="cb65-7"><a href=""></a><span class="co">#&gt; 2 pspline(bm_cont), nonlin   NA       NA           1.87  0.607</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
-<div id="tabset-8-4">
+<div id="tabset-10-4">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href=""></a>fit_num <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> bm2, <span class="at">data=</span>df)</span>
-<span id="cb55-2"><a href=""></a>survminer<span class="sc">::</span><span class="fu">ggcoxfunctional</span>(fit_num)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href=""></a>fit_num <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> bm_cont, <span class="at">data=</span>df)</span>
+<span id="cb66-2"><a href=""></a>survminer<span class="sc">::</span><span class="fu">ggcoxfunctional</span>(fit_num)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure>
-<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-54-1.png" width="960"></p>
+<p><img data-src="analyse_files/figure-revealjs/unnamed-chunk-64-1.png" width="960"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
 </div>
+</div>
+</section>
+<section id="choix-des-groupes-de-référence" class="slide level2">
+<h2>Choix des groupes de référence</h2>
+<p>Le groupe de référence est le premier niveau de la variable. Si ce n’est pas un facteur, R prendra le premier par ordre alphabétique.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href=""></a>df2 <span class="ot">=</span> df <span class="sc">%&gt;%</span> </span>
+<span id="cb67-2"><a href=""></a>  <span class="fu">mutate</span>(<span class="at">arm =</span> <span class="fu">fct_relevel</span>(arm, <span class="st">"Treatment"</span>),</span>
+<span id="cb67-3"><a href=""></a>         <span class="at">bm_bin =</span> <span class="fu">fct_relevel</span>(bm_bin, <span class="st">"Positive"</span>))</span>
+<span id="cb67-4"><a href=""></a><span class="fu">levels</span>(df<span class="sc">$</span>arm)</span>
+<span id="cb67-5"><a href=""></a><span class="co">#&gt; [1] "Control"   "Treatment"</span></span>
+<span id="cb67-6"><a href=""></a><span class="fu">levels</span>(df2<span class="sc">$</span>arm)</span>
+<span id="cb67-7"><a href=""></a><span class="co">#&gt; [1] "Treatment" "Control"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href=""></a>m1 <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> bm_bin, <span class="at">data=</span>df)</span>
+<span id="cb68-2"><a href=""></a>m2 <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> bm_bin, <span class="at">data=</span>df2)</span>
+<span id="cb68-3"><a href=""></a><span class="fu">coef</span>(m1)</span>
+<span id="cb68-4"><a href=""></a><span class="co">#&gt;   armTreatment bm_binPositive </span></span>
+<span id="cb68-5"><a href=""></a><span class="co">#&gt;     -0.3081165      0.2808774</span></span>
+<span id="cb68-6"><a href=""></a><span class="fu">coef</span>(m2)</span>
+<span id="cb68-7"><a href=""></a><span class="co">#&gt;     armControl bm_binNegative </span></span>
+<span id="cb68-8"><a href=""></a><span class="co">#&gt;      0.3081165     -0.2808774</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="test-de-modèles-emboîtés" class="slide level2">
@@ -3209,18 +3444,19 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 <li class="fragment"><p>Il faut alors utiliser la fonction <code>anova()</code> sur deux modèles emboîtés.</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href=""></a>fit1  <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> bm1, <span class="at">data=</span>df)</span>
-<span id="cb56-2"><a href=""></a>fit2 <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> bm1 <span class="sc">+</span> bm2, <span class="at">data=</span>df)</span>
-<span id="cb56-3"><a href=""></a><span class="fu">anova</span>(fit1, fit2)</span>
-<span id="cb56-4"><a href=""></a><span class="co">#&gt; Analysis of Deviance Table</span></span>
-<span id="cb56-5"><a href=""></a><span class="co">#&gt;  Cox model: response is  Surv(t, event)</span></span>
-<span id="cb56-6"><a href=""></a><span class="co">#&gt;  Model 1: ~ arm + bm1</span></span>
-<span id="cb56-7"><a href=""></a><span class="co">#&gt;  Model 2: ~ arm + bm1 + bm2</span></span>
-<span id="cb56-8"><a href=""></a><span class="co">#&gt;    loglik Chisq Df Pr(&gt;|Chi|)  </span></span>
-<span id="cb56-9"><a href=""></a><span class="co">#&gt; 1 -1220.7                      </span></span>
-<span id="cb56-10"><a href=""></a><span class="co">#&gt; 2 -1217.8 5.778  1    0.01623 *</span></span>
-<span id="cb56-11"><a href=""></a><span class="co">#&gt; ---</span></span>
-<span id="cb56-12"><a href=""></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href=""></a>fit1 <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> bm_bin, <span class="at">data=</span>df)</span>
+<span id="cb69-2"><a href=""></a>fit2 <span class="ot">=</span> <span class="fu">coxph</span>(<span class="fu">Surv</span>(t, event) <span class="sc">~</span> arm <span class="sc">+</span> bm_bin <span class="sc">+</span> bm_cont, <span class="at">data=</span>df)</span>
+<span id="cb69-3"><a href=""></a></span>
+<span id="cb69-4"><a href=""></a><span class="fu">anova</span>(fit1, fit2)</span>
+<span id="cb69-5"><a href=""></a><span class="co">#&gt; Analysis of Deviance Table</span></span>
+<span id="cb69-6"><a href=""></a><span class="co">#&gt;  Cox model: response is  Surv(t, event)</span></span>
+<span id="cb69-7"><a href=""></a><span class="co">#&gt;  Model 1: ~ arm + bm_bin</span></span>
+<span id="cb69-8"><a href=""></a><span class="co">#&gt;  Model 2: ~ arm + bm_bin + bm_cont</span></span>
+<span id="cb69-9"><a href=""></a><span class="co">#&gt;    loglik Chisq Df Pr(&gt;|Chi|)  </span></span>
+<span id="cb69-10"><a href=""></a><span class="co">#&gt; 1 -1220.7                      </span></span>
+<span id="cb69-11"><a href=""></a><span class="co">#&gt; 2 -1217.8 5.778  1    0.01623 *</span></span>
+<span id="cb69-12"><a href=""></a><span class="co">#&gt; ---</span></span>
+<span id="cb69-13"><a href=""></a><span class="co">#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="conclusion" class="slide level2">
@@ -3251,16 +3487,6 @@ Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_p X_p + \varepsilon
 </figure>
 </div>
 </div></div>
-</section></section>
-<section>
-<section id="backup" class="title-slide slide level1 appendix center" data-visibility="uncounted">
-<h1>Backup</h1>
-
-</section>
-<section id="modèles-mixtes" class="slide level2" data-visibility="uncounted">
-<h2>Modèles mixtes</h2>
-<p>(lme4, nlme, mmrm), betareg</p>
-<script src="assets/custom.js"></script>
 <script src="assets/custom.js"></script>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">

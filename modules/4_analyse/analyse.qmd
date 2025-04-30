@@ -14,7 +14,7 @@ format:
     controls: true
     keyboard: true
     code-line-numbers: true
-    # embed-resources: true
+    embed-resources: true
     scrollable: true
     # toc: true
     slide-number: true
