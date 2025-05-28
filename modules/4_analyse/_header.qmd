@@ -5,12 +5,13 @@ format:
     theme: simple
     css: assets/style.css
     pagetitle: "Oncostat R - analyses"
+    output-file: "index.html"
     template-partials:
      - assets/title-slide.html
     title: "Équipe ONCOSTAT <br> Modules de cours de R"
-    subtitle: "Analyse descriptive & Analyse statistique"
+    subtitle: "Import, checks, et description"
     author: "Dan Chaltiel"
-    description: "🎯 Décrire et analyser vos données efficacement !"
+    description: "📦 {EDCimport} et 📦 {crosstable}"
     incremental: true
     controls: true
     keyboard: true
@@ -24,7 +25,7 @@ format:
     footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
 execute:
   echo: true
-  cache: true
+  cache: false
   code-overflow: wrap
   warnings: false
   messages: false
