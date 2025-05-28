@@ -1,0 +1,66 @@
+---
+format:
+  revealjs:
+    theme: simple
+    css: assets/style.css
+    pagetitle: "Oncostat R - analyses"
+    output-file: "index.html"
+    template-partials:
+     - assets/title-slide.html
+    title: "Équipe ONCOSTAT <br> Modules de cours de R"
+    subtitle: "Import, checks, et description"
+    author: "Dan Chaltiel"
+    description: "EDCimport et crosstable"
+    incremental: true
+    controls: true
+    keyboard: true
+    code-line-numbers: true
+    # embed-resources: true
+    # scrollable: true
+    # toc: true
+    slide-number: true
+    smaller: true
+    preview-links: auto
+    footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+execute:
+  echo: true
+  cache: false
+  code-overflow: wrap
+  warnings: false
+  messages: false
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
+    R.options:
+      crosstable_compact: true
+      width: 105
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+## Plan du module
+1.  [**Analyse descriptive**](#analyse-descriptive)
+    -   Tables descriptives avec `crosstable`
+    -   Formatage avec `flextable`\
+2.  [**Analyse statistique**](#analyse-statistique)
+    -   Modèles logistiques (`glm`) et modèles de Cox (`coxph`)
+    -   Formatage en table
+    -   Tests d'hypothèses
+
+# Imports, Checks, et visualisation avec `EDCimport`
+
+{{< include _edcimport.qmd >}}
+
+# Analyse descriptive avec `crosstable`
+
+{{< include _crosstable.qmd >}}
+
+
+
+{{< include _header.qmd >}}
+
+<script src="assets/custom.js"></script>
