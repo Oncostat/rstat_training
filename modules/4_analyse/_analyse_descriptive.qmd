@@ -7,15 +7,15 @@ format:
     template-partials:
      - assets/title-slide.html
     title: "Équipe ONCOSTAT <br> Modules de cours de R"
-    subtitle: "Analyse descriptive & Analyse statistique"
+    subtitle: "Import, checks, et description"
     author: "Dan Chaltiel"
-    description: "🎯 Décrire et analyser vos données efficacement !"
+    description: "EDCimport et crosstable"
     incremental: true
     controls: true
     keyboard: true
     code-line-numbers: true
     # embed-resources: true
-    scrollable: true
+    # scrollable: true
     # toc: true
     slide-number: true
     smaller: true
@@ -40,6 +40,14 @@ editor:
   markdown: 
     wrap: 72
 ---
+
+```{r}
+#| include: false
+#| cache: false
+library(tidyverse)
+library(crosstable)
+get_label = crosstable::get_label
+```
 
 ## Le package `crosstable`
 
@@ -460,5 +468,5 @@ ct %>%
 
 - Ajoutez une issue sur GitHub si vous avez une feature request
 
-- Dans un module futur on verra `officer`, pour intégrer les crosstables dans des rapports automatisés <br> ![](media/chris-pratt.gif){fig-align="center" style="width:35%; margin-left:30%;"}
+- Dans le module 6, Charlotte vous montrera `officer`, qui permet d'intégrer les crosstables dans des rapports automatisés <br> ![](media/chris-pratt.gif){fig-align="center" style="width:35%; margin-left:30%;"}
 
