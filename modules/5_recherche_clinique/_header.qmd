@@ -1,0 +1,44 @@
+---
+# This header should be added last
+format:
+  revealjs:
+    theme: simple
+    css: assets/style.css
+    pagetitle: "Oncostat R - recherche clinique"
+    template-partials:
+     - assets/title-slide.html
+    title: "Équipe ONCOSTAT <br> Modules de cours de R"
+    subtitle: "Import et check de bases & tables standards"
+    author: "Dan Chaltiel"
+    description: "📦 {EDCimport} et 📦 {grstat}"
+    incremental: true
+    controls: true
+    keyboard: true
+    code-line-numbers: true
+    # embed-resources: true
+    scrollable: true
+    number-sections: true
+    number-depth: 1
+    slide-number: true
+    smaller: true
+    preview-links: auto
+    footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+execute:
+  echo: true
+  cache: false
+  code-overflow: wrap
+  warnings: false
+  messages: false
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
+    R.options:
+      crosstable_compact: true
+      width: 105
+editor: 
+  markdown: 
+    wrap: 72
+---
