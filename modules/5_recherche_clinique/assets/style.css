@@ -23,6 +23,9 @@
   border-bottom: 1px solid black;
 }
 
+#merci h1 {
+    display: none;
+}
 
 .reveal h2 code {
  font-size
