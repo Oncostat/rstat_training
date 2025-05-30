@@ -1,13 +1,13 @@
 
 
 ## Plan du module
-1.  [**Analyse descriptive**](#analyse-descriptive)
-    -   Tables descriptives avec `crosstable`
+1.  [**Importer et checker sa base avec 📦 {EDCimport}**](#edcimport)
+    -   Fonctions d'import de base
+    -   Data-checking
+    -   Data-visualisation\ 
+1.  [**Décrire ses tables avec 📦 {crosstable} **](#analyse-descriptive)
+    -   Tables descriptives
     -   Formatage avec `flextable`\
-2.  [**Analyse statistique**](#analyse-statistique)
-    -   Modèles logistiques (`glm`) et modèles de Cox (`coxph`)
-    -   Formatage en table
-    -   Tests d'hypothèses
 
 # Imports, Checks, et visualisation avec `EDCimport`
 
