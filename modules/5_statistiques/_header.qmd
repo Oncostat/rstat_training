@@ -36,7 +36,6 @@ execute:
   messages: false
   
 keywords: ["r", "rstat", "training", "course", "module"]
-mouse-wheel: true
 
 knitr:
   opts_chunk: 
