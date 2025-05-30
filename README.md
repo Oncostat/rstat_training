@@ -1,9 +1,12 @@
 # Équipe ONCOSTAT - Modules de cours de R
 
+[![pages-build-deployment](https://github.com/Oncostat/rstat_training/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Oncostat/rstat_training/actions/workflows/pages/pages-build-deployment)
 
 ## Objectifs
 
-Formation R interne à Gustave Roussy.
+Formation R interne au Bureau de Biostatistique et d'Epidémiologie (BBE) de Gustave Roussy.
+
+Le code quarto est disponible sur ce repository (liens ci-dessous) et les diapos sont disponibles sur oncostat.github.io/rstat_training/.
 
 ## Modules
 
