@@ -4,13 +4,14 @@ format:
   revealjs:
     theme: simple
     css: assets/style.css
-    pagetitle: "Oncostat R - recherche clinique"
+    pagetitle: "Oncostat R - Statistiques"
+    output-file: "index.html"
     template-partials:
      - assets/title-slide.html
     title: "Équipe ONCOSTAT <br> Modules de cours de R"
-    subtitle: "Import et check de bases & tables standards"
+    subtitle: "Analyses statistiques & tables standards"
     author: "Dan Chaltiel"
-    description: "📦 {EDCimport} et 📦 {grstat}"
+    description: "Avec le package 📦 {grstat}"
     incremental: true
     controls: true
     keyboard: true
