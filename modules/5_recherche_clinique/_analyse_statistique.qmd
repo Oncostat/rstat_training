@@ -589,18 +589,7 @@ anova(fit1, fit2)
     -   On peut parfois s'y perdre un peu
 
 -   Attention à la validité des packages, qui reste difficile à
-    démontrer
+    démontrer (contrairement à SAS)
 
-##  {#merci .center data-menu-title="Merci !" visibility="uncounted"}
-
-::::: columns
-::: {.column width="60%"}
-![](media/bob.jpg){fig-align="center"}
-:::
-
-::: {.column width="40%"}
-![](media/keep_calm.jpeg){fig-align="center"}
-:::
-:::::
 
 
