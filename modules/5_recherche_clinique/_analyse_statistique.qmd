@@ -53,7 +53,7 @@ t
 t$p.value
 ```
 
-### 2-sample Wilcoxon test
+### 2-sample Wilcoxon
 
 ```{r}
 w = wilcox.test(mpg ~ am, data=db)
@@ -552,6 +552,8 @@ df2 = df %>%
 levels(df$arm)
 levels(df2$arm)
 ``` 
+
+Les modèles : 
 
 ```{r}
 m1 = coxph(Surv(t, event) ~ arm + bm_bin, data=df)

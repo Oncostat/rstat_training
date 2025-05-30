@@ -24,16 +24,20 @@ format:
     smaller: true
     preview-links: auto
     footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+    
 revealjs-plugins:
   - fragoff
+  
 execute:
   echo: true
   cache: false
   code-overflow: wrap
   warnings: false
   messages: false
+  
 keywords: ["r", "rstat", "training", "course", "module"]
 mouse-wheel: true
+
 knitr:
   opts_chunk: 
     collapse: true
@@ -41,6 +45,7 @@ knitr:
     R.options:
       crosstable_compact: true
       width: 105
+      
 editor: 
   markdown: 
     wrap: 72
