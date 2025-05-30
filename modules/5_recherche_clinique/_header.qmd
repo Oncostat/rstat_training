@@ -24,6 +24,8 @@ format:
     smaller: true
     preview-links: auto
     footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+revealjs-plugins:
+  - fragoff
 execute:
   echo: true
   cache: false
