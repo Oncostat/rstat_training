@@ -30,7 +30,7 @@ revealjs-plugins:
   
 execute:
   echo: true
-  cache: false
+  cache: true
   code-overflow: wrap
   warnings: false
   messages: false
