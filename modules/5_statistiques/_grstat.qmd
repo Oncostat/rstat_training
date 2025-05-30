@@ -1,0 +1,287 @@
+
+{{< include _header.qmd >}}
+
+```{r}
+#| include: false
+library(tidyverse)
+library(grstat)
+```
+
+## Le package `grstat` 📦
+
+-   Package interne au BBE
+-   Reprend les macros SAS validées
+-   Propose des sorties standardisées
+
+::: {.callout-note title="Version" fragment-index="4" real-fragment-index="4"}
+Cette présentation a été réalisée avec `grstat` v`{r} packageVersion("grstat")`.
+:::
+
+## Documentation
+
+Accessible dans RStudio et [en
+ligne](https://oncostat.github.io/grstat/index.html):
+
+<iframe src="https://oncostat.github.io/grstat/index.html" style="width:1000px; height:500px">
+
+</iframe>
+
+
+## Fonctions {.nonincremental}
+
+Fonctions stables et validées :
+
+-   Tableaux AE : `ae_table_grade()` & `ae_table_soc()`
+-   Graphiques AE : `ae_plot_grade()` & `butterfly_plot()` 
+
+. . .
+
+Fonctions en cours de développement : 
+
+-  Swimmerplot & Waterfall-plot RECIST
+-  Forest-plot
+-  Sorties standard pour les modèles principaux
+-  Vignettes/Book de documentation
+
+. . .
+
+::: {.callout-tip .no_fragment title="Liste"}
+La liste des fonctions est accessible dans [les références de la doc](https://oncostat.github.io/grstat/reference/index.html).
+:::
+
+
+## Données d'exemple
+
+On va utiliser une base de données d'exemple.
+
+```{r}
+#| attr-source: "style='max-height: 400px !important;'"
+#| cache: false
+library(grstat)
+db = grstat_example(r=0.4)
+attach(db, warn.conflicts=FALSE)
+
+db
+```
+
+::: {.callout-note title="EDCimport" fragment-index="2" real-fragment-index="2"}
+`db` n'est pas (encore) une base EDCimport mais fonctionne de la même façon.
+:::
+
+
+## AE par grade : tableaux
+
+::::: {.panel-tabset .no_fragment style="grid-template-columns: 16% 82%;"}
+
+### Total
+
+```{r}
+#| classes: no_fragment
+ae_table_grade(df_ae=ae, df_enrol=enrolres, arm=NULL) %>%
+  as_flextable(header_show_n=TRUE)
+```
+
+### Par bras
+
+```{r}
+#| classes: no_fragment
+ae_table_grade(df_ae=ae, df_enrol=enrolres, arm="arm") %>%
+  as_flextable(header_show_n=TRUE)
+```
+
+### SAE
+
+```{r}
+#| classes: no_fragment
+ae %>%
+  filter(sae=="Yes") %>%
+  ae_table_grade(df_enrol=enrolres, arm="arm", ae_label="SAE") %>%
+  as_flextable(header_show_n=TRUE)
+```
+
+### Population
+
+Pour décrire une sous-population, il faut filtrer `df_enrol`:
+
+```{r}
+#| classes: no_fragment
+enrolres2 = enrolres %>%
+  filter(arm=="Control")
+ae %>%
+  ae_table_grade(df_enrol=enrolres2, arm="arm") %>%
+  as_flextable(header_show_n=TRUE)
+```
+
+### Postprod
+
+On peut modifier le résultat avant de passer en `flextable`:
+
+```{r}
+#| classes: no_fragment
+ae %>%
+  ae_table_grade(df_enrol=enrolres, arm="arm") %>%
+  filter(!variable %in% c("Grade 1", "Grade 2")) %>%
+  as_flextable(header_show_n=TRUE)
+```
+
+:::::
+
+
+## AE par grade : graphiques
+
+::::: {.panel-tabset .no_fragment style="grid-template-columns: 16% 82%;"}
+
+### Total
+
+```{r}
+#| classes: no_fragment
+#| fig-height: 3.7
+ae_plot_grade(df_ae=ae, df_enrol=enrolres, arm=NULL) #340
+```
+
+### Par bras
+
+```{r}
+#| classes: no_fragment
+#| fig-height: 3.7
+ae_plot_grade(df_ae=ae, df_enrol=enrolres, arm="ARM", 
+              variant=c("max", "sup")) #453
+```
+
+### Absolues
+
+⚠ Attention aux valeurs absolues pour des essais non équilibrés !
+
+```{r}
+#| classes: no_fragment
+#| fig-height: 3.7
+ae_plot_grade(df_ae=ae, df_enrol=enrolres, arm="ARM", 
+              type="absolute") #567
+```
+
+
+:::::
+
+
+## AE par SOC : tableaux
+
+::::: {.panel-tabset .no_fragment style="grid-template-columns: 16% 82%;"}
+
+### Total
+
+```{r}
+#| classes: no_fragment
+ae_table_soc(df_ae=ae, df_enrol=enrolres, arm=NULL) %>%
+  as_flextable()
+```
+
+### Par bras
+
+```{r}
+#| classes: no_fragment
+ae_table_soc(df_ae=ae, df_enrol=enrolres, arm="arm") %>%
+  as_flextable()
+```
+
+
+### Population
+
+Idem, pour décrire une sous-population, il faut filtrer `df_enrol`:
+
+```{r}
+#| classes: no_fragment
+enrolres2 = enrolres %>% head(50)
+ae %>%
+  ae_table_soc(df_enrol=enrolres2, arm="arm") %>%
+  as_flextable()
+```
+
+### Avec Term
+
+```{r}
+#| classes: no_fragment
+ae_table_soc(df_ae=ae, df_enrol=enrolres, arm="ARM", 
+             term="aeterm") %>%
+  as_flextable()
+```
+
+:::::
+
+## AE par SOC : graphiques
+
+::::: {.panel-tabset .no_fragment style="grid-template-columns: 16% 82%;"}
+
+### Butterfly
+
+```{r}
+#| classes: no_fragment
+#| fig-height: 3.7
+butterfly_plot(df_ae=ae, df_enrol=enrolres)
+```
+
+### Serious
+
+```{r}
+#| classes: no_fragment
+#| fig-height: 3.7
+ae %>% 
+  mutate(serious = sae=="Yes") %>% #colonne logical/booleanZ
+  butterfly_plot(df_enrol=enrolres, severe="serious") +
+  labs(caption="Darker areas represent Serious Adverse Events")
+```
+
+:::::
+
+<script src="assets/custom.js"></script>
+
+
+## DEV: `gr_new_project()`
+
+
+::::: columns
+::: {.column width="60%"}
+ - Fonction évolutive pour créer un nouveau projet.
+ - Crée un projet RStudio dans le chemin spécifié
+ - Crée un squelette standard avec des fichiers pré-remplis
+ - La fonction va évoluer avec le temps
+ - Exemple
+   ```r
+   gr_new_project("HRNBL2/IDMC_27")
+   ```
+ 
+:::
+
+::: {.column width="40%"}
+```
+├── main.R
+├── NEWS.md
+├── R
+│   ├── init.R
+│   ├── read.R
+│   ├── check.R
+│   ├── description.R
+│   ├── graph.R
+│   └── report.R
+├── README.md
+└── my_proj.Rproj
+
+```
+:::
+:::::
+
+
+## To be continued
+
+`grstat` est un package encore jeune et plein de fonctionnalités sont en cours de développement :
+
+ - Tables de sorties de modèles
+ - `waterfall_plot()` RECIST
+ - `swimmer_plot()` RECIST
+ - Template `officer` standard
+ - Création de listes de randomisation
+ - `forest_plot()`
+ - Check automatique de la fiche RECIST standard (TrialMaster)
+
+. . .
+
+Vous pouvez demander des fonctionnalités sur <https://github.com/Oncostat/grstat/issues>.
