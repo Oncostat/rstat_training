@@ -233,3 +233,40 @@ ae %>%
 :::::
 
 <script src="assets/custom.js"></script>
+
+
+## DEV: `gr_new_project()`
+
+
+::::: columns
+::: {.column width="60%"}
+ - Fonction évolutive pour créer un nouveau projet.
+ - Crée un projet RStudio dans le chemin spécifié
+ - Crée un squelette standard avec des fichiers pré-remplis
+ - La fonction va évoluer avec le temps
+ 
+ ```r
+ gr_new_project("HRNBL2/IDMC_27")
+ ```
+ 
+:::
+
+::: {.column width="40%"}
+```
+├── main.R
+├── NEWS.md
+├── R
+│   ├── init.R
+│   ├── read.R
+│   ├── check.R
+│   ├── description.R
+│   ├── graph.R
+│   └── report.R
+├── README.md
+└── my_proj.Rproj
+
+```
+:::
+:::::
+
+
