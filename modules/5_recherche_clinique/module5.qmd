@@ -53,7 +53,7 @@ editor:
 
 # Importer et checker sa base avec 📦 {EDCimport}
 
-{{< include _edcimport.qmd >}}
+{{< include _analyse_statistique.qmd >}}
 
 # Générer du contenu avec 📦 {grstat}
 
