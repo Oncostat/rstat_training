@@ -11,7 +11,7 @@ Formation R interne à Gustave Roussy.
 2) [Données](modules/2_donnees/) (Charlotte Bargain)
 3) [Graphiques](modules/3_graphiques/) (Nusaibah Ibrahimi)
 4) [Analyse](modules/4_analyse/) (Dan Chaltiel)
-5) [Recherche clinique](modules/5_rech_clin/) (Dan Chaltiel)
+5) [Recherche clinique](modules/5_statistiques/) (Dan Chaltiel)
 6) [Bonnes pratiques de programmation](modules/6_bpp/) (Charlotte Bargain)
 7) [Reporting - officer](modules/7_officer/) (Charlotte Bargain)
 8) [Reporting - quarto](modules/8_quarto/) (Nusaibah Ibrahimi)
