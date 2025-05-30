@@ -9,11 +9,11 @@
     -   Tables descriptives
     -   Formatage avec `flextable`\
 
-# Imports, Checks, et visualisation avec `EDCimport`
+# Imports, Checks, et visualisation avec `EDCimport` {.unnumbered}
 
 {{< include _edcimport.qmd >}}
 
-# Analyse descriptive avec `crosstable`
+# Analyse descriptive avec `crosstable` {.unnumbered}
 
 {{< include _crosstable.qmd >}}
 
