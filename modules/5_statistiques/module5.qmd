@@ -10,11 +10,11 @@
     -   Graphiques des Adverse Events
     -   Création de projet standard (DEV)
 
-# Analyse statistique
+# Analyse statistique {.unnumbered}
 
 {{< include _analyse_statistique.qmd >}}
 
-# Générer du contenu avec 📦 {grstat}
+# Générer du contenu avec 📦 {grstat} {.unnumbered}
 
 {{< include _grstat.qmd >}}
 

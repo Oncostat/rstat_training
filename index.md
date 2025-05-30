@@ -10,5 +10,5 @@ Formation R interne au Bureau de Biostatistique et d'Epidémiologie (BBE) de Gus
 2.  [Données](modules/2_donnees/) (Charlotte Bargain)
 3.  [Graphiques](modules/3_graphiques/) (Nusaibah Ibrahimi)
 4.  [Import, checks, et description](modules/4_edcimport_crosstable/) (Dan Chaltiel)
-5.  [Analyses statistiques](modules/5_analyse/) (Dan Chaltiel)
+5.  [Analyses statistiques](modules/5_statistiques/) (Dan Chaltiel)
 6.  [Reporting - officer](modules/6_officer/) (Charlotte Bargain)

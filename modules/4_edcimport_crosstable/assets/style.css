@@ -14,6 +14,19 @@
   margin: 0px 50px;
 }
 
+.slide-logo {
+  top: 14px !important;
+  right: 50px !important;
+  max-height: 100px !important;
+  height: 100px !important;
+}
+.slide-number, .reveal.has-logo .slide-number {
+  bottom: 14px !important;
+  right: 50px !important;
+  top: unset !important;
+  color: #777777 !important;
+}
+
 .footer > p {
   font-size: 14px;
 }
@@ -23,6 +36,9 @@
   border-bottom: 1px solid black;
 }
 
+#merci h1 {
+    display: none;
+}
 
 .reveal h2 code {
  font-size
