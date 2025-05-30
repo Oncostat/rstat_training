@@ -244,10 +244,10 @@ ae %>%
  - Crée un projet RStudio dans le chemin spécifié
  - Crée un squelette standard avec des fichiers pré-remplis
  - La fonction va évoluer avec le temps
- 
- ```r
- gr_new_project("HRNBL2/IDMC_27")
- ```
+ - Exemple
+   ```r
+   gr_new_project("HRNBL2/IDMC_27")
+   ```
  
 :::
 
@@ -270,3 +270,18 @@ ae %>%
 :::::
 
 
+## To be continued
+
+`grstat` est un package encore jeune et plein de fonctionnalités sont en cours de développement :
+
+ - Tables de sorties de modèles
+ - `waterfall_plot()` RECIST
+ - `swimmer_plot()` RECIST
+ - Template `officer` standard
+ - Création de listes de randomisation
+ - `forest_plot()`
+ - Check automatique de la fiche RECIST standard (TrialMaster)
+
+. . .
+
+Vous pouvez demander des fonctionnalités sur <https://github.com/Oncostat/grstat/issues>.
