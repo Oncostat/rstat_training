@@ -1,0 +1,38 @@
+
+
+## Plan du module
+1.  [**Analyse statistique**](#analyse-statistique)
+    -   Modèles logistiques (`glm`) et modèles de Cox (`coxph`)
+    -   Formatage en table
+    -   Tests d'hypothèses
+1.  [**Sorties standards avec 📦 {grstat}**](#grstat)
+    -   Tables des Adverse Events
+    -   Graphiques des Adverse Events
+    -   Création de projet standard (DEV)
+
+# Analyse statistique {.unnumbered}
+
+{{< include _analyse_statistique.qmd >}}
+
+# Générer du contenu avec 📦 {grstat} {.unnumbered}
+
+{{< include _grstat.qmd >}}
+
+
+# {#merci .center data-menu-title="Merci !" visibility="uncounted"}
+
+::::: columns
+::: {.column width="60%"}
+![](media/bob.jpg){fig-align="center"}
+:::
+
+::: {.column width="40%"}
+![](media/keep_calm.jpeg){fig-align="center"}
+:::
+:::::
+
+
+
+{{< include _header.qmd >}}
+
+<script src="assets/custom.js"></script>
