@@ -5,6 +5,7 @@ format:
     # template-partials:
     #  - assets/title-slide.html
    fig-pos: 'H'
+   output-file: "index.html"
    auto-stretch: false
    logo: logo_IGR.jpg
    css: assets/style.css
@@ -67,7 +68,7 @@ editor:
 
 ## Overview
 
-![](images/clipboard-2862186918.png)
+![](images/clipboard-2862186918.png){fig-align="center" width="659"}
 
 # 
 
@@ -104,7 +105,7 @@ analysis and enhancement.
 producing data visualization.
 
 You provide the data, tell `ggplot2` how to map variables to aesthetics,
-what graphical primitives to use, and it takes care of the details
+what graphical primitives to use, and it takes care of the details.
 
 This package is now integrated into R through the `tidyverse` framework.
 
@@ -112,6 +113,8 @@ This package is now integrated into R through the `tidyverse` framework.
 # The easiest way to get ggplot2 is to install the whole tidyverse:
 # install.packages("tidyverse")
 library(tidyverse)
+
+
 # Alternatively, install just ggplot2:
 # install.packages("ggplot2")
 library(ggplot2)
@@ -171,8 +174,11 @@ library(grstat)
 
 ```{r}
 # ?grstat_example # help - see the documentation of the function
-db = grstat_example() # generate a list of datasets
-names(db)
+
+db = grstat_example(N=200, seed = 42) # generate a list of simulated datasets 
+
+# str(db)   # displays an overview of each element of the list
+# names(db)  # displays the names of objects in the list db
 
 df_enrol = db$enrolres
 df_recist = db[["recist"]]
@@ -196,20 +202,23 @@ table(df_enrol$arm3)
 
 ## Syntax
 
-A typical graph is therefore:
-
+::::::: columns
+::: {.column width="65%"}
 ```{r}
-# barplot 
+# barplot
 ggplot(data = df_enrol,
-       mapping = aes(x = arm3, 
+       mapping = aes(x = arm3,
                      fill = arm3)) + # Change fill color by groups
+  
   geom_bar(width = 0.7) +
   ggtitle("Distribution of patients by treatment arm") +
   xlab("") +
   ylab("Number of patients") +
   labs(fill = "Group") # title subtitle x & y labels parameters also
 ```
+:::
 
+::::: {.column width="35%"}
 ::: callout-note
 You can add as many additional functions as you want.
 
@@ -221,8 +230,10 @@ package.
 Return to the line at each instruction, after `+` . The code will be
 easier to read.
 
-Do not forget to indent.
+Do not forget to indent `CTRL + I`.
 :::
+:::::
+:::::::
 
 ## Data
 
@@ -245,7 +256,9 @@ ggplot(data = df_recist %>% filter(rcvisit == 0))
 
 ```{r eval=FALSE, output = FALSE}
 df_recist %>% 
-  ggplot() # it will understand that the data is df_recist
+  filter(rcvisit == 0) %>% 
+  ggplot() # it will understand that the data is 
+           # df_recist filtered by baseline visit
 ```
 
 ## Mapping
@@ -253,7 +266,7 @@ df_recist %>%
 The mapping of a plot is a set of instructions on how parts of the data
 are mapped onto aesthetic attributes of geometric objects.
 
-A mapping can be made by using the `aes()`function.
+A mapping can be made by using the `aes()` function.
 
 ```{r eval=FALSE, output = FALSE}
 # preparation of the data
@@ -264,8 +277,7 @@ df_recist %>%
             by = "subjid") %>% 
 # figure
   ggplot(mapping = aes(x = subjid,  
-                       y = rctlsum_b,
-                       fill = arm3))
+                       y = rctlsum_b))
 ```
 
 ::: callout-note
@@ -309,27 +321,7 @@ geom_point()
 The heart of any graphic is the
 [layers](https://ggplot2-book.org/toolbox.html). They take the mapped
 data and display it in something humans can understand as a
-representation of the data. Every layer consists of three important
-parts:
-
-1.  The [**geometry**](https://ggplot2-book.org/individual-geoms.html)
-    that determines *how* data are displayed, such as points, lines, or
-    rectangles.
-
-2.  The [**statistical
-    transformation**](https://ggplot2-book.org/statistical-summaries.html)
-    that may compute new variables from the data and affect *what* of
-    the data is displayed.
-
-3.  The [**position
-    adjustment**](https://ggplot2-book.org/layers.html#position) that
-    primarily determines *where* a piece of data is being displayed.
-
-A layer can be constructed using the `geom_*()` and `stat_*()`
-functions. These functions often determine one of the three parts of a
-layer, while the other two can still be specified. Here is how we can
-use two layers to display the `cty` and `hwy` columns of the `mpg`
-dataset as points and stack a trend line on top.
+representation of the data.
 :::
 
 The heart of any graphic is the layers. Every layer consists of three
@@ -347,8 +339,8 @@ important parts:
 :::
 
 A layer can be constructed using the `geom_xxx()` functions. These
-functions often determine the form of the plot, while the other two can
-still be specified later with others functions.
+functions often determine the geometry, while the other two can still be
+specified later with others functions.
 
 ```{r}
 # preparation of the data
@@ -386,7 +378,7 @@ fig_point = df_recist %>%
   ggplot(mapping = aes(x = subjid,  
                        y = rctlsum_b,
                        colour = arm3))+
-  geom_point() 
+  geom_point(shape = 6) # triangle form 
 fig_point
 ```
 :::
@@ -411,8 +403,12 @@ df_recist %>%
 
 ## Layers
 
+::: callout-note
+## Reminder
+
 Each new graphic element is added in the form of a layer separated by
 `+`.
+:::
 
 `labs()` function labels all possible elements of the aesthetic, as well
 as the title, subtitle and caption.
@@ -423,6 +419,8 @@ fig_point +
        subtitle = "subtitle",
        colour = "Legend")
 ```
+
+## Layers
 
 ::: callout-note
 There are several other ways of specifying these elements using specific
@@ -489,7 +487,6 @@ df_recist %>%
   left_join(df_enrol %>% 
               select(subjid, arm3),
             by = "subjid") %>% 
-# figure boxplot
   ggplot(mapping = aes(x = rcresp,
                        y = rctlsum,
                        fill = rcresp,
@@ -498,7 +495,7 @@ df_recist %>%
   xlab(label = "Overall response at visit 1") +
   ylab(label = "Tumor size (mm)") +
   guides(colour = "none", fill = "none") + # remove legend
-  scale_x_discrete(labels = c(`Complete response`="CR",
+  scale_x_discrete(labels = c(`Complete response`="Complete \n Response", # return to line
                               `Partial response` = "PR",
                               `Stable disease` = "SD",
                               `Progressive disease` = "PR",
@@ -531,22 +528,32 @@ There are predefined themes in `ggplot2` that you can already use.
 :::
 
 ::: {.column width="65%"}
-![](images/clipboard-275570733.png)
+![](images/clipboard-275570733.png){width="608"}
 :::
 :::::
 
 ## Theme
 
+```{r}
+fig_point + 
+  theme_void()   # no relevant
+```
+
+## Theme
+
 The [theme](https://ggplot2-book.org/themes) system controls almost any
 visuals of the plot that are not controlled by the data and is therefore
-important for the look and feel of the plot. You can use the theme for
-customization ranging from changing the location of the legends to
-setting the background color of the plot. Many elements in the theme are
-hierarchical in that setting the look of the general axis line affects
-those of the x and y axes simultaneously.
+important for the look and feel of the plot.
 
-To tweak the look of the plot, one can use many of the built-in
-`theme_*()` functions and/or detail specific aspects with the
+::: notes
+You can use the theme for customization ranging from changing the
+location of the legends to setting the background color of the plot.
+Many elements in the theme are hierarchical in that setting the look of
+the general axis line affects those of the x and y axes simultaneously.
+:::
+
+You can use many of the built-in `theme_*()` functions and/or detail
+specific aspects with the
 [`theme()`](https://ggplot2.tidyverse.org/reference/theme.html)
 function. The `element_*()` functions control the graphical attributes
 of theme components.
@@ -561,20 +568,16 @@ df_recist %>%
   # figure boxplot
   ggplot(mapping = aes(x = rcresp,
                        y = rctlsum,
-                       fill = rcresp,
-                       colour = rcresp)) +
+                       fill = rcresp)) +
   geom_boxplot() + 
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),
         axis.text.y = element_text(size = 10, colour = "red"),
-        axis.title.x = element_blank())+ 
-  xlab(label = "Overall response at visit 1") +
+        axis.title.x = element_blank())+ # remove the space dedicated to the title
+  xlab(label = "Overall response at visit 1") + # did not appear because the space was removed
   ylab(label = "Tumor size (mm)") +
   scale_fill_brewer(type = "div", 
                     palette = "RdYlBu",  # display.brewer.pal(4,"RdYlBu") 
-                    direction = -1) +    # reverse the order
-  scale_colour_brewer(type = "div", 
-                      palette = "RdYlBu",  
-                      direction = -1) + 
+                    direction = -1) +    # reverse the order 
   scale_y_continuous(limits = c(0,180))+
   guides(fill = guide_legend(theme = theme(
   legend.text.position = "top",
@@ -598,15 +601,14 @@ df_recist %>%
   # figure boxplot
   ggplot(mapping = aes(x = rcresp,
                        y = rctlsum,
-                       fill = rcresp,
-                       colour = rcresp)) +
+                       fill = rcresp)) +
   geom_boxplot() + 
   geom_jitter(width = 0.2, height = 0.2) +
-  geom_text( aes(label=count)) + 
+  geom_text(aes(label = count, x= rcresp,y =150) ) + 
   xlab(label = "Overall response at visit 1") +
   ylab(label = "Tumor size (mm)") +
   guides(colour = "none", fill = "none") + # remove legend
-  scale_x_discrete(labels = c(`Complete response`="CR",
+  scale_x_discrete(labels = c(`Complete response`="Complete \n Response", # \n back to the line 
                               `Partial response` = "PR",
                               `Stable disease` = "SD",
                               `Progressive disease` = "PR",
@@ -614,9 +616,6 @@ df_recist %>%
   scale_fill_brewer(type = "div", 
                     palette = "RdYlBu",  # display.brewer.pal(4,"RdYlBu") 
                     direction = -1) +    # reverse the order
-  scale_colour_brewer(type = "div", 
-                      palette = "RdYlBu",  
-                      direction = -1) + 
   scale_y_continuous(limits = c(0,180))+
   facet_grid( ~ arm3)
 ```
@@ -657,7 +656,6 @@ df_recist %>%
        size = "New lesion")+
   scale_fill_lancet() +
   scale_color_lancet() # scale_color_jco The Lancet Journal
-
 ```
 
 # Interactive graphs with package `plotly`
@@ -673,8 +671,18 @@ library(plotly)
 ```
 
 ```{r}
-fig_point %>%    
-  ggplotly()
+ggplotly()   # by default it will display the last plot (hence the one of the previous slide)
+```
+
+## Package `plotly`
+
+```{r eval=FALSE, output=FALSE}
+ggplotly(p = fig_point) # as argument it needs a ggplot object
+```
+
+```{r}
+fig_point %>%    # another way to code with the pipe
+  ggplotly() 
 ```
 
 ::: notes
