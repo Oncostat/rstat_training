@@ -1,0 +1,169 @@
+---
+title: "Code with me - module 4"
+subtitle: "EDCimport & Crosstable"
+author: "Dan Chaltiel"
+output: html_notebook
+---
+
+Ce script R sert à illustrer les notions abordées lors du module 4 **EDCimport & Crosstable**.
+
+## Chargement des packages :
+
+```{r}
+#| message: false
+library(tidyverse) #dplyr, tidyr, ggplot2, lubridate, purrr...
+library(EDCimport)
+library(crosstable)
+```
+
+## Import de données `.sas7bdat` :
+
+``` r
+#exemple : "//nas-01/SBE_ETUDES/NIVOGLIO/3.3 Data
+path = "//nas-01/SBE_ETUDES/NIVOGLIO/3.3 Data/swisstransfer_798ce15a-7625-470d-b39d-2aa48933cb24/" 
+formats = "//nas-01/SBE_ETUDES/NIVOGLIO/3.3 Data/formats.sas7bdat" 
+#regarder la section "Format file" de ?read_all_sas
+db = read_all_sas(path, format_file=formats)
+db
+load_database(db)
+ae
+```
+
+## Import de données TrialMaster :
+
+``` r
+path = "Y:/ATEZOLACC/11-atezo-stat/Backup/ATEZO_ExportTemplate_2020_12_31_SAS_XPORT_2022_06_03_15_01.zip" 
+db = read_trialmaster(path, pw="")
+db
+load_database(db)
+ae
+```
+
+## Utilisation de données exemples :
+
+```{r}
+db = edc_example()
+db
+load_database(db)
+ae
+```
+
+## Helpers
+
+Regarder le lookup (résumé de la base), chercher une colonne, chercher une valeur, et explorer la base dans le navigateur web.
+
+```{r}
+edc_lookup()
+edc_find_column("date")
+edc_find_value("disorder")
+# edc_viewer()  
+```
+
+## Nettoyer ses données
+
+On va mettre tous les noms de colonne en majuscules, séparer les données longues/short du dataset `AE`, et unifier les `subjid`.
+
+::: callout-note
+Par défaut, nettoyer les noms de colonne signifie enlever les accents, symboles, espaces... Ici, l'exemple est déjà propre donc on met en majuscule.
+:::
+
+```{r}
+db2 = edc_example() %>% 
+  edc_clean_names(clean_fun=toupper) %>% 
+  edc_split_mixed(ae) %>% 
+  edc_unify_subjid()
+
+db2$ae_short
+db2$ae_long
+db2$ae$SUBJID
+```
+
+```{r}
+#| label: Cleaning
+#| include: false
+#oubliez ce chunk, c'est juste que EDCimport se souvient uniquement de la dernière base importée
+edc_example() 
+```
+
+## Vérifier ses données
+
+On va faire 5 checks plus ou moins sensés, pour l'exemple :
+
+-   Critères d'inclusion : entre 25 et 70 ans
+
+-   Pas de patients dupliqués dans le dataset `data1`
+
+-   Pas de valeur `val1a` inférieure à `-1.5` dans le bras contrôle
+
+-   Pas de manquants sur le grade des AE
+
+-   Pas d'AE de grade \<1 ou \>5 (**erreur fatale**)
+
+```{r}
+enrol %>% 
+  filter(age>70 | age<25) %>% 
+  select(subjid, enrol_date, age) %>% 
+  edc_data_warn("Age should be 25-70", issue_n=1)
+
+data1 %>% 
+  filter(n()>1, .by=subjid) %>%
+  edc_data_warn("Duplicated patients in `data1` ({nrow(.data)} rows)", issue_n=3)
+
+long_pure %>% 
+  edc_left_join(enrol) %>% 
+  filter(arm=="Ctl" & val1a < -1.5) %>% 
+  edc_data_warn("Biomarqueur bras contrôle trop faible", issue_n=4)
+
+ae %>% 
+  filter(is.na(aegr)) %>% 
+  edc_data_warn("AE: Grade manquant", issue_n=2)
+
+ae %>% 
+  filter(aegr<1 | aegr>5) %>% 
+  edc_data_stop("Grade AE invalide !") #stop!
+
+edc_data_warnings()
+save_edc_data_warnings(open=TRUE)
+```
+
+## Dernières nouvelles
+
+```{r}
+lastnews = lastnews_table(except=c("date10"), 
+                          prefer=c("data3$date9"),
+                          show_delta=TRUE)
+```
+
+## Dataviz: Swimmerplot
+
+```{r}
+edc_swimmerplot()
+edc_swimmerplot(include=c("enrol", "data1", "data2"), 
+                exclude=c("visitdt"))
+edc_swimmerplot(include=c("enrol", "data1", "data2"), 
+                exclude=c("visitdt"), 
+                origin="enrol$enrol_date", time_unit="weeks")
+edc_swimmerplot(include=c("enrol", "data1", "data2"), 
+                exclude=c("visitdt"), 
+                origin="enrol$enrol_date", time_unit="years",
+                group="enrol$arm")
+edc_swimmerplot(include=c("enrol", "data1", "data2"), 
+                exclude=c("visitdt", "enrol_date"), 
+                origin="enrol$enrol_date", time_unit="years",
+                plotly=TRUE)
+
+
+```
+
+## Dataviz: remplissage
+
+```{r}
+edc_crf_plot()
+edc_patient_gridplot()
+```
+
+## xxx
+
+```{r}
+
+```

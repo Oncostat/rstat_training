@@ -8,5 +8,6 @@
 *.html
 !title-slide.html
 !index.html
+!code_with_me.nb.html
 
 modules/test*
