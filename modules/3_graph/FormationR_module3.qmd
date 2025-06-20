@@ -68,7 +68,7 @@ editor:
 
 ## Overview
 
-![](images/clipboard-2862186918.png){fig-align="center" width="659"}
+![](media/clipboard-2862186918.png){fig-align="center" width="659"}
 
 # 
 
@@ -84,7 +84,7 @@ The main objective of this module is to discover a set of methods in R
 to produce figures.
 :::
 
-# Package `ggplot2` ![](images/clipboard-4243774750.png){width="201"}
+# Package `ggplot2` ![](media/clipboard-4243774750.png){width="201"}
 
 ## Package `ggplot2`
 
@@ -122,9 +122,9 @@ library(ggplot2)
 
 ## Cheatsheet
 
-![](images/clipboard-3500636186.png)
+![](media/clipboard-3500636186.png)
 
-![](images/clipboard-1136683792.png)
+![](media/clipboard-1136683792.png)
 
 # Initialization with `ggplot()` function
 
@@ -143,7 +143,7 @@ The scales, facets, coordinates, and themes have reasonable defaults.
 :::
 
 ::: {.column width="60%"}
-![](images/clipboard-3730255188.png)
+![](media/clipboard-3730255188.png)
 :::
 :::::
 
@@ -437,7 +437,7 @@ fig_point +
 
 # 
 
-![](images/03-plotType.png)
+![](media/03-plotType.png)
 
 ## Scales
 
@@ -528,7 +528,7 @@ There are predefined themes in `ggplot2` that you can already use.
 :::
 
 ::: {.column width="65%"}
-![](images/clipboard-275570733.png){width="608"}
+![](media/clipboard-275570733.png){width="608"}
 :::
 :::::
 
@@ -710,9 +710,9 @@ library(plotly)
 # esquisser(df_recist)
 ```
 
-![](images/clipboard-369250986.png)
+![](media/clipboard-369250986.png)
 
-![](images/clipboard-1458169185.png)
+![](media/clipboard-1458169185.png)
 
 # Conclusion
 
