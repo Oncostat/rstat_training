@@ -1,19 +1,16 @@
 # Équipe ONCOSTAT - Modules de cours de R
 
+[![pages-build-deployment](https://github.com/Oncostat/rstat_training/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/Oncostat/rstat_training/actions/workflows/pages/pages-build-deployment)
 
 ## Objectifs
 
-Formation R interne à Gustave Roussy.
+Formation R interne au Bureau de Biostatistique et d'Epidémiologie (BBE) de Gustave Roussy.
 
-## Modules
+Le code quarto est disponible sur ce repository (liens ci-dessous) et les diapos sont disponibles sur oncostat.github.io/rstat_training/.
 
-1) [Introduction](modules/1_intro/) (Nusaibah Ibrahimi)
-2) [Données](modules/2_donnees/) (Charlotte Bargain)
-3) [Graphiques](modules/3_graphiques/) (Nusaibah Ibrahimi)
-4) [Analyse](modules/4_analyse/) (Dan Chaltiel)
-5) [Recherche clinique](modules/5_rech_clin/) (Dan Chaltiel)
-6) [Bonnes pratiques de programmation](modules/6_bpp/) (Charlotte Bargain)
-7) [Reporting - officer](modules/7_officer/) (Charlotte Bargain)
-8) [Reporting - quarto](modules/8_quarto/) (Nusaibah Ibrahimi)
-9) [(Not) Fun facts](modules/9_beyond/) (Dan Chaltiel)
-
+1)  [Introduction](modules/1_intro/) (Nusaibah Ibrahimi)
+2)  [Données](modules/2_donnees/) (Charlotte Bargain)
+3)  [Graphiques](modules/3_graphiques/) (Nusaibah Ibrahimi)
+4)  [Import, checks, et description](modules/4_edcimport_crosstable/) (Dan Chaltiel)
+5)  [Analyses statistiques](modules/5_statistiques/) (Dan Chaltiel)
+6)  [Reporting - officer](modules/6_officer/) (Charlotte Bargain)

@@ -1,0 +1,34 @@
+
+
+## Plan du module
+1.  [**Importer et checker sa base avec 📦 {EDCimport}**](#edcimport)
+    -   Fonctions d'import de base
+    -   Data-checking
+    -   Data-visualisation\ 
+1.  [**Décrire ses tables avec 📦 {crosstable} **](#analyse-descriptive)
+    -   Tables descriptives
+    -   Formatage avec `flextable`\
+
+# Imports, Checks, et visualisation avec `EDCimport` {.unnumbered}
+
+{{< include _edcimport.qmd >}}
+
+# Analyse descriptive avec `crosstable` {.unnumbered}
+
+{{< include _crosstable.qmd >}}
+
+
+# {#merci .center data-menu-title="Merci !" visibility="uncounted"}
+
+::::: columns
+::: {.column width="60%"}
+![](media/bob.jpg){fig-align="center"}
+:::
+
+::: {.column width="40%"}
+![](media/keep_calm.jpeg){fig-align="center"}
+
+
+{{< include _header.qmd >}}
+
+<script src="assets/custom.js"></script>
