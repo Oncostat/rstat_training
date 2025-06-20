@@ -2,10 +2,10 @@ window.RevealFragOff = function () {
   return {
     id: "RevealFragOff",
     init: function (deck) {
-
-      console.log(deck);
+      fragoff.log(deck);
 
       let toolbar = document.querySelector(".slide-menu-items");
+      let fragments = document.querySelectorAll('.fragment');
 
       let newLi = document.createElement("li");
       newLi.classList.add("slide-menu-item");
@@ -16,7 +16,6 @@ window.RevealFragOff = function () {
       checkbox.checked = true;
 
       let label = document.createElement("label");
-      label.htmlFor = "fragoff_checkbox";
       label.textContent = "Fragments enabled";
 
       newLi.appendChild(checkbox);
@@ -24,26 +23,30 @@ window.RevealFragOff = function () {
       newLi.style.textAlign = "center";
       toolbar.insertBefore(newLi, toolbar.firstChild);
 
-      let fragments = document.querySelectorAll('.fragment');
-      newLi.addEventListener("click", function() {
-        console.log("<li> cliquée !");
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event("change"));
+      newLi.addEventListener("click", function(event) {
+        fragments = document.querySelectorAll('.fragment');
+        fragoff.log("<li> cliquée !");
+        if(event.srcElement.id!="fragoff_checkbox"){
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event("change"));
+          event.stopPropagation();
+        }
       });
+
       checkbox.addEventListener("change", function() {
           if (this.checked) {
-            console.log("Checkbox cochée !");
+            fragoff.log("Checkbox décochée -> cochée");
+            label.textContent = "Fragments enabled"
             fragments.forEach(frag => {
               frag.classList.add('fragment')
               frag.classList.remove('disabled_fragment')
-              label.textContent = "Fragments enabled"
             });
           } else {
-            console.log("Checkbox décochée !");
+            fragoff.log("Checkbox cochée -> décochée");
+            label.textContent = "Fragments disabled"
             fragments.forEach(frag => {
               frag.classList.add('disabled_fragment')
               frag.classList.remove('fragment')
-              label.textContent = "Fragments disabled"
             });
           }
       });
@@ -52,3 +55,10 @@ window.RevealFragOff = function () {
   };
 };
 
+//run `fragoff.verbose = true` in the console to activate the logs
+window.fragoff = {
+  verbose: false,
+  log: function(...args) {
+    if (this.verbose) console.log(...args)
+  }
+}
