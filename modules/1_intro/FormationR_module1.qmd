@@ -878,8 +878,8 @@ NULL: empty
 
 ::: callout-caution
 The names of these particular values are “reserved” by R, and **cannot
-be used as variable names**. This is also the case for booleans TRUE (T
-in abbreviated form), FALSE (F in abbreviated form).
+be used as variable names**. This is also the case for booleans TRUE,
+FALSE.
 :::
 
 ```{r}
