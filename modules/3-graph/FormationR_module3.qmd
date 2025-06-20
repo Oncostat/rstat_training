@@ -1,0 +1,754 @@
+---
+format: 
+  revealjs: 
+   theme: simple
+    # template-partials:
+    #  - assets/title-slide.html
+   fig-pos: 'H'
+   output-file: "index.html"
+   auto-stretch: false
+   logo: logo_IGR.jpg
+   css: assets/style.css
+   title: "ONCOSTAT & BBE Team <br> Training course R"
+   subtitle: "Module 3 : Data visualization with ggplot2"
+   description: "Graphing tools"
+   author: "Nusaïbah IBRAHIMI"
+   incremental: true
+   controls: true
+   keyboard: true
+   date: today
+   date-format: full
+   affiliation-title: "BBE"
+   self-contained: true
+   toc-depth: 3
+   toc-title: "Table of contents"
+   toc: false
+   slide-number: true
+   smaller: true
+   scrollable: true
+   preview-links: auto
+   footer: "The source code for this presentation is available [on GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+
+execute:
+  echo: true
+  output: true
+  #cache: true
+  code-overflow: wrap
+  warnings: false
+  messages: false
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
+    R.options:
+      crosstable_compact: true
+      width: 105
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Table of contents
+
+-   Overview
+
+-   Package `ggplot2`
+
+-   Initialization with `ggplot()` function
+
+-   Collection of color palettes with package `ggsci`
+
+-   Interactive graphs with package `plotly`
+
+-   Little help with package `esquisse`
+
+-   Conclusion
+
+## Overview
+
+![](images/clipboard-2862186918.png){fig-align="center" width="659"}
+
+# 
+
+[R Graph Gallery](https://r-graph-gallery.com/) a website of the main
+figures existing in ggplot, there are tutorials to help you.
+
+<iframe src="https://r-graph-gallery.com/" style="width:1000px; height:500px">
+
+</iframe>
+
+::: notes
+The main objective of this module is to discover a set of methods in R
+to produce figures.
+:::
+
+# Package `ggplot2` ![](images/clipboard-4243774750.png){width="201"}
+
+## Package `ggplot2`
+
+::: notes
+`ggplot2` is a package created by Hadley Wickham and Winston Chang to
+implement in R graphical designs.
+
+The aim is to provide a single approach to producing virtually any
+graphical enhancement of data that can be found in scientific journals,
+newspapers, statistical analysis or data visualization.
+
+This package is now integrated into R through the `tidyverse` framework,
+which offers a coherent approach to data import and preparation,
+analysis and enhancement.
+:::
+
+`ggplot2` is a R package created by Hadley Wickham and Winston Chang for
+producing data visualization.
+
+You provide the data, tell `ggplot2` how to map variables to aesthetics,
+what graphical primitives to use, and it takes care of the details.
+
+This package is now integrated into R through the `tidyverse` framework.
+
+```{r}
+# The easiest way to get ggplot2 is to install the whole tidyverse:
+# install.packages("tidyverse")
+library(tidyverse)
+
+
+# Alternatively, install just ggplot2:
+# install.packages("ggplot2")
+library(ggplot2)
+```
+
+## Cheatsheet
+
+![](images/clipboard-3500636186.png)
+
+![](images/clipboard-1136683792.png)
+
+# Initialization with `ggplot()` function
+
+## Initialization with `ggplot()` function
+
+::::: columns
+::: {.column width="40%"}
+For structure, we go over the 7 component parts that come together as a
+set of instructions on how to draw a chart.
+
+Out of these components, `ggplot2` needs at least the following three to
+produce a chart: [data]{style="color:orange;"}, a
+[mapping]{style="color:blue;"}, and a [layer]{style="color:green;"}.
+
+The scales, facets, coordinates, and themes have reasonable defaults.
+:::
+
+::: {.column width="60%"}
+![](images/clipboard-3730255188.png)
+:::
+:::::
+
+## Initialization with `ggplot()` function
+
+To build a graph with `ggplot2`, you need to define several elements:
+
+1.  **the data**: `ggplot2` lets you work with vectors, dataframes;
+
+2.  **the mapping**: the aesthetic (or `aes`) defines the mapping, i.e.
+    the correspondence between visual elements and variables. It is in
+    the aesthetic that we declare what we want to represent, which
+    depends on the variables (which variable on the x axis, on the y
+    axis, which variable to define a color scale...);
+
+3.  **the layer** (“geometric form”): this defines the graphical
+    representation in which the above parameters are represented. In
+    `ggplot2`, these functions are of the form `geom_xxx`;
+
+## Case study
+
+```{r output=FALSE}
+# install.packages(pkgs = "devtools")
+library(package = devtools)
+install_github(repo = "Oncostat/grstat@v0.1.0.9010")
+library(grstat)
+```
+
+```{r}
+# ?grstat_example # help - see the documentation of the function
+
+db = grstat_example(N=200, seed = 42) # generate a list of simulated datasets 
+
+# str(db)   # displays an overview of each element of the list
+# names(db)  # displays the names of objects in the list db
+
+df_enrol = db$enrolres
+df_recist = db[["recist"]]
+
+```
+
+Overview of the first observations with the function `head()`
+
+```{r}
+# display the 5 first rows
+head(x = df_enrol, n = 5) 
+```
+
+Frequency table with the function `table()` (`prop.table()` to compute
+percentage).
+
+```{r}
+# count of patient in each treatment arm
+table(df_enrol$arm3)
+```
+
+## Syntax
+
+::::::: columns
+::: {.column width="65%"}
+```{r}
+# barplot
+ggplot(data = df_enrol,
+       mapping = aes(x = arm3,
+                     fill = arm3)) + # Change fill color by groups
+  
+  geom_bar(width = 0.7) +
+  ggtitle("Distribution of patients by treatment arm") +
+  xlab("") +
+  ylab("Number of patients") +
+  labs(fill = "Group") # title subtitle x & y labels parameters also
+```
+:::
+
+::::: {.column width="35%"}
+::: callout-note
+You can add as many additional functions as you want.
+
+Each function is linked with a `+` like a pipe `%>%` with `tidyverse`
+package.
+:::
+
+::: callout-tip
+Return to the line at each instruction, after `+` . The code will be
+easier to read.
+
+Do not forget to indent `CTRL + I`.
+:::
+:::::
+:::::::
+
+## Data
+
+::: notes
+With ggplot, vector and dataframe or matrix can be used for the
+construction of a figure.
+:::
+
+`ggplot2` uses data to construct a plot. The best format is a
+rectangular dataframe structure where rows are observations and columns
+are variables.
+
+As the first step in many plots, you would pass the data to the
+`ggplot()` function, which stores the data to be used later by other
+parts of the plotting system.
+
+```{r eval=FALSE, output = FALSE}
+ggplot(data = df_recist %>% filter(rcvisit == 0))
+```
+
+```{r eval=FALSE, output = FALSE}
+df_recist %>% 
+  filter(rcvisit == 0) %>% 
+  ggplot() # it will understand that the data is 
+           # df_recist filtered by baseline visit
+```
+
+## Mapping
+
+The mapping of a plot is a set of instructions on how parts of the data
+are mapped onto aesthetic attributes of geometric objects.
+
+A mapping can be made by using the `aes()` function.
+
+```{r eval=FALSE, output = FALSE}
+# preparation of the data
+df_recist %>% 
+  filter(rcvisit == 0) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+# figure
+  ggplot(mapping = aes(x = subjid,  
+                       y = rctlsum_b))
+```
+
+::: callout-note
+No need to specify the table name in the form df_recist\$subjid or
+df_recist\[,"rctlsum_b"\] as `ggplot` automatically searches for the
+variable in the data table specified with the data parameter.
+:::
+
+## Mapping
+
+In addition, the `aes()` function admits other arguments that can be
+used to modify the appearance of the graph.
+
+::: callout-note
+It is possible to specify parameters that will be valid for the entire
+graph. These parameters are the same as those proposed in the `aes`, but
+must be passed outside the aesthetic.
+:::
+
+```{r}
+# preparation of the data
+df_recist %>% 
+  filter(rcvisit == 1) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+# figure
+  ggplot(mapping = aes(x = subjid,  
+                       y = rctlsum,
+                       fill = arm3, # fill colour for points
+                       colour = arm3, # outline color for points
+                       alpha = rcresp, # transparency
+                       size = rctlsum_b/100) # points size
+         ) +
+geom_point()
+```
+
+## Layers
+
+::: notes
+The heart of any graphic is the
+[layers](https://ggplot2-book.org/toolbox.html). They take the mapped
+data and display it in something humans can understand as a
+representation of the data.
+:::
+
+The heart of any graphic is the layers. Every layer consists of three
+important parts:
+
+::: nonincremental
+1.  The **geometry** that determines *how* data are displayed, such as
+    points, lines, or rectangles.
+
+2.  The **statistical transformation** that may compute new variables
+    from the data and affect *what* of the data is displayed.
+
+3.  The **position adjustment** that primarily determines *where* a
+    piece of data is being displayed.
+:::
+
+A layer can be constructed using the `geom_xxx()` functions. These
+functions often determine the geometry, while the other two can still be
+specified later with others functions.
+
+```{r}
+# preparation of the data
+df_recist %>% 
+  filter(rcvisit == 0) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+# figure
+  ggplot(mapping = aes(x = subjid,  
+                       y = rctlsum_b,
+                       colour = arm3))+
+  geom_point()
+```
+
+## Layers
+
+::: callout-warning
+The layer chosen and the display depend on the data you put on the
+mapping. Indeed, some form of figure do not need exhaustive parameters
+whereas others do, hence, if you choose the wrong layer, R will return
+you an error or a warning message.
+:::
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+# preparation of the data
+fig_point = df_recist %>% 
+  filter(rcvisit == 0) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+  # figure scatter plot
+  ggplot(mapping = aes(x = subjid,  
+                       y = rctlsum_b,
+                       colour = arm3))+
+  geom_point(shape = 6) # triangle form 
+fig_point
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+# preparation of the data
+df_recist %>% 
+  filter(rcvisit == 0) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+# figure histogram
+  ggplot(mapping = aes(x = rctlsum_b,
+                       fill = arm3,
+                       colour = arm3))+
+  
+  geom_histogram(binwidth = 20, boundary = 0)
+```
+:::
+:::::
+
+## Layers
+
+::: callout-note
+## Reminder
+
+Each new graphic element is added in the form of a layer separated by
+`+`.
+:::
+
+`labs()` function labels all possible elements of the aesthetic, as well
+as the title, subtitle and caption.
+
+```{r}
+fig_point + 
+  labs(title = "TITLE",
+       subtitle = "subtitle",
+       colour = "Legend")
+```
+
+## Layers
+
+::: callout-note
+There are several other ways of specifying these elements using specific
+layers.
+:::
+
+```{r}
+fig_point + 
+  ggtitle(label = "Scatter plot of tumor size at baseline (N = 200)",
+       subtitle = NULL) +
+  xlab("Patient") +
+  ylab("Tumor size at baseline (mm)")
+```
+
+# 
+
+![](images/03-plotType.png)
+
+## Scales
+
+Scales are responsible for updating the limits of a plot, setting the
+breaks, formatting the labels, and possibly applying a transformation.
+
+To use scales, use one of the scale functions that are patterned as
+`scale_{aesthetic}_{type}()` functions, where `{aesthetic}` is one of
+the pairings made in the mapping part of a plot.
+
+```{r output=TRUE}
+library(RColorBrewer)
+# preparation of the data
+df_recist %>% 
+  filter(rcvisit == 0) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+# figure histogram
+  ggplot(mapping = aes(x = rctlsum_b,
+                       fill = arm3,
+                       colour = arm3)) +
+  geom_histogram(binwidth = 20, boundary = 0) + 
+  scale_x_continuous(name = "Baseline size tumor",
+                     breaks = seq(from = 0, to = 180, by = 20)) +
+  scale_fill_brewer(name = "Treatment arm") + 
+  scale_colour_brewer(name = "Treatment arm",
+                      type = "div", 
+                      palette = "PRGn") +
+  scale_y_continuous(limits = c(0,100))
+# display.brewer.pal(3,"PRGn")  # displays the 3 first color of palette name "PRGn"
+```
+
+## Facets
+
+Facets can be used to separate small multiples, or different subsets of
+the data. It is a powerful tool to quickly split up the data into
+smaller panels, based on one or more variables, to display patterns or
+trends (or the lack thereof) within the subsets.
+
+The facets have their own mapping that can be given as a formula with
+the function `facet_grid()`.
+
+```{r}
+df_recist %>% 
+  filter(rcvisit == 1) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+  ggplot(mapping = aes(x = rcresp,
+                       y = rctlsum,
+                       fill = rcresp,
+                       colour = rcresp)) +
+  geom_boxplot() + 
+  xlab(label = "Overall response at visit 1") +
+  ylab(label = "Tumor size (mm)") +
+  guides(colour = "none", fill = "none") + # remove legend
+  scale_x_discrete(labels = c(`Complete response`="Complete \n Response", # return to line
+                              `Partial response` = "PR",
+                              `Stable disease` = "SD",
+                              `Progressive disease` = "PR",
+                              `Not evaluable` = "NA")) +
+  scale_fill_brewer(type = "div", 
+                      palette = "RdYlBu",  # display.brewer.pal(4,"RdYlBu") 
+                      direction = -1) +    # reverse the order
+  scale_colour_brewer(type = "div", 
+                      palette = "RdYlBu",  
+                      direction = -1) + 
+  scale_y_continuous(limits = c(0,180))+
+  facet_grid( ~ arm3)
+```
+
+## Theme
+
+::: notes
+What font should I use for the chart title? For the x-axis title? What
+font size? What color for the background? What type of line for the
+grids?
+:::
+
+::::: columns
+::: {.column width="35%"}
+`ggplot2` themes modify the appearance of yours graphics. Appearance
+refers to everything that does not relate to the data, such as fonts,
+grids and background.
+
+There are predefined themes in `ggplot2` that you can already use.
+:::
+
+::: {.column width="65%"}
+![](images/clipboard-275570733.png){width="608"}
+:::
+:::::
+
+## Theme
+
+```{r}
+fig_point + 
+  theme_void()   # no relevant
+```
+
+## Theme
+
+The [theme](https://ggplot2-book.org/themes) system controls almost any
+visuals of the plot that are not controlled by the data and is therefore
+important for the look and feel of the plot.
+
+::: notes
+You can use the theme for customization ranging from changing the
+location of the legends to setting the background color of the plot.
+Many elements in the theme are hierarchical in that setting the look of
+the general axis line affects those of the x and y axes simultaneously.
+:::
+
+You can use many of the built-in `theme_*()` functions and/or detail
+specific aspects with the
+[`theme()`](https://ggplot2.tidyverse.org/reference/theme.html)
+function. The `element_*()` functions control the graphical attributes
+of theme components.
+
+```{r}
+df_recist %>% 
+  filter(rcvisit == 1) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+  mutate(count = n(), .by = c("arm3","rcresp")) %>%
+  # figure boxplot
+  ggplot(mapping = aes(x = rcresp,
+                       y = rctlsum,
+                       fill = rcresp)) +
+  geom_boxplot() + 
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1),
+        axis.text.y = element_text(size = 10, colour = "red"),
+        axis.title.x = element_blank())+ # remove the space dedicated to the title
+  xlab(label = "Overall response at visit 1") + # did not appear because the space was removed
+  ylab(label = "Tumor size (mm)") +
+  scale_fill_brewer(type = "div", 
+                    palette = "RdYlBu",  # display.brewer.pal(4,"RdYlBu") 
+                    direction = -1) +    # reverse the order 
+  scale_y_continuous(limits = c(0,180))+
+  guides(fill = guide_legend(theme = theme(
+  legend.text.position = "top",
+  legend.position = "top",
+  legend.text = element_text(hjust = 1))))
+  
+```
+
+## Combining
+
+As mentioned at the start, you can layer all of the pieces to build a
+customized plot of your data.
+
+```{r}
+df_recist %>% 
+  filter(rcvisit == 1) %>% 
+  left_join(df_enrol %>% 
+              select(subjid, arm3),
+            by = "subjid") %>% 
+  mutate(count = n(), .by = c("arm3","rcresp")) %>%
+  # figure boxplot
+  ggplot(mapping = aes(x = rcresp,
+                       y = rctlsum,
+                       fill = rcresp)) +
+  geom_boxplot() + 
+  geom_jitter(width = 0.2, height = 0.2) +
+  geom_text(aes(label = count, x= rcresp,y =150) ) + 
+  xlab(label = "Overall response at visit 1") +
+  ylab(label = "Tumor size (mm)") +
+  guides(colour = "none", fill = "none") + # remove legend
+  scale_x_discrete(labels = c(`Complete response`="Complete \n Response", # \n back to the line 
+                              `Partial response` = "PR",
+                              `Stable disease` = "SD",
+                              `Progressive disease` = "PR",
+                              `Not evaluable` = "NA")) +
+  scale_fill_brewer(type = "div", 
+                    palette = "RdYlBu",  # display.brewer.pal(4,"RdYlBu") 
+                    direction = -1) +    # reverse the order
+  scale_y_continuous(limits = c(0,180))+
+  facet_grid( ~ arm3)
+```
+
+# Collection of color palettes with package `ggsci`
+
+## Package `ggsci`
+
+External packages, such as `ggthemes` or `hrbrthemes`, can be used to
+amplify the collection of themes.
+
+The package `ggsci` contains the usual themes to use for scientific
+journals, such as Lancet journal, journal of Clinical Oncology, NEJM and
+BMJ.
+
+```{r output = FALSE}
+# install.packages("ggsci")
+library(ggsci)
+```
+
+```{r}
+df_recist %>%
+ filter(rcvisit >= 0 & rcvisit <= 1) %>%
+  filter(!is.na(rcnew) & !is.na(rcresp)) %>% 
+ ggplot() +
+  aes(
+    x = rctlsum_b,
+    y = rctlsum,
+    fill = rcresp,
+    colour = rcresp,
+    size = rcnew
+  ) +
+  geom_point() +
+  xlab("Baseline tumor size")+
+  ylab("Tumor size at visit 1")+
+  labs(fill = "Global response",
+       colour = "Global response", 
+       size = "New lesion")+
+  scale_fill_lancet() +
+  scale_color_lancet() # scale_color_jco The Lancet Journal
+```
+
+# Interactive graphs with package `plotly`
+
+## Package `plotly`
+
+The package `plotly` is a supplementary element that can be added in
+`ggplot`, to obtain an interactive graph.
+
+```{r output = FALSE}
+# install.packages("plotly") 
+library(plotly)
+```
+
+```{r}
+ggplotly()   # by default it will display the last plot (hence the one of the previous slide)
+```
+
+## Package `plotly`
+
+```{r eval=FALSE, output=FALSE}
+ggplotly(p = fig_point) # as argument it needs a ggplot object
+```
+
+```{r}
+fig_point %>%    # another way to code with the pipe
+  ggplotly() 
+```
+
+::: notes
+By interactive, you can zoom in/out, you can select an particular point,
+having the x and y coordinates for example.
+:::
+
+# Little help with package `esquisse`
+
+## Package `esquisse`
+
+The package `esquisse` explore and visualize your data interactively. It
+helps you to obtain the main body of the ggplot, by indicating variables
+you want to plot. Then, you can adapt it to your taste.
+
+```{r output = FALSE}
+# install.packages("esquisse")
+# install.packages("plotly")
+library(esquisse)
+library(plotly)
+```
+
+```{r}
+# esquisser()
+# esquisser(df_recist)
+```
+
+![](images/clipboard-369250986.png)
+
+![](images/clipboard-1458169185.png)
+
+# Conclusion
+
+## Conclusion
+
+You are now able to:
+
+-   import databases into R environment and manipulate them (training
+    course n°2 led by Charlotte);
+
+-   create basic and complex graphs with reasoning and structure;
+
+-   customized aesthetics parameters.
+
+## Next steps
+
+The next steps will be covered with Dan.
+
+**Training course n°4**
+
+::: nonincremental
+-   presentation of the R package `EDCimport`, a toolbox for importing
+    and checking TrialMaster data;
+
+-   description data tables with the package `crosstable`.
+:::
+
+**Training course n°5**
+
+::: nonincremental
+-   main hypothesis tests;
+
+-   usual statistical models (linear and binary regressions, survival
+    models...);
+
+-   presentation of the R package `grstat` for Adverse Events tables.
+:::
+
+# Thank you for your attention
