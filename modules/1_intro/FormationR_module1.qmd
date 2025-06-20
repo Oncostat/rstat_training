@@ -12,6 +12,7 @@ format:
     description: "Getting started with RStudio"
     author: "Nusaïbah IBRAHIMI"
     incremental: true
+    auto-stretch: false
     controls: true
     keyboard: true
     date: today
@@ -224,7 +225,7 @@ like to remove and use the broom icon to clear them from our
 *environment*.
 :::
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 ![](media/clipboard-4117536477.png)
 :::
@@ -232,7 +233,7 @@ like to remove and use the broom icon to clear them from our
 ::: {.column width="50%"}
 ![](media/clipboard-2231335957.png)
 :::
-:::
+:::::
 
 With the function `rm()`. List between the parenthesis the object names
 separated by a comma.
@@ -271,8 +272,8 @@ toto2 = seq( from = 1, to = 5, by = 1)  # function seq() creates a sequence of n
 To execute the code line(s), `CTRL+ENTER` on the interest line(s) or
 click on the button Run
 
-To run the code, `CTRL+A` then `CTRL+ENTER` or click on the button
-Source
+To run all code, `CTRL+A` for selection then `CTRL+ENTER` to execute, or
+click on the button Source
 
 ::: {.column width="50%"}
 ![](media/clipboard-1858809340.png)
@@ -286,7 +287,7 @@ Tips to make your code readable: (1/2)
 
     -   `#` only is for comments
 
-    -   `# Title1 ----` a title of level 1
+    -   `# Title1 ----` a title of level 1 or `CTRL + SHIFT + R`
 
     -   `## Title2 ----` a title of level 2
 
@@ -306,7 +307,7 @@ Tips to make your code readable: (2/2)
 
 -   use indentation by using `CTRL + I`
 
-    ::: callout-tip
+    :::: callout-tip
     <div>
 
     Apply often the 3 following steps:
@@ -318,7 +319,7 @@ Tips to make your code readable: (2/2)
     3.  save the code, `CTRL + S`.
 
     </div>
-    :::
+    ::::
 
 ## R script
 
@@ -375,15 +376,15 @@ The figures and tables are displayed in the *Plots* tab or *Viewer* tab.
 
 From the tab, you can zoom in or save it as PDF or as Image.
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
-![](media/clipboard-3201062396.png)
+![](media/clipboard-3201062396.png){width="339"}
 :::
 
 ::: {.column width="50%"}
-![](media/clipboard-1281198536.png)
+![](media/clipboard-1281198536.png){width="408"}
 :::
-:::
+:::::
 
 # Packages
 
@@ -410,7 +411,7 @@ data.
 
 The most common “core” `tidyverse` packages are:
 
-::: columns
+::::: columns
 ::: {.column width="40%"}
 -   `readr`, for data import;
 
@@ -430,7 +431,7 @@ The most common “core” `tidyverse` packages are:
 
 -   `forcats`, for working with factors (categorical data).
 :::
-:::
+:::::
 
 ## Installation of a package
 
@@ -462,8 +463,8 @@ A package only needs to be installed once. Then, it is stocked in your
 RStudio. We can find it in the *Packages* tab.
 :::
 
-::: columns
-::: {.column width="50%"}
+::::::: columns
+::::: {.column width="50%"}
 code line (script .R or in the Console):
 
 ::: nonincremental
@@ -484,21 +485,23 @@ click-bottom:
 
 4.  click on Install
 :::
-:::
+:::::
 
 ::: {.column width="50%"}
 ![](media/clipboard-1302393951.png){width="479"}
 :::
-:::
+:::::::
 
 ## Loading a package
 
 To load a package:
 
+::: nonincremental
 -   you research for package name in the *Packages* tab and check the
     box next to it.
 
 -   otherwise, you run the code `library("package_name")`.
+:::
 
 ```{r}
 #| code-line-numbers: "1|2-3|4|5-6|7-8"
@@ -526,7 +529,7 @@ Clicking the package name in the *Packages* tab takes us to the
 
 To get the package documentation:
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 Click on the package name, in the *Packages* tab.
 
@@ -544,11 +547,11 @@ Type this command into the *Console*
 help(package = "stringr")
 ```
 :::
-:::
+:::::
 
 ## Help on a package
 
-::: columns
+::::: columns
 ::: {.column width="50%"}
 ![](media/clipboard-3183408281.png)
 :::
@@ -556,7 +559,7 @@ help(package = "stringr")
 ::: {.column width="50%"}
 ![](media/clipboard-15338476.png)
 :::
-:::
+:::::
 
 ## Help on a package
 
@@ -594,8 +597,8 @@ name to see the help file. Here we see the `str_to_lower()` function
 from the `stringr` package is at the top of this list:
 :::
 
-::: columns
-::: {.column width="50%"}
+:::::: columns
+:::: {.column width="50%"}
 To have the help of a function,
 
 ::: nonincremental
@@ -611,12 +614,12 @@ help("str_to_lower")
 help(str_to_lower) 
 ?str_to_lower
 ```
-:::
+::::
 
 ::: {.column width="50%"}
 ![](media/clipboard-440183010.png)
 :::
-:::
+::::::
 
 ## Help on a function
 
@@ -643,8 +646,6 @@ However, the functions do not need the same arguments, so you may
 encounter errors if you do not precise from each package the function
 comes from.
 :::
-
-# Break
 
 # Operator
 
@@ -688,10 +689,8 @@ Old way of exponent in R, is \*\*
 
 ## Creation of object
 
-<https://www.geeksforgeeks.org/r-objects/>
-
 ::: notes
-In[ **R
+In [**R
 programming**](https://www.geeksforgeeks.org/r-programming-language-introduction/),
 objects are the fundamental data structures used to store and manipulate
 data. Objects in R can hold different types of data, such as numbers,
@@ -731,17 +730,16 @@ To print the value of the variable, just type the variable name in the
 *Console*.
 :::
 
-Variables are containers for storing values.
+Object are containers for storing values.
 
-To assign a value to a variable, use the assignment operators `<-` or
-`=` .
+To assign a value to an object, use the assignment operators `<-` or `=`
+.
 
-To print the value of the variable, just type the variable name in the
-*Console*.
+To print the value of the object, just type its name in the *Console*.
 
 ```{r}
 #| code-line-numbers: "1-3|5|6-8"
-# we create 2 numerical variables
+# we create 2 numerical objects
 term1 = 50
 term2 <- 60
 
@@ -750,7 +748,7 @@ sum <- term1 + term2 # same as using function sum() such as sum(term1, term2)
 sum # or print(sum)
 ```
 
-## Type of variables
+## Type of objects
 
 ::: notes
 In programming, data type is an important concept. Variables can store
@@ -786,7 +784,7 @@ There are 3 types of values :
 :::
 
 ::: callout-important
-Data type is an important concept. Variables can store data of different
+Data type is an important concept. Object can store data of different
 types and different types can do different things.
 :::
 
@@ -800,12 +798,11 @@ types and different types can do different things.
 
 ## Vector
 
-Object of 1 dimension stocking elements of same type.
+Object of 1 dimension stocking elements of same
+type.![](images/clipboard-4083231145.png){width="187"}
 
 There are many ways to create vectors, but the usual one is to use the
 command `c()`.
-
-![](media/clipboard-4083231145.png){width="224"}
 
 ::: notes
 Factors are data structures that are implemented to categorize the data
@@ -824,8 +821,8 @@ vec_num = c(1,2,3,4,5) # double
 vec_num
 vec_num_same = 1:5 # integer
 print(vec_num_same)
-vec_char = c("Toulouse", "Paris", "Bordeaux", "Lyon", "Marseille")  # character
-vec_seq = seq(from = 0, to = 20, by = 5)  # function seq() generates a sequence
+vec_char = c("Toulouse", "Paris", "Bordeaux", "Lyon", 'Marseille')  # character in quotation marks (simple or double)
+vec_seq = seq(from = 0, to = 20, by = 2.5)  # function seq() generates a sequence
 vec_rep = rep(x = c("I","You","He/She/It", "We", "You", "They"), 
               times = 3) # function rep() replicates the values in x times
 vec_rep
@@ -881,14 +878,14 @@ NULL: empty
 
 ::: callout-caution
 The names of these particular values are “reserved” by R, and **cannot
-be used as variable names**. This is also the case for booleans TRUE,
-FALSE, T and F.
+be used as variable names**. This is also the case for booleans TRUE (T
+in abbreviated form), FALSE (F in abbreviated form).
 :::
 
 ```{r}
-is.na(vec) # function is.na() displays if each item is NA.
+is.na(vec) # function is.na() displays if each item of vec is NA.
 
-# TRUE=8  
+# TRUE=8  #ERROR Message
 100/0
 c()  # empty vector 
 ```
@@ -966,9 +963,6 @@ observations and columns to variables.
 It shares many of the properties of matrices and of lists.
 :::
 
-::: columns
-::: {.column width="50%"}
-::: columns
 An object of 2D table of variables of multiples types.
 
 ![](media/clipboard-770258203.png){width="181"}
@@ -977,18 +971,17 @@ To create a dataframe, use the function `data.frame()`.
 
 For an overview of the table:
 
+::: nonincremental
 -   `View()`which gives you access to the table;
 
 -   `str()` which lists the attributes of the dataframe.
+:::
 
 `dim()` returns the dimension (row column) of the dataframe.
 
 `nrow()` and `ncol()` return respectively the number of lines and
 columns.
-:::
-:::
 
-::: {.column width="50%"}
 ```{r}
 df = data.frame("name" = c("Albert Einstein","Martin Luther","Nelson Mandela","William Shakespeare", "Ludwig van Beethoven"),
                 "gender" = rep(x = 1, times = 5))
@@ -999,8 +992,6 @@ is.data.frame(df) # function returns a logical value: TRUE if is a dataframe, FA
 View(df) # overview of the dataframe
 str(df)
 ```
-:::
-:::
 
 ::: callout-note
 Remind that the created objects are saved in the global environment.
@@ -1008,19 +999,21 @@ Remind that the created objects are saved in the global environment.
 
 ## Dataframe
 
-To select an item, use the hooks `[]` and note the index of the line
+To select an item, use the hooks `[,]` and note the index of the line
 number and the column number or the name of the variable, separated by a
 comma, because there are 2 dimensions to indicate.
 
-To select a row (or observation), use the hooks `[]` by assigning the
+To select a row (or observation), use the hooks `[,]` by assigning the
 index of the row, followed by a comma.
 
 To select a column (a variable), use:
 
+::: nonincremental
 -   the dollar symbol `$` followed the name of the variable;
 
--   or the hooks `[]` by assigning the name of the variable in quotes or
-    the index of the column preceded by a comma.
+-   or the hooks `[,]` by assigning the name of the variable in quotes
+    or the index of the column preceded by a comma.
+:::
 
 ```{r}
 df[,"name"] # "Albert Einstein","Martin Luther","Nelson Mandela","William Shakespeare", "Ludwig van Beethoven"
@@ -1036,10 +1029,10 @@ df[df$name!= "Martin Luther" & df$name!="Nelson Mandela",]
 
 ## Dataframe
 
-To add a new variable, use hooks `[]` by indicating the name of the new
+To add a new variable, use hooks `[,]` by indicating the name of the new
 variable or the dollar sign `$` followed by the name.
 
-To add a new observation, you can use the `[]` by knowing the last
+To add a new observation, you can use the `[,]` by knowing the last
 observation number, and put the vector of elements.
 
 `bind_rows()` combines a sequence of vectors or dataframes by rows.
@@ -1061,8 +1054,8 @@ df = bind_rows(df,
 ```
 
 ::: callout-caution
-When you use the `[]`, you have to call the variables in quotes. Whereas
-with the `$` it is not necessary.
+When you use the `[,]`, you have to call the variables in quotes.
+Whereas with the `$` it is not necessary.
 :::
 
 ## List
@@ -1166,7 +1159,7 @@ main components of an R function are: function name, function parameters
 Let's take a look at each of them separately.
 :::
 
-![](media/clipboard-3123930456.png)
+![](media/clipboard-3123930456.png){fig-align="center" width="802"}
 
 ## Function name
 
@@ -1189,6 +1182,10 @@ Generally, variable names should be nouns and function names should be
 verbs.
 :::
 
+::: callout-warning
+A name can not begin with a number
+:::
+
 ``` r
 # Good
 day_one
@@ -1201,10 +1198,6 @@ dayone  # misunderstanding
 djm1  #not clear
 ```
 
-::: callout-warning
-A name can not begin with a number
-:::
-
 ## Function parameters (arguments)
 
 The arguments are the variables in the function definition placed inside
@@ -1213,7 +1206,7 @@ values each time we call the function.
 
 ```{r}
 quadratic_polynomial <- function(x, a, b, c){
-  y = a^2 * x + b*x + c
+  y = a * x^2 + b*x + c
   return(y)
 }
 quadratic_polynomial(x = 1, a = 2, b = 3, c = 4)
@@ -1245,7 +1238,7 @@ definition, which then can be reset when calling the function.
 
 ```{r}
 quadratic_polynomial <- function(x, a=2, b=1, c=10){
-  y = a^2 * x + b*x + c
+  y = a * x^2 + b*x + c
   return(y)
 }
 quadratic_polynomial(x = -1, a = 3) #b and c is defined by default.
@@ -1313,10 +1306,10 @@ To call a function: put function name and add the necessary arguments
 inside the parenthesis.
 
 When calling a function, we usually assign the result of this operation
-to a variable, to be able to use it later.
+to an object, to be able to use it later.
 
 ```{r}
-x = check_sqrt(x = 25)
+x = check_sqrt(x = 25)  # x is a list of a character (note) and the value (result)
 
 quadratic_polynomial(x$result,a = -1, b = -1, c = 4) 
 
