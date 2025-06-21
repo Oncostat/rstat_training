@@ -4,27 +4,27 @@ window.RevealFragOff = function () {
     init: function (deck) {
       fragoff.log(deck);
 
-      let toolbar = document.querySelector(".slide-menu-items");
-      let fragments = document.querySelectorAll('.fragment');
+      const menu = document.querySelector(".slide-menu");
+      const panel = document.querySelector(".slide-menu-panel");
 
-      let newLi = document.createElement("li");
-      newLi.classList.add("slide-menu-item");
+      const span = document.createElement("span");
+      span.classList.add("slide-menu-item");
 
-      let checkbox = document.createElement("input");
+      const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.id = "fragoff_checkbox";
       checkbox.checked = true;
 
-      let label = document.createElement("label");
+      const label = document.createElement("label");
       label.textContent = "Fragments enabled";
 
-      newLi.appendChild(checkbox);
-      newLi.appendChild(label);
-      newLi.style.textAlign = "center";
-      toolbar.insertBefore(newLi, toolbar.firstChild);
+      span.appendChild(checkbox);
+      span.appendChild(label);
+      span.style.textAlign = "center";
+      menu.insertBefore(span, panel);
 
-      newLi.addEventListener("click", function(event) {
-        fragments = document.querySelectorAll('.fragment');
+
+      span.addEventListener("click", function(event) {
         fragoff.log("<li> cliquée !");
         if(event.srcElement.id!="fragoff_checkbox"){
           checkbox.checked = !checkbox.checked;
@@ -35,15 +35,17 @@ window.RevealFragOff = function () {
 
       checkbox.addEventListener("change", function() {
           if (this.checked) {
-            fragoff.log("Checkbox décochée -> cochée");
+            fragoff.log("Checkbox unchecked -> checked: enabling fragments");
             label.textContent = "Fragments enabled"
+            const fragments = document.querySelectorAll('.disabled_fragment');
             fragments.forEach(frag => {
               frag.classList.add('fragment')
               frag.classList.remove('disabled_fragment')
             });
           } else {
-            fragoff.log("Checkbox cochée -> décochée");
+            fragoff.log("Checkbox checked -> unchecked:  disabling fragments");
             label.textContent = "Fragments disabled"
+            const fragments = document.querySelectorAll('.fragment');
             fragments.forEach(frag => {
               frag.classList.add('disabled_fragment')
               frag.classList.remove('fragment')
