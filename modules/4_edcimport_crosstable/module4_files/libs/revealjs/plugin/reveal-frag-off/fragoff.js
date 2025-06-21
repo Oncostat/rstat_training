@@ -2,48 +2,53 @@ window.RevealFragOff = function () {
   return {
     id: "RevealFragOff",
     init: function (deck) {
+      fragoff.log(deck);
 
-      console.log(deck);
+      const menu = document.querySelector(".slide-menu");
+      const panel = document.querySelector(".slide-menu-panel");
 
-      let toolbar = document.querySelector(".slide-menu-items");
-
-      let newLi = document.createElement("li");
+      const newLi = document.createElement("span");
       newLi.classList.add("slide-menu-item");
 
-      let checkbox = document.createElement("input");
+      const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.id = "fragoff_checkbox";
       checkbox.checked = true;
 
-      let label = document.createElement("label");
-      label.htmlFor = "fragoff_checkbox";
+      const label = document.createElement("label");
       label.textContent = "Fragments enabled";
 
       newLi.appendChild(checkbox);
       newLi.appendChild(label);
       newLi.style.textAlign = "center";
-      toolbar.insertBefore(newLi, toolbar.firstChild);
+      menu.insertBefore(newLi, panel);
 
-      let fragments = document.querySelectorAll('.fragment');
-      newLi.addEventListener("click", function() {
-        console.log("<li> cliquée !");
-        checkbox.checked = !checkbox.checked;
-        checkbox.dispatchEvent(new Event("change"));
+
+      newLi.addEventListener("click", function(event) {
+        fragoff.log("<li> cliquée !");
+        if(event.srcElement.id!="fragoff_checkbox"){
+          checkbox.checked = !checkbox.checked;
+          checkbox.dispatchEvent(new Event("change"));
+          event.stopPropagation();
+        }
       });
+
       checkbox.addEventListener("change", function() {
           if (this.checked) {
-            console.log("Checkbox cochée !");
+            fragoff.log("Checkbox unchecked -> checked");
+            label.textContent = "Fragments enabled"
+            const fragments = document.querySelectorAll('.disabled_fragment');
             fragments.forEach(frag => {
               frag.classList.add('fragment')
               frag.classList.remove('disabled_fragment')
-              label.textContent = "Fragments enabled"
             });
           } else {
-            console.log("Checkbox décochée !");
+            fragoff.log("Checkbox checked -> unchecked");
+            label.textContent = "Fragments disabled"
+            const fragments = document.querySelectorAll('.fragment');
             fragments.forEach(frag => {
               frag.classList.add('disabled_fragment')
               frag.classList.remove('fragment')
-              label.textContent = "Fragments disabled"
             });
           }
       });
@@ -52,3 +57,10 @@ window.RevealFragOff = function () {
   };
 };
 
+//run `fragoff.verbose = true` in the console to activate the logs
+window.fragoff = {
+  verbose: false,
+  log: function(...args) {
+    if (this.verbose) console.log(...args)
+  }
+}
