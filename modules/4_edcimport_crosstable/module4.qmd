@@ -27,7 +27,9 @@
 
 ::: {.column width="40%"}
 ![](media/keep_calm.jpeg){fig-align="center"}
+:::
 
+:::::
 
 {{< include _header.qmd >}}
 
