@@ -15,4 +15,4 @@ Le code quarto est disponible sur ce repository (liens ci-dessous) et les diapos
 5)  [Analyses statistiques](modules/5_statistiques/) (Dan Chaltiel)
 6)  [Reporting - officer](modules/6_officer/) (Charlotte Bargain)
 
-![](qrcode.png){width="150"}
+![](qrcode.png)
