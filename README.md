@@ -14,3 +14,5 @@ Le code quarto est disponible sur ce repository (liens ci-dessous) et les diapos
 4)  [Import, checks, et description](modules/4_edcimport_crosstable/) (Dan Chaltiel)
 5)  [Analyses statistiques](modules/5_statistiques/) (Dan Chaltiel)
 6)  [Reporting - officer](modules/6_officer/) (Charlotte Bargain)
+
+![](qrcode.png){width="150"}
