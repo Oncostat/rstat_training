@@ -1,0 +1,60 @@
+/* Logo et pagination */
+
+.logo-left {
+  position: absolute;
+  top: 6px;
+  left: 10px; /* Positionner à gauche */
+}
+
+.logo-right {
+  position: absolute;
+  top: 10px;
+  right: 10px; /* Positionner à droite */
+}
+
+
+.logo-left img, .logo-right img {
+  width: 200px; /* Taille des logos */
+  height: auto !important;
+}
+
+
+.slide-number, .reveal.has-logo .slide-number {
+  bottom: 14px !important;
+  right: 30px !important;
+  top: unset !important;
+  color: #777777 !important;
+}
+
+
+
+
+/* Changement taille code R */
+
+.reveal pre code {
+  font-size: 16px;
+  line-height: 1.6; /* Optional: Adjust the line height for readability */
+}
+
+
+
+.small-table {
+  font-size: 0.7em;
+}
+
+
+
+/* Formatage des séparation en colonnes des slides */
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+

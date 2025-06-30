@@ -1,0 +1,170 @@
+---
+title: "Data Manipulation - Code with me" 
+subtitle: "Introduction to the Tidyverse" 
+author: "Charlotte Bargain" 
+output: html_notebook 
+---
+
+Ce script R sert à illustrer les notions abordées lors du cours **Data Manipulation - Introduction to the Tidyverse**.
+
+Il reprend les grandes étapes de la manipulation de dataframe en utilisant notamment le `Tidyverse`, en commençant par l'import des bases de données dans l'environnement de travail.
+
+Les données utilisées pour cet exemple sont des **données simulées** créer spécialement pour cette formation.
+
+# Import des bases de données :
+
+## Type des données ?
+
+Selon le format des bases de données à importer, la fonction utilisée pour l'import peut être différente. Il faut penser à charger le package correspondant en amont de l'utilisation de la fonction.
+
+## Import des données :
+
+```{r}
+library(readxl)
+
+data_clinique_raw <- readxl::read_xlsx(path = "./Data/data_clinique.xlsx",
+                                   col_names = TRUE,
+                                   sheet = "Sheet 1")
+
+data_chimio_raw <- readxl::read_xlsx(path = "./Data/data_chimio.xlsx",
+                                 col_names = TRUE,
+                                 sheet = "Sheet 1")
+
+data_AE_raw <- readxl::read_xlsx(path = "./Data/data_AE.xlsx",
+                             col_names = TRUE,
+                             sheet = "Sheet 1")
+```
+
+## Observation des données :
+
+```{r}
+str(data_clinique_raw)
+str(data_chimio_raw)
+str(data_AE_raw)
+```
+
+```{r}
+View(data_clinique_raw)
+View(data_chimio_raw)
+View(data_AE_raw)
+```
+
+# Nettoyage des données :
+
+*Observation* : Certains noms de variables ne sont pas très "jolis" et peuvent être difficile à utiliser à l'intérieur d'un script R : espace, majuscules/minuscules, ponctuation, ...
+
+On va changer ces noms de variables pour faciliter l'écriture du code par la suite.
+
+## Nettoyage des noms des variables :
+
+```{r}
+library(janitor)
+library(tidyverse)
+
+data_clinique <- data_clinique_raw %>%
+  janitor::clean_names()
+
+data_chimio <- data_chimio_raw %>%  
+  janitor::clean_names() %>%
+  dplyr::rename(subjid = id)
+  
+data_AE <- data_AE_raw %>%
+  janitor::clean_names() %>%
+  dplyr::rename(soc = aesoc,
+                grade = aegrade)
+```
+
+```{r}
+rm(list = c('data_clinique_raw', 'data_chimio_raw', 'data_AE_raw'))
+```
+
+## Nettoyage et recodage du contenu des variables :
+
+*Observation* : Certaines variables catégorielles sont mal codées, certaines dates sont en format Numeric ou en Character.
+
+*Note* : Les dates en format numérique dans une base Excel ont une origine différente des dates en format numérique dans R. Il faut donc utiliser l'argument `origin = "1899-12-30"` dans la fonction `as_date`.
+
+```{r}
+library(lubridate)
+
+data_clinique <- data_clinique %>%
+  
+  dplyr::mutate(sex = if_else(sex == 1,
+                              true = 'Male',
+                              false = 'Female'),
+                date_naissance = as_date(date_naissance, origin = "1899-12-30"), # De numeric à Date
+                date_diagnosis = ymd(date_diagnosis)) %>% # de Character à Date
+  
+  dplyr::mutate_if(is_character, as_factor) # de Character à Factor
+
+
+data_chimio <- data_chimio %>%
+  
+  dplyr::mutate(date_debut_tt = as_date(date_debut_tt, origin = "1899-12-30"))
+
+
+data_AE <- data_AE %>%
+  
+  dplyr::mutate(arm = if_else(arm == 1,
+                              true = 'Experimental',
+                              false = 'Control')) %>%
+  
+  dplyr::mutate_if(is_character, as_factor) # de Character à Factor
+```
+
+# Création de nouvelles variables :
+
+On aimerait calculer de nouvelles variables, comme :
+
+-   l'âge au diagnostic
+
+-   le grade maximum d'adverse event par patient
+
+```{r}
+data_clinique <- data_clinique %>%
+  
+  dplyr::mutate(age = time_length(date_naissance %--% date_diagnosis, unit = "years"))
+
+
+data_AE <- data_AE %>%
+  
+  dplyr::group_by(subjid) %>%
+  dplyr::mutate(grade_max = max(grade, na.rm = TRUE)) %>%
+  dplyr::ungroup()
+```
+
+# Pivot des données :
+
+Nous avons des données d'adverse event en format "long" et nous pourrions les obtenir en format "large" afin d'avoir une ligne résumée par patient, en utilisant la fonction `pivot_wider` de `tidyr`. On aimerait avoir les grades associées aux soc, pour chaque patient.
+
+Pour la fonction `pivot_wider`, il faut spécifier :
+
+-   `id_cols` : les variables qui sont des identifiants uniques pour les patients, qui sont conservées comme telles.
+
+-   `names_from` : la variable dont les valeurs sont utilisées comme nouvelles colonnes.
+
+-   `values_from` : la variable dont les valeurs sont utilisées comme valeurs en regard des colonnes issues de "names_from".
+
+-   `values_fn` : s'i y a des doublons entre les variables (names_from, values_from), on peut choisir une fonction pour les résumer, comme choisir la valeur maximum des grades.
+
+```{r}
+library(tidyr)
+
+data_AE_wide <- data_AE %>%
+  
+  tidyr::pivot_wider(id_cols = c(subjid, arm),
+                     names_from = soc,
+                     values_from = grade,
+                     values_fn = max)
+  
+```
+
+# Jointure des données :
+
+On aimerait regrouper toutes les données des patients en une seule base de données, qui contiennent les informations démographiques et les détails des précédents traitements par chimiothérapie suivis par ces patients par exemple.
+
+```{r}
+data <- data_clinique %>%
+  
+  dplyr::left_join(data_chimio, by = 'subjid')
+```

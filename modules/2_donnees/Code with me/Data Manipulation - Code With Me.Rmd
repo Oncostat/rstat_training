@@ -1,0 +1,90 @@
+---
+title: "Data Manipulation - Code with me"
+subtitle: "Introduction to the Tidyverse"
+author: "Charlotte Bargain"
+output: html_notebook
+---
+
+Ce script R sert à illustrer les notions abordées lors du cours **Data Manipulation - Introduction to the Tidyverse**.
+
+Il reprend les grandes étapes de la manipulation de dataframe en utilisant notamment le `Tidyverse`, en commençant par l'import des bases de données dans l'environnement de travail.
+
+Les données utilisées pour cet exemple sont des **données simulées** créer spécialement pour cette formation.
+
+# Import des bases de données :
+
+## Type des données ?
+
+Selon le format des bases de données à importer, la fonction utilisée pour l'import peut être différente. Il faut penser à charger le package correspondant en amont de l'utilisation de la fonction.
+
+## Import des données :
+
+```{r}
+
+```
+
+## Observation des données :
+
+```{r}
+
+```
+
+# Nettoyage des données :
+
+*Observation* : Certains noms de variables ne sont pas très "jolis" et peuvent être difficile à utiliser à l'intérieur d'un script R : espace, chiffres, majuscules/minuscules, ponctuation, ...
+
+On va changer ces noms de variables pour faciliter l'écriture du code par la suite.
+
+## Nettoyage des noms des variables :
+
+```{r}
+
+```
+
+## Nettoyage et recodage du contenu des variables :
+
+*Observation* : Certaines variables catégorielles sont mal codées, certaines dates sont en format numérique ou en character.
+
+*Note* : Les dates en format numérique dans une base Excel ont une origine différente des dates en format numérique dans R. Il faut donc utiliser l'argument `origin = "1899-12-30"` dans la fonction `as_date`.
+
+```{r}
+
+```
+
+# Création de nouvelles variables :
+
+On aimerait calculer de nouvelles variables, comme :
+
+-   l'âge
+
+-   le grade maximum d'adverse event par patient
+
+```{r}
+
+```
+
+# Pivot des données :
+
+Nous avons des données d'adverse event en format "long" et nous pourrions les obtenir en format "large" afin d'avoir une ligne résumée par patient, en utilisant la fonction `pivot_wider` de `tidyr`. On aimerait avoir les grades associées aux soc, pour chaque patient.
+
+Pour la fonction `pivot_wider`, il faut spécifier :
+
+-   `id_cols` : les variables qui sont des identifiants uniques pour les patients, qui sont conservées comme telles.
+
+-   `names_from` : la variable dont les valeurs sont utilisées comme nouvelles colonnes.
+
+-   `values_from` : la variable dont les valeurs sont utilisées comme valeurs en regard des colonnes issues de "names_from".
+
+-   `values_fn` : s'i y a des doublons entre les variables (names_from, values_from), on peut choisir une fonction pour les résumer, comme choisir la valeur maximum des grades.
+
+```{r}
+
+```
+
+# Jointure des données :
+
+On aimerait regrouper toutes les données des patients en une seule base de données, qui contiennent les informations démographiques et les détails des précédents traitements suivis par ces patients par exemple.
+
+```{r}
+
+```
