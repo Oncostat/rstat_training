@@ -1,4 +1,5 @@
 Version: 1.0
+ProjectId: 1ecf7738-6bb1-4ef1-95aa-476b415d3ab4
 
 RestoreWorkspace: No
 SaveWorkspace: No
@@ -14,6 +15,7 @@ LaTeX: pdfLaTeX
 
 AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
+LineEndingConversion: Posix
 
 QuitChildProcessesOnExit: Yes
 DisableExecuteRprofile: Yes

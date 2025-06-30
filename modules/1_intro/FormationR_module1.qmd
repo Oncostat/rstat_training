@@ -1,0 +1,1318 @@
+---
+format: 
+  revealjs: 
+    theme: simple
+    # template-partials:
+    #  - assets/title-slide.html
+    logo: media/logo_gustaveroussy.png
+    css: assets/style.css
+    title: "ONCOSTAT & BBE Team <br> Training course R"
+    output-file: "index.html"
+    subtitle: "Module 1 : Introduction of programming language R and the RStudio interface"
+    description: "Getting started with RStudio"
+    author: "Nusaïbah IBRAHIMI"
+    incremental: true
+    auto-stretch: false
+    controls: true
+    keyboard: true
+    date: today
+    date-format: full
+    affiliation-title: "BBE"
+    self-contained: true
+    toc-depth: 2
+    toc-title: "Table of contents"
+    toc: false
+    slide-number: true
+    smaller: true
+    scrollable: true
+    preview-links: auto
+    footer: "The source code for this presentation is available [on GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+
+execute:
+  echo: true
+  #cache: true
+  code-overflow: wrap
+  warnings: false
+  messages: false
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+knitr:
+  opts_chunk: 
+    collapse: true
+    comment: "#>" 
+    R.options:
+      crosstable_compact: true
+      width: 105
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Table of contents {footer="false"}
+
+-   Interface RStudio
+
+-   Operator
+
+-   Object
+
+-   Function
+
+# R you ready?
+
+# Interface RStudio {footer="false"}
+
+::: notes
+RStudio is an open-source tool for programming in R.
+
+RStudio is a flexible tool that helps you create readable analyses, and
+keeps your code, images, comments, and plots together in one place.
+
+Using RStudio for data analysis and programming in R provides many
+advantages. Here are a few examples of what RStudio provides:
+
+-   An intuitive interface that lets us keep track of saved objects,
+    scripts, and figures
+
+-   A text editor with features like color-coded syntax that helps us
+    write clean scripts
+
+-   Auto complete features save time
+
+-   Tools for creating documents containing a project’s code, notes, and
+    visuals
+
+-   Dedicated Project folders to keep everything in one place
+:::
+
+## First look at RStudio {footer="false"}
+
+::: notes
+When we open RStudio, R is launched as well. For the first time, we will
+probably see a layout like this.
+
+We have the main information on the version of R used. There are at
+least 3 panes: the console, the environment and the Files pane (or Help
+pane).
+:::
+
+![](media/interface-02.PNG)
+
+## First look at RStudio
+
+::: notes
+Usually, we create a script R and save it in our folders.
+:::
+
+![](media/clipboard-4117190390%20-%20Copie.png)
+
+# The Console
+
+::: notes
+The Console is the important element in RStudio, because it is there
+that you will run your code and see the output.
+:::
+
+## The Console
+
+::: notes
+Let’s start off by introducing some features of the *Console*. In each
+new session, the *Console* displays the main information of the version
+of R used. We use the *Console* to test code immediately. *Console* is a
+tab in RStudio where the R code runs. When we type an expression like
+`1+2`, we will see the result below after pressing the enter key.
+
+Try typing a few expressions like this one. Press the enter key to see
+the result.
+:::
+
+![](media/Capture.PNG)
+
+::: callout-important
+## Difference between SAS and R
+
+No need to put `;` at the end of each instruction.
+
+In case of error, the code is blocked.
+:::
+
+## The Console
+
+::: notes
+In the Console, you can run any code, create any object, plot, and save
+anything. For example, you want to save the addition result `1+2` into a
+variable. You have to use the operator `<-` or `=` like in the example
+here. To display the value of the variable, you can simply call the
+variable `result`or use the function `print()`. To run the code, press
+the Enter Key.
+
+When we create a variable in RStudio, it saves it as an object in the
+R **global environment**. We will discuss the *environment* and how to
+view objects stored in the next section.
+
+The main operators will be presented in a dedicated section.
+
+R script is a file of programming in language R. Then when you run the
+line code of the script, the console will display in the same time, the
+code and the output. the R script is nothing without the console, that
+is why the Console is the major part in R programming.
+:::
+
+```{r}
+#| code-line-numbers: "1-2|3-5|6-8"
+1+2
+result <- 1 + 2       # creation of a variable called result and equal to 3
+result                # to display the value of the variable result
+result = result + 1   # change the value. it smash the previous value
+print(result)         # another way to display the value with the function print()
+```
+
+::: callout-note
+## Assignment operators
+
+`<-` or `=`
+:::
+
+::: callout-warning
+The code in the *Console* is unsaved after closing RStudio.
+
+Hence, we suggest to save it in R script.
+:::
+
+# The Environment
+
+::: notes
+During a programming session in R, any variables we define, or data we
+import and save in a dataframe, are stored in our global environment.
+:::
+
+## The Environment
+
+::: notes
+In RStudio, we can see the objects in our global environment at the top
+right of the interface.
+
+Notice that the value, 3, stored in the variable is displayed. In the
+meantime I created other type of object that we will see together after;
+but just to have an idea what you can see in the Environnement.
+
+We will see any objects we created; such as result, under values in the
+*Environment* tab.
+
+You can click to have a view of those objects. here the variable is a
+value, so we see everything, but if is a complex object, you have to
+click to know more.
+:::
+
+![](media/clipboard-3526065785.png)
+
+::: callout-tip
+Think of the **global environment** as our workspace (the Work folder in
+SAS)
+:::
+
+## The Environment
+
+::: notes
+Sometimes, having too many named objects in the *environment* creates
+confusion. Maybe we would like to remove all or some of the objects.
+
+To remove all objects, click the broom icon at the top of the window.
+
+To remove selected objects from the workspace, select the Grid view from
+the dropdown menu. Here we can check the boxes of the objects we would
+like to remove and use the broom icon to clear them from our
+*environment*.
+:::
+
+::::: columns
+::: {.column width="50%"}
+![](media/clipboard-4117536477.png)
+:::
+
+::: {.column width="50%"}
+![](media/clipboard-2231335957.png)
+:::
+:::::
+
+With the function `rm()`. List between the parenthesis the object names
+separated by a comma.
+
+```{r}
+#| code-line-numbers: "1-2|3|4-5"
+ls() # list all existing object in the current working directory (environment)
+rm(result) # rm() function removes object from the environment
+ls()
+```
+
+# R script
+
+## R script
+
+::: notes
+The R script is a file where we write the code and run it on RStudio.
+The outputs are displayed in the *Console* and the figures in the *Plots
+tab*. To clarify the script for an outsider, we add comments to explain
+the aim of the code, example below.
+
+R ignores lines of code that begin with `#`. It is common to share code
+with colleagues and collaborators. Ensuring they understand our methods
+will be very important. But more importantly, thorough notes are helpful
+to your future-self, so that you can understand your methods when you
+revisit the script in the future!
+:::
+
+```{r}
+# script .R 
+toto = c(1,2,3,4,5) # function c() forms a vector of elements of a common type 
+toto1 = 1:5         # creates a sequence of integers from 1 to 5
+toto2 = seq( from = 1, to = 5, by = 1)  # function seq() creates a sequence of number. The 3rd argument is the increment of the sequence
+```
+
+To execute the code line(s), `CTRL+ENTER` on the interest line(s) or
+click on the button Run
+
+To run all code, `CTRL+A` for selection then `CTRL+ENTER` to execute, or
+click on the button Source
+
+::: {.column width="50%"}
+![](media/clipboard-1858809340.png)
+:::
+
+## R script
+
+Tips to make your code readable: (1/2)
+
+-   comment or document your code by using `#` or `CTRL + SHIFT + C`
+
+    -   `#` only is for comments
+
+    -   `# Title1 ----` a title of level 1 or `CTRL + SHIFT + R`
+
+    -   `## Title2 ----` a title of level 2
+
+    -   `### Title3 ----` a title of level 3
+
+        The outline is displayed next to the Source item.
+
+        ![](media/clipboard-3422402088.png){width="413"}
+
+## R script
+
+Tips to make your code readable: (2/2)
+
+-   separate elements of your code with white-space
+
+-   use informative and concise names
+
+-   use indentation by using `CTRL + I`
+
+    :::: callout-tip
+    <div>
+
+    Apply often the 3 following steps:
+
+    1.  select all, `CTRL + A`;
+
+    2.  indent the code, `CTRL + I`;
+
+    3.  save the code, `CTRL + S`.
+
+    </div>
+    ::::
+
+## R script
+
+When the code is running, the code lines and the outputs are displayed
+in the *Console.*
+
+For some particular outputs, it is also displayed on the *Viewer* pane
+or the *Plots* pane or the *Source* pane.
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(flextable)
+library(crosstable)
+```
+
+```{r}
+#| code-line-numbers: "1-2|4-5|7-8|10-14|15-21|22| 24-17"
+toto == toto1  # == is a logical operator to verify the equality
+
+toto1[3:5] # the hooks enables to display the elements of a vector
+
+toto2[6] # toto2 = c(1, 2, 3, 4, 5)
+
+plot(x = toto, y = 2* toto1)
+
+```
+
+## R script
+
+```{r}
+#| code-line-numbers: "1-5|6-12|13"
+# creation of a new object: a dataframe 
+# dataframe is a data structure constructed with rows and columns
+population=data.frame(SUBJID=1:5,
+                      AGE=sample(25:60,size = 5,replace = TRUE), # sampling with function sample()
+                      PAYS=c("FR","ESP","UK","UK","MAR")) # vector of characters
+population # displayed on the Console
+View(population) # overview of the table in a new window
+```
+
+![](media/clipboard-764478778.png)
+
+```{r}
+population %>% 
+  crosstable(cols = c("AGE","PAYS")) %>% 
+  af()
+```
+
+# Plots & Viewer
+
+## Plots & Viewer
+
+The figures and tables are displayed in the *Plots* tab or *Viewer* tab.
+
+From the tab, you can zoom in or save it as PDF or as Image.
+
+::::: columns
+::: {.column width="50%"}
+![](media/clipboard-3201062396.png){width="339"}
+:::
+
+::: {.column width="50%"}
+![](media/clipboard-1281198536.png){width="408"}
+:::
+:::::
+
+# Packages
+
+## Main packages to know
+
+::: notes
+One of the most popular collection of packages in R is known as the
+`tidyverse`. The `tidyverse` is a [collection of R
+packages](https://www.tidyverse.org/packages/) designed for working with
+data. The `tidyverse` package shares a common design philosophy, grammar
+and data structures. The `tidyverse` enables you to spend less time
+cleaning data so that you can focus more on analyzing, visualizing and
+modeling data.
+:::
+
+Packages are shareable collections of code, data and documentation.
+
+They can be on the CRAN (Comprehensive R Archive Network) or they can be
+download from Github or as .zip folder.
+
+One of the most popular: `tidyverse`. It is a [collection of R
+packages](https://www.tidyverse.org/packages/) designed for working with
+data.
+
+The most common “core” `tidyverse` packages are:
+
+::::: columns
+::: {.column width="40%"}
+-   `readr`, for data import;
+
+-   `ggplot2`, for data visualization;
+
+-   `dplyr`, for data manipulation;
+
+-   `tidyr`, for data tidying;
+:::
+
+::: {.column width="60%"}
+-   `purrr`, for functional programming;
+
+-   `tibble`, for tibbles, a modern re-imagining of dataframes;
+
+-   `stringr`, for string manipulation;
+
+-   `forcats`, for working with factors (categorical data).
+:::
+:::::
+
+## Installation of a package
+
+::: notes
+There are many ways to install packages in R, we use the built-in
+`install.packages()` function in the script R or on the *Console*.
+
+The `install.packages()` command only needs to be used to download and
+install packages for the first time. Then, it is stocked in your
+RStudio. We can find it in the *Packages* tab.
+
+In the window at the bottom right of the *Console*, the *Packages* tab
+contains all installed packages in R.
+
+Another way to install a package is to click on the box install and look
+for the name of the package on the Repository (CRAN). The CRAN
+[Comprehensive R Archive Network](https://cran.r-project.org/) is a site
+where you can find nearly everything that enables to code in R. In the
+case where the package is not available on the CRAN, you can download
+the .zip in the website then install it by clicking on the box install
+and choose the option Package Archive File (zip, tar.gz).
+
+At the bottom right of the interface, the *Packages* tab contains all
+installed packages in R.
+:::
+
+::: callout-note
+A package only needs to be installed once. Then, it is stocked in your
+RStudio. We can find it in the *Packages* tab.
+:::
+
+::::::: columns
+::::: {.column width="50%"}
+code line (script .R or in the Console):
+
+::: nonincremental
+-   `install.packages()` function if the package is on the CRAN
+
+-   `install_github()` function if the package is from Github
+:::
+
+click-bottom:
+
+::: nonincremental
+1.  click on the box `Install` in the *Packages* tab
+
+2.  specify if it is from the CRAN or package archive file (.zip,
+    .tar.gz) if it is not available on the CRAN
+
+3.  write the package name
+
+4.  click on Install
+:::
+:::::
+
+::: {.column width="50%"}
+![](media/clipboard-1302393951.png){width="479"}
+:::
+:::::::
+
+## Loading a package
+
+To load a package:
+
+::: nonincremental
+-   you research for package name in the *Packages* tab and check the
+    box next to it.
+
+-   otherwise, you run the code `library("package_name")`.
+:::
+
+```{r}
+#| code-line-numbers: "1|2-3|4|5-6|7-8"
+install.packages("stringr")
+str_trim(string = " Paris, the City of Love  ",side = "both")
+library("stringr") # manipulation of characters
+str_trim(string = " Paris, the City of Love  ",side = "both")
+str_squish(string = " Paris,  the City of Love   and   the City of Light ")
+```
+
+::: callout-warning
+Packages need to be loaded in each R session.
+:::
+
+# Help
+
+## Help on a package
+
+::: notes
+We’ve learned how to install and load packages. But what if we would
+like to learn more about a package that we have installed? That’s easy!
+Clicking the package name in the *Packages* tab takes us to the
+*Help* tab for the selected package.
+:::
+
+To get the package documentation:
+
+::::: columns
+::: {.column width="50%"}
+Click on the package name, in the *Packages* tab.
+
+It takes us to the *Help* tab.
+
+![](media/clipboard-2119875930.png)
+:::
+
+::: {.column width="50%"}
+Alternatively,
+
+Type this command into the *Console*
+
+```{r}
+help(package = "stringr")
+```
+:::
+:::::
+
+## Help on a package
+
+::::: columns
+::: {.column width="50%"}
+![](media/clipboard-3183408281.png)
+:::
+
+::: {.column width="50%"}
+![](media/clipboard-15338476.png)
+:::
+:::::
+
+## Help on a package
+
+::: notes
+The *Help* page for a package provides quick access to documentation for
+each function included in the package. From the main help page for a
+package you can also access “vignettes” when they are available.
+Vignettes provide brief introductions, tutorials, or other reference
+information about a package, or how to use specific functions in a
+package.
+
+This is one of the reason why RStudio is a powerful tool for programming
+in R. We can access function and package documentation and tutorials
+without leaving RStudio!
+:::
+
+```{r}
+vignette(package = "stringr") # displays the list of vignettes from the package
+```
+
+![](media/clipboard-43406873.png)
+
+## Help on a function
+
+::: notes
+To have the help of a function, you can use the *Help* tab, you will
+find usually the description of the function that means the aim, the
+arguments, details of output and examples.
+
+F1 on the function displays the help documentation
+
+As we learned in the last section, we can get help on a function by
+clicking the package name in `Packages` and then click on a function
+name to see the help file. Here we see the `str_to_lower()` function
+from the `stringr` package is at the top of this list:
+:::
+
+:::::: columns
+:::: {.column width="50%"}
+To have the help of a function,
+
+::: nonincremental
+-   from *Packages* tab, click on the function name to see the help file
+
+-   type the function name on the search toolbar in the *Help* tab
+
+-   run one of the following code line in the *Console*
+:::
+
+```{r}
+help("str_to_lower") 
+help(str_to_lower) 
+?str_to_lower
+```
+::::
+
+::: {.column width="50%"}
+![](media/clipboard-440183010.png)
+:::
+::::::
+
+## Help on a function
+
+::: callout-warning
+2 packages may have a function with the **same call**, but different
+argument.
+:::
+
+::: callout-tip
+To avoid the conflict, you precise the package name followed by `::` and
+the name of the function.
+:::
+
+Example:
+
+``` r
+dplyr::select() # select variables of a data table 
+MASS::select() # fit a linear model by ridge regression
+```
+
+::: notes
+For example, `dplyr` and `MASS` are both having `select()` function.
+However, the functions do not need the same arguments, so you may
+encounter errors if you do not precise from each package the function
+comes from.
+:::
+
+# Operator
+
+## Comparison operators
+
+| Description              | SAS     | R    |
+|--------------------------|---------|------|
+| Less than                | \<      | \<   |
+| Greater then             | \>      | \>   |
+| Less than or equal to    | \<=     | \<=  |
+| Greater than or equal to | \>=     | \>=  |
+| Equal                    | =       | ==   |
+| Different                | \^=, ne | !=   |
+| Not x                    | not(x)  | !x   |
+| Belongs to               | in      | %in% |
+
+## Logical operators
+
+| Description | SAS | R   |
+|-------------|-----|-----|
+| AND         | &   | &   |
+| OR          | \|  | \|  |
+| Negation    | \^  | !   |
+
+## Arithmetic operators
+
+| Description     | SAS                 | R           |
+|-----------------|---------------------|-------------|
+| Usual operators | +, -, \*, /         | +, -, \*, / |
+| Exponent        | \*\*                | \^          |
+| Minimum         | a\<\>b or Min(a, b) | min(a,b)    |
+| Maximum         | a\>\<b or Max(a, b) | max(a,b)    |
+
+<div>
+
+Old way of exponent in R, is \*\*
+
+</div>
+
+# Object
+
+## Creation of object
+
+::: notes
+In [**R
+programming**](https://www.geeksforgeeks.org/r-programming-language-introduction/),
+objects are the fundamental data structures used to store and manipulate
+data. Objects in R can hold different types of data, such as numbers,
+characters, lists, or even more complex structures like data frames and
+matrices.
+
+An object in R is important an instance of a class and can be assigned
+to a variable. Unlike many other programming languages, R does not
+require variables to be explicitly declared with a data type. Instead,
+variables in R are associated with objects and R automatically
+determines the object type based on the assigned value.
+
+### Key Points
+
+1.  **Dynamic Typing:** R automatically infers the type of an object
+    based on the data assigned to it.
+
+2.  **Types of Objects:** R supports various objects like vectors,
+    lists, data frames, matrices and functions.
+
+3.  **Memory Allocation:** Unlike many languages, where memory is
+    allocated based on explicit data types, R assigns memory dynamically
+    when objects are created or modified.
+
+4.  **Manipulating Objects:** Once an object is created, it can be
+    manipulated using various built-in functions and the type of the
+    object can be checked using functions like **class(), typeof()** and
+    **mode().**
+:::
+
+::: notes
+R does not have a command for declaring a variable, unlike in SAS. A
+variable is created the moment you first assign a value to it. To assign
+a value to a variable, use the `<-` or `=` sign.
+
+To print the value of the variable, just type the variable name in the
+*Console*.
+:::
+
+Object are containers for storing values.
+
+To assign a value to an object, use the assignment operators `<-` or `=`
+.
+
+To print the value of the object, just type its name in the *Console*.
+
+```{r}
+#| code-line-numbers: "1-3|5|6-8"
+# we create 2 numerical objects
+term1 = 50
+term2 <- 60
+
+sum <- term1 + term2 # same as using function sum() such as sum(term1, term2)
+
+sum # or print(sum)
+```
+
+## Type of objects
+
+::: notes
+In programming, data type is an important concept. Variables can store
+data of different types and different types can do different things.
+
+In R, variables do not need to be declared with any particular type and
+can even change type after they have been set. R has a variety of data
+types and object classes.
+
+There are 3 types of values :
+
+-   Numeric: integer or double;
+
+-   Character: text;
+
+-   Logical: boolean (TRUE/FALSE).
+
+-   The values seen previously can be structured in different class of
+    object. The `class()` function enables to know the class of an
+    object.
+
+    There are 4 types of data:
+
+    -   vector;
+
+    -   factor;
+
+    -   matrix;
+
+    -   dataframe;
+
+    -   list.
+:::
+
+::: callout-important
+Data type is an important concept. Object can store data of different
+types and different types can do different things.
+:::
+
+3 main types of data:
+
+-   vector;
+
+-   dataframe;
+
+-   list.
+
+## Vector
+
+Object of 1 dimension stocking elements of same
+type.![](images/clipboard-4083231145.png){width="187"}
+
+There are many ways to create vectors, but the usual one is to use the
+command `c()`.
+
+::: notes
+Factors are data structures that are implemented to categorize the data
+or represent categorical data and store it on multiple levels. They can
+be stored as integers with a corresponding label to every unique
+integer.
+
+The R factor accepts only a restricted number of distinct values. For
+example, a data field such as gender may contain values only from female
+or male.
+:::
+
+```{r}
+#| code-line-numbers: "1-3|4-6|7-8|9-14|15-21"
+vec_num = c(1,2,3,4,5) # double
+vec_num
+vec_num_same = 1:5 # integer
+print(vec_num_same)
+vec_char = c("Toulouse", "Paris", "Bordeaux", "Lyon", 'Marseille')  # character in quotation marks (simple or double)
+vec_seq = seq(from = 0, to = 20, by = 2.5)  # function seq() generates a sequence
+vec_rep = rep(x = c("I","You","He/She/It", "We", "You", "They"), 
+              times = 3) # function rep() replicates the values in x times
+vec_rep
+vec_factor = factor(x = c(1,1,0,0,1),
+                    levels = c(0,1), 
+                    labels = c("Alive","Dead")) # factor
+levels(vec_factor)
+vec_factor[2]="Death"
+vec_factor[2]="Dead"
+```
+
+```{r}
+is.vector(vec_char)  # function returns a logical value: TRUE                  
+# if the argument is a vector, FALSE otherwise   
+```
+
+## Vector
+
+Each item is indexed from 1 to the number of items of the vector.
+
+The function `length()` computes the length of the vector.
+
+To select an item, you have to use the hooks `[]` and note the index of
+the item.
+
+```{r}
+#| code-line-numbers: "1-3|4-5|6-7|8-9|10-12|13-15|16-18"
+vec = seq(from = 0, to = 20, by = 5) # 0 5 10 15 20
+length(vec)  
+vec[2] 
+vec[-3] # prints the vector without the third item
+vec[c(1,2,4,5)] # prints the elements of index 1, 2, 4 and 5 of the vector
+vec[3] = 100 # you can change the value of a vector
+vec
+vec[6] = 25 # you can add a new item by assigning to a new value
+vec
+vec[11] = 50
+vec 
+```
+
+## Vector
+
+::: callout-note
+NA: missing value (Not Available) in a variable or as the result of a
+function
+
+NaN: Not a Number when a function attempts to divide by 0
+
+NULL: empty
+
+-Inf, Inf: positive or negative inﬁni when a function diverges
+:::
+
+::: callout-caution
+The names of these particular values are “reserved” by R, and **cannot
+be used as variable names**. This is also the case for booleans TRUE,
+FALSE.
+:::
+
+```{r}
+is.na(vec) # function is.na() displays if each item of vec is NA.
+
+# TRUE=8  #ERROR Message
+100/0
+c()  # empty vector 
+```
+
+## Vector
+
+::: callout-warning
+The vector contains only elements of the **same type**.
+
+If a character value is added in a numerical vector, hence the vector is
+converted into character vector.
+:::
+
+```{r}
+print(vec)
+vec[5] ="last"
+```
+
+## Vector
+
+### Exercise
+
+``` r
+vec_char = c("Toulouse", "PSG", "Bordeaux", "Lyon", "Marseille","Londres")  
+
+length(vec_char) # what is the result?
+
+# what the below command displays?
+vec_char[5] 
+
+# what command enables to change the item PSG by Paris
+
+# create a derived vector without the last item. Display it in 2 ways.
+
+# what the below command displays?
+vec_char[8]
+```
+
+## Vector
+
+### Correction
+
+```{r}
+vec_char = c("Toulouse", "PSG", "Bordeaux", "Lyon", "Marseille","Londres")  
+
+length(vec_char) # what is the result?
+
+# what the below command displays?
+vec_char[5] 
+
+# what command enables to change the item PSG by Paris
+vec_char[2]="Paris"
+
+# create a derived vector without the last item. Display it in 2 ways.
+vec_derived1 = vec_char[-6]
+vec_derived1
+
+vec_derived2 = vec_char[c(1,2,3,4,5)]
+print(vec_derived2)
+
+# what the below command displays?
+vec_char[8]
+```
+
+## Dataframe
+
+::: notes
+Several vectors of different types with the same number of rows can be
+joined together to form a dataframe.
+
+Dataframes are the most common objects in standard data processing. They
+are 2D tables of variables of multiples types, whose rows correspond to
+observations and columns to variables.
+
+It shares many of the properties of matrices and of lists.
+:::
+
+An object of 2D table of variables of multiples types.
+
+![](media/clipboard-770258203.png){width="181"}
+
+To create a dataframe, use the function `data.frame()`.
+
+For an overview of the table:
+
+::: nonincremental
+-   `View()`which gives you access to the table;
+
+-   `str()` which lists the attributes of the dataframe.
+:::
+
+`dim()` returns the dimension (row column) of the dataframe.
+
+`nrow()` and `ncol()` return respectively the number of lines and
+columns.
+
+```{r}
+df = data.frame("name" = c("Albert Einstein","Martin Luther","Nelson Mandela","William Shakespeare", "Ludwig van Beethoven"),
+                "gender" = rep(x = 1, times = 5))
+df
+dim(df)
+
+is.data.frame(df) # function returns a logical value: TRUE if is a dataframe, FALSE otherwise
+View(df) # overview of the dataframe
+str(df)
+```
+
+::: callout-note
+Remind that the created objects are saved in the global environment.
+:::
+
+## Dataframe
+
+To select an item, use the hooks `[,]` and note the index of the line
+number and the column number or the name of the variable, separated by a
+comma, because there are 2 dimensions to indicate.
+
+To select a row (or observation), use the hooks `[,]` by assigning the
+index of the row, followed by a comma.
+
+To select a column (a variable), use:
+
+::: nonincremental
+-   the dollar symbol `$` followed the name of the variable;
+
+-   or the hooks `[,]` by assigning the name of the variable in quotes
+    or the index of the column preceded by a comma.
+:::
+
+```{r}
+df[,"name"] # "Albert Einstein","Martin Luther","Nelson Mandela","William Shakespeare", "Ludwig van Beethoven"
+
+df$gender = factor(x = df$gender, levels = c(0,1), labels = c("Woman", "Man"))
+
+df[1,3] # "Nelson Mandela"
+df[1,] 
+# "Albert Einstein" "Man"
+
+df[df$name!= "Martin Luther" & df$name!="Nelson Mandela",]
+```
+
+## Dataframe
+
+To add a new variable, use hooks `[,]` by indicating the name of the new
+variable or the dollar sign `$` followed by the name.
+
+To add a new observation, you can use the `[,]` by knowing the last
+observation number, and put the vector of elements.
+
+`bind_rows()` combines a sequence of vectors or dataframes by rows.
+
+```{r}
+# Adding the city of birth
+
+df$countryBirth = c("Germany","USA","South-Africa","UK","Germany")
+
+df[,"countryBirth"]
+
+# Adding a new observation
+
+df[6,] = c("Marie Curie", "Woman", "France")
+nrow(df) 
+
+df = bind_rows(df, 
+               c("name" = "Malala Yousafzai", "gender" = "Woman", "countryBirth" = "Pakistan"))
+```
+
+::: callout-caution
+When you use the `[,]`, you have to call the variables in quotes.
+Whereas with the `$` it is not necessary.
+:::
+
+## List
+
+Lists are special objects whose elements can be of any kind (including
+other lists).
+
+To create a list, use `list()` and write the individual elements between
+the parenthesis.
+
+```{r}
+listing = list("object1"=vec_char,
+               "object2"=df)
+```
+
+For an overview of the list, use the function `str()`.
+
+```{r}
+str(listing)
+```
+
+## List
+
+To access an element of the list, you have many ways:
+
+```{r}
+# by position number, using the double hooks `[[]]` 
+listing[[2]] 
+
+# by name, using the double hooks `[[]]`  
+listing[["object1"]] 
+
+# by name, using the operator `$`(commun method) 
+listing$object1
+
+```
+
+# Function
+
+::: notes
+A function in R is an object containing multiple statements that are run
+together in a predefined order every time the function is called.
+
+Functions in R can be built-in or created by the user (user-defined).
+The main purpose of creating a user-defined function is to optimize our
+program, avoid the repetition of the same block of code used for a
+specific task that is frequently performed in a particular project,
+prevent us from inevitable and hard-to-debug errors related to
+copy-paste operations, and make the code more readable. A good practice
+is creating a function whenever we're supposed to run a certain set of
+commands more than twice.
+:::
+
+## Usual functions
+
+`min()`, `max()`, `mean()`, `median()` – return the minimum / maximum /
+mean / median value of a numeric vector
+
+`sum()` – returns the sum of a numeric vector
+
+`range()` – returns the minimum and maximum values of a numeric vector
+
+`abs()` – returns the absolute value of a number
+
+`str()` – shows the structure of an R object
+
+`print()` – displays an R object on the console
+
+`head()` – displays the first rows (by default the 6 first ones) of a
+table
+
+`ncol()`, `nrow()` – returns the number of columns or rows of a matrix
+or a dataframe
+
+`colnames()` – returns
+
+`length()` – returns the number of items in an R object (a vector, a
+list, etc.)
+
+`cat`– concatenate and print
+
+`nchar()` – returns the number of characters in a character object
+
+`sort()` – sorts a vector in ascending or descending (decreasing=TRUE)
+order
+
+`exists()` – returns TRUE or FALSE depending on whether or not a
+variable is defined in the R environment.
+
+## Creation of a new function
+
+::: notes
+applying built-in functions facilitates many common tasks
+
+Often, we need to create our own function to automate the performance of
+a particular task. To declare a user-defined function in R, we use the
+keyword **function**. The syntax is as illustrated on the figure. The
+main components of an R function are: function name, function parameters
+(or called arguments), and function body.
+
+Let's take a look at each of them separately.
+:::
+
+![](media/clipboard-3123930456.png){fig-align="center" width="802"}
+
+## Function name
+
+This is the name of the function object that will be stored in the R
+environment after the function definition and used for calling that
+function.
+
+It should be **concise** but **clear** and **meaningful** so that the
+user who reads our code can easily understand what exactly this function
+does.
+
+::: callout-tip
+## Good Practice
+
+Variable and function names should be lowercase.
+
+Use an underscore `_` to separate words within a name.
+
+Generally, variable names should be nouns and function names should be
+verbs.
+:::
+
+::: callout-warning
+A name can not begin with a number
+:::
+
+``` r
+# Good
+day_one
+day_1
+
+# Bad
+first_day_of_the_month   # too long 
+DayOne  # uppercase in the middle
+dayone  # misunderstanding
+djm1  #not clear
+```
+
+## Function parameters (arguments)
+
+The arguments are the variables in the function definition placed inside
+the parentheses and separated with a comma that will be set to actual
+values each time we call the function.
+
+```{r}
+quadratic_polynomial <- function(x, a, b, c){
+  y = a * x^2 + b*x + c
+  return(y)
+}
+quadratic_polynomial(x = 1, a = 2, b = 3, c = 4)
+```
+
+<div>
+
+It's possible, even though rarely useful, for a function to have no
+parameters.
+
+</div>
+
+```{r}
+iteration <- function(){
+  print("New iteration")
+}
+
+iteration()
+```
+
+## Function parameters (arguments)
+
+<div>
+
+Also, some parameters can be set to default values inside the function
+definition, which then can be reset when calling the function.
+
+</div>
+
+```{r}
+quadratic_polynomial <- function(x, a=2, b=1, c=10){
+  y = a * x^2 + b*x + c
+  return(y)
+}
+quadratic_polynomial(x = -1, a = 3) #b and c is defined by default.
+```
+
+::: callout-important
+## Good practice
+
+Clearly assign a value to each argument.
+:::
+
+## Function body
+
+The function body is a set of commands inside the curly braces `{}` that
+are run in a predefined order every time we call the function.
+
+```{r}
+prop_tab <- function(v, decimales=0.1) {
+  tri <- table(v)
+  effectif_total <- length(v)
+  tri <- tri / effectif_total * 100
+  tri <- round(tri, decimales)
+ tri
+}
+vec <- c("rouge", "vert", "vert", "bleu", "rouge")
+prop_tab(vec)
+
+```
+
+<div>
+
+It usually isn't necessary to explicitly include the return statement
+when defining a function.
+
+</div>
+
+## Function body
+
+But this becomes inevitable if we need to return more than one result
+from a function.
+
+```{r}
+ check_sqrt<- function(x){
+   if (x >= 0){    # no warning
+     value = paste("The value is positive",x, sep = ":")
+     result = sqrt(x)
+   }else {
+     value = paste0("Warning! the value is negative:",x)
+     result = NaN
+   }
+   output = list("note" = value, "result" = result)
+   return(output)
+}
+ 
+check_sqrt(x = 100)
+```
+
+::: callout-important
+The `return()` function can return only a single R object.
+:::
+
+## Output
+
+To call a function: put function name and add the necessary arguments
+inside the parenthesis.
+
+When calling a function, we usually assign the result of this operation
+to an object, to be able to use it later.
+
+```{r}
+x = check_sqrt(x = 25)  # x is a list of a character (note) and the value (result)
+
+quadratic_polynomial(x$result,a = -1, b = -1, c = 4) 
+
+```
+
+# We R done

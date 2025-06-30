@@ -3,8 +3,11 @@
 .RData
 .Ruserdata
 
-*_files*
-*.html
 *_cache*
+_*/
+
+*.html
+!title-slide.html
+!index.html
 
 modules/test*
