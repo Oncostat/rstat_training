@@ -1,0 +1,51 @@
+"patient_id"	"sex"	"age"	"bmi"	"diagnosis_date"	"initial_therapy"	"chemotherapy"
+1	"Man"	74	21.42	"2017-11-04"	"Surgery"	NA
+2	"Woman"	66	23.26	"2019-11-15"	"Chemotherapy + Surgery"	"Cisplatine"
+3	"Woman"	63	25.7	"2019-02-13"	"Chemotherapy"	"Cisplatine"
+4	"Woman"	85	19.94	"2018-03-16"	"Chemotherapy + Surgery"	"Cisplatine"
+5	"Man"	41	21.38	"2017-05-01"	"Chemotherapy + Surgery"	"Carboplatine"
+6	"Man"	37	24.04	"2017-11-10"	"Chemotherapy"	"Cisplatine"
+7	"Woman"	28	22.24	"2017-10-22"	"Chemotherapy"	"Carboplatine"
+8	"Man"	68	25.42	"2017-10-28"	"Surgery"	NA
+9	"Woman"	58	20.59	"2019-07-11"	"Chemotherapy"	"Carboplatine"
+10	"Man"	44	25.72	"2017-11-27"	"Chemotherapy + Surgery"	"Carboplatine"
+11	"Man"	33	20.44	"2018-03-05"	"Chemotherapy + Surgery"	"Carboplatine"
+12	"Woman"	65	23.76	"2018-05-15"	"Surgery"	NA
+13	"Woman"	34	19.07	"2018-11-02"	"Chemotherapy + Surgery"	"Carboplatine"
+14	"Man"	42	21.35	"2017-02-22"	"Chemotherapy + Surgery"	"Carboplatine"
+15	"Man"	55	21.07	"2018-10-06"	"Chemotherapy + Surgery"	"Carboplatine"
+16	"Man"	73	24.16	"2019-08-17"	"Chemotherapy"	"Carboplatine"
+17	"Man"	65	24.88	"2018-03-14"	"Chemotherapy + Surgery"	"Carboplatine"
+18	"Man"	21	25.15	"2019-10-26"	"Chemotherapy + Surgery"	"Carboplatine"
+19	"Man"	41	21.05	"2019-08-13"	"Chemotherapy + Surgery"	"Cisplatine"
+20	"Man"	22	24.98	"2017-11-12"	"Surgery"	NA
+21	"Man"	46	25.54	"2019-11-18"	"Surgery"	NA
+22	"Woman"	58	21.83	"2017-06-12"	"Surgery"	NA
+23	"Man"	71	20.6	"2018-04-05"	"Chemotherapy + Surgery"	"Cisplatine"
+24	"Woman"	41	19.08	"2017-06-01"	"Chemotherapy"	"Cisplatine"
+25	"Man"	32	20.77	"2017-10-07"	"Surgery"	NA
+26	"Man"	69	24.86	"2017-11-16"	"Chemotherapy + Surgery"	"Carboplatine"
+27	"Man"	29	19.92	"2019-04-08"	"Surgery"	NA
+28	"Woman"	20	21.39	"2018-03-03"	"Surgery"	NA
+29	"Man"	61	25.5	"2018-12-14"	"Chemotherapy"	"Carboplatine"
+30	"Woman"	25	20.76	"2019-10-29"	"Chemotherapy + Surgery"	"Carboplatine"
+31	"Woman"	25	23.07	"2018-02-20"	"Surgery"	NA
+32	"Man"	40	25.34	"2018-04-19"	"Chemotherapy + Surgery"	"Cisplatine"
+33	"Woman"	25	20.01	"2018-03-04"	"Chemotherapy"	"Carboplatine"
+34	"Woman"	19	19.97	"2017-12-14"	"Surgery"	NA
+35	"Man"	43	22.5	"2019-05-22"	"Surgery"	NA
+36	"Woman"	30	22.72	"2019-03-10"	"Surgery"	NA
+37	"Man"	33	22.43	"2018-07-13"	"Chemotherapy + Surgery"	"Cisplatine"
+38	"Man"	66	22.84	"2018-04-13"	"Chemotherapy + Surgery"	"Carboplatine"
+39	"Woman"	64	25.33	"2018-11-11"	"Chemotherapy"	"Cisplatine"
+40	"Man"	85	24.32	"2018-10-05"	"Chemotherapy"	"Cisplatine"
+41	"Man"	31	20.12	"2017-07-03"	"Surgery"	NA
+42	"Woman"	76	23.5	"2018-10-18"	"Chemotherapy"	"Cisplatine"
+43	"Woman"	29	20.03	"2018-07-05"	"Surgery"	NA
+44	"Woman"	40	19.71	"2019-03-19"	"Chemotherapy"	"Cisplatine"
+45	"Woman"	58	24.9	"2019-04-15"	"Chemotherapy"	"Carboplatine"
+46	"Man"	56	21.87	"2017-08-10"	"Surgery"	NA
+47	"Man"	48	24.14	"2017-07-28"	"Chemotherapy + Surgery"	"Cisplatine"
+48	"Man"	69	25.24	"2019-12-18"	"Chemotherapy + Surgery"	"Carboplatine"
+49	"Woman"	54	20.28	"2019-06-24"	"Surgery"	NA
+50	"Woman"	25	25.34	"2019-05-28"	"Chemotherapy"	"Cisplatine"
