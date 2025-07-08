@@ -16,3 +16,8 @@ Le code quarto est disponible sur ce repository (liens ci-dessous) et les diapos
 6)  [Reporting - officer](modules/6_officer/) (Charlotte Bargain)
 
 ![](qrcode.png)
+
+## Ressources
+
+Tutoriel très complet, en français : https://juba.github.io/tidyverse/
+
