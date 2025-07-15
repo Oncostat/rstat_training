@@ -7,7 +7,7 @@ format:
    fig-pos: 'H'
    output-file: "index.html"
    auto-stretch: false
-   logo: logo_IGR.jpg
+   logo: media/logo_gustaveroussy.png
    css: assets/style.css
    title: "ONCOSTAT & BBE Team <br> Training course R"
    subtitle: "Module 3 : Data visualization with ggplot2"
