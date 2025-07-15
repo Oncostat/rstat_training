@@ -1,0 +1,1280 @@
+---
+title: "Data Manipulation"
+subtitle: "Introduction to the Tidyverse"
+author: "Charlotte Bargain"
+date: last-modified
+date-format: "DD/MM/YYYY"
+format: 
+  revealjs:
+    output-file: "index.html"
+    css: style.css
+    theme: simple 
+    code-line-numbers: true
+    scrollable: true
+    slide-number: c/t
+    slide-level: 3
+    transition: slide
+    progress: true
+    toc: true
+    toc-depth: 1
+    toc-expand: 2
+    smaller: true
+    embed-resources: true
+    preview-links: auto
+    # footer: "Le code source de cette présentation est disponible [sur GitHub](https://github.com/Oncostat/rstat_training/){target='_blank'}."
+execute:
+  echo: true
+  cache: true
+  code-overflow: wrap
+keywords: ["r", "rstat", "training", "course", "module"]
+mouse-wheel: true
+editor: 
+  markdown: 
+    wrap: 72
+header-includes:
+  - <link rel="stylesheet" href="style.css">
+  - <div class="logo-left">
+      <img src="./Logo/logo_CESP_bis.png" alt="Logo CESP" width="200">
+      </div>
+      <div class="logo-right">
+      <img src="./Logo/logo_IGR.jpg" alt="Logo IGR" width="200">
+      </div>
+---
+
+# Introduction
+
+## An example of data manipulation
+
+The goal of this training course is to learn how to manipulate data
+using the `tidyverse` syntax in `R`.
+
+Here is an extract of an `R` script showing the import of **clinical and
+biological** Excel data bases, the **cleaning** of the variables names,
+the **reshape** of biological data, the **re-coding** of the types of
+variables and the computing of **derived variables**. This `R` script
+could be refined in terms of efficiency, but it provides a good example
+of data manipulation with the tidyverse.
+
+<br>
+
+```         
+# IMPORT CLINICAL AND BIOLOGICAL DATA ----------------------------------------------
+  
+data_clinical_unilateral_raw <- readxl::read_xlsx(path = paste(file_data, "donnees_cliniques_bilateral.xlsx", 
+                                                  sep = ""), 
+                                                  sheet = "Unilat")
+  
+data_clinical_bilateral_raw <- readxl::read_xlsx(path = paste(file_data, "donnees_cliniques_bilateral.xlsx", 
+                                                 sep = ""), 
+                                                 sheet = "Bilat")
+  
+  
+data_biological_unilateral_raw <- readxl::read_xlsx(path = paste(file_data, "biological_unilateral.xlsx", sep = ""))
+  
+data_biological_bilateral_raw <- readxl::read_xlsx(path = paste(file_data, "biological_bilateral.xlsx", sep = ""))
+  
+(...)
+  
+  
+
+# CLEAN VARIABLES NAMES AND PIVOT BIOLOGICAL DATA ----------------------------------
+  
+data_clinical_unilateral <- data_clinical_unilateral_raw %>%
+  janitor::clean_names() %>%
+  dplyr::rename(traitement = type_de_traitement,
+                id_patient = numero_de_dossier_gr,
+                age = age_au_debut_du_traitement,
+                cancer_primitif = primitif_standardise,
+                histologie = histologie_definitive_standardise,
+                debut_radiotherapie = debut,
+                fin_radiotherapie = fin,
+                chimiotherapie_concomittante = chimio_conco,
+                recidive = recidivie,
+                radiotherapy_adjuvante = rt_adjuvante,
+                chimiotherapie_induction = chimio_induction,
+                recidive_post_traitement = recidivie_post_tt) 
+  
+  
+data_biological_unilateral_wide <- data_biological_unilateral_raw %>%
+  janitor::clean_names() %>%
+  tidyr::separate(col = noigr_datedeb_datefin,
+                  into = c('id_patient', 'debut_radiotherapie', 'fin_radiotherapie'),
+                  sep = "_") %>%
+  tidyr::separate_wider_regex(cols = j_avant,
+                              patterns = c(biological_baseline = "\\d+\\.\\d.", 
+                                           "\\s*-\\s*",
+                                           date_prelevement_baseline = "\\d{2}/\\d{2}/\\d{4}\\s+\\d{2}:\\d{2}"),
+                              too_few = "align_start") 
+  
+data_biological_unilateral <- data_biological_unilateral_wide %>%
+  tidyr::pivot_longer(cols = tidyselect::starts_with('j'),
+                      names_to = "prelevement",
+                      values_to = "biological_date") %>%
+  tidyr::separate_wider_regex(cols = biological_date,
+                              patterns = c(biological = "\\d+\\.\\d.", 
+                                           "\\s*-\\s*",
+                                           date_prelevement = "\\d{2}/\\d{2}/\\d{4}\\s+\\d{2}:\\d{2}",
+                                           "\\s*-\\s*",
+                                           jours_prelevement = "\\d*"),
+                              too_few = "align_start")
+  
+(...)
+  
+  
+  
+# RECODE TYPE OF VARIABLES ---------------------------------------------------------
+  
+indicatrice <- function(x) {
+  
+  # Input : 
+  # x : a numeric vector which takes values 1 (for 'Yes') and 0 (for 'No').
+  # Output :
+  # a vector which is a factor with two levels 'Yes' and 'No'.
+  
+  return(factor(case_when(x == 1 ~ 'Yes',
+                          x == 0 ~ 'No',
+                          is.na(x) ~ NA,
+                          .default = NA),
+                levels = c('Yes', 'No')))
+}
+  
+data_clinical_unilateral <- data_clinical_unilateral %>%
+  dplyr::mutate(oms = as.numeric(case_when(oms == 'NC' ~ NA,
+                                           .default = oms))) %>%
+  dplyr::mutate_if(is.character,
+                   .funs = as.factor) %>% 
+  dplyr::mutate_at(vars('id_patient'), 
+                   .funs = as.character) %>%
+  dplyr::mutate_at(vars(c('chimiotherapie_concomittante', 'recidive', 'reirradiation',
+                          'radiotherapy_adjuvante', 'chimiotherapie_induction', 
+                          'recidive_post_traitement', 'deces')),
+                   .funs = indicatrice)
+  
+(...)
+  
+  
+  
+# BIND DATA OF CONTROL AND EXPERIMENTAL ARM ----------------------------------------
+  
+data_clinical <- data_clinical_unilateral %>%
+  dplyr::bind_rows(data_clinical_bilateral) %>%
+  dplyr::select(- age) # age not complete : it will be (re)computed later
+  
+(...)
+  
+  
+  
+# DERIVATION OF VARIABLES -----------------------------------------------------------
+  
+data_clinical <- data_clinical %>%
+
+  dplyr::mutate(age = floor(lubridate::interval(date_de_naissance, debut_radiotherapie)/years(1)),
+  oms = case_when(oms == 0 ~ '0',
+                  oms == 1 | oms == 2 ~ '1-2',
+                  .default = NA),
+  t = case_when(t == 'Tx' ~ 'Tx',
+                t == 'T0' ~ 'T0',
+                t == 'T1' ~ 'T1',
+                t == 'T2' ~ 'T2',
+                t == 'T3' ~ 'T3',
+                t == 'T4a' | t == 'T4b' ~ 'T4',
+                .default = NA),
+  n = case_when(n == 'Nx' ~ 'Nx',
+                n == 'N0' ~ 'N0',
+                n == 'N1' ~ 'N1',
+                n == 'N2a' | n == 'N2b' | n == 'N2c' ~ 'N2',
+                n == 'N3' ~ 'N3',
+                .default = NA),
+  stade = case_when(m == 'M1' ~ 'Stage IV',
+                    n == 'N3' | t == 'T4' ~ 'Stage III',
+                    n == 'N2' | t == 'T3' ~ 'Stage II',
+                    n == 'N1' | n == 'N0' | t == 'T2' | t == 'T1' | t == 'T0' ~ 'Stage I',
+                    t == 'Tx' &  n == 'Nx' ~ 'TxNx',
+                    .default = NA),
+  stade_new = as.factor(case_when(stade == 'Stage I' | stade == 'Stage II' ~ 'Stage I-II',
+                                  stade == 'Stage III' | stade == 'Stage IV' ~ 'Stage III-IV',
+                                  .default = NA)),
+  
+  duree_radiotherapie = floor(lubridate::interval(debut_radiotherapie, fin_radiotherapie)/days(1)),
+  date_derniere_nouvelle = case_when(!is.na(date_deces) ~ date_deces,
+                                     !is.na(date_derniere_consultation) ~ date_derniere_consultation,
+                                     .default = NA),
+  delai_OS = lubridate::interval(debut_radiotherapie, date_derniere_nouvelle)/months(1),
+  delai_PFS = case_when(!is.na(date_de_recidive) ~ lubridate::interval(debut_radiotherapie, date_de_recidive)/months(1),
+                        .default = lubridate::interval(debut_radiotherapie, date_derniere_nouvelle)/months(1)),
+  duree_suivi_months = lubridate::interval(debut_radiotherapie, date_derniere_nouvelle)/months(1)) 
+  
+  
+data_biological <- data_biological %>%
+  
+  dplyr::mutate(normales = "[1.0 - 4.0] (10^9/L)",
+  prelevement_timing = as.factor(str_extract(prelevement, pattern = "(?<=_)(.*?)(?=_)")),
+  prelevement_number = as.integer(str_extract(prelevement, pattern = "\\d+")),
+  jours_prelevement_bis = case_when((!is.na(date_prelevement) & prelevement_timing == 'pendant') ~ floor(lubridate::interval(debut_radiotherapie, date_prelevement)/days(1)),
+                                    (!is.na(date_prelevement) & prelevement_timing == 'apres') ~ floor(lubridate::interval(debut_radiotherapie, date_prelevement)/days(1)),
+                                    .default = NA),
+  mois_prelevement = case_when((!is.na(date_prelevement) & prelevement_timing == 'pendant') ~ floor(lubridate::interval(debut_radiotherapie, date_prelevement)/months(1)),
+                               (!is.na(date_prelevement) & prelevement_timing == 'apres') ~ floor(lubridate::interval(debut_radiotherapie, date_prelevement)/months(1)),
+                               .default = NA)) 
+  
+(...)
+```
+
+# Import data bases
+
+## Data bases types
+
+Data bases may have various formats :
+
+-   CSV (Comma Separated Values) files **.csv**
+-   Excel files **.xls** or **.xlsx**
+-   SAS files **.sas7bdat** or **xpt** (Trialmaster)
+
+<br>
+
+<hr>
+
+<br>
+
+To import data correctly, you must pay attention to :
+
+-   Separator **,** or **;** or **tab**
+-   Decimal **.** or **,**
+-   Sheet in excel files
+
+## Data bases types
+
+::: {layout-nrow="2"}
+![](Data/Capture_csv.png){width="57%"}
+
+![](Data/Capture_xlsx.png){width="70%"}
+:::
+
+## Import data bases
+
+Many functions from multiple packages exist to import data bases from
+different formats.
+
+```{r}
+#| code-line-numbers: "1-2|4-6|8-10"
+data_csv <- read.csv(file = "./Data/data_clinique.csv", 
+header = TRUE, sep = ",", dec = ".")
+
+library(readxl)
+data_excel <- readxl::read_xlsx(path = "./Data/data_clinique.xlsx", 
+sheet = "Sheet 1", col_names = TRUE)
+
+library(haven)
+# data_sas <- haven::read_sas(data_file = "./Data/data_clinique.sas7bdat")
+# data_sas_bis <- haven::read_xpt(file = "./Data/data_clinique.xpt")
+```
+
+::: {.callout-tip title="Using **package::function** syntax"}
+**Prefixing** a function with the name of its package using **`::`** is
+not mandatory, but it can be good practice for beginners. It helps
+clarify which package a function comes from and can **prevent
+conflicts** when different packages have functions with the same name.
+This ensures you’re using the correct function from the right package.
+:::
+
+## Import data bases
+
+Easier to use `import` function from `rio` package which import data
+bases from different formats, in your **global environment**.
+
+```{r}
+library(rio)
+data <- rio::import(file = "./Data/data_clinique.csv", setclass = "tibble")
+```
+
+```{r include=FALSE}
+data$diagnosis_date <- as.character(data$diagnosis_date)
+```
+
+<br>
+
+<hr>
+
+<br>
+
+Another solution is the Dan's package `EDCimport` which allows to import
+several data sets from formats **csv**, **sas** or **xpt** files with
+functions `read_all_csv`, `read_all_sas` and `read_all_xpt`.
+
+```{r}
+library(EDCimport)
+# data_list <- EDCimport::read_all_sas(path = "./Data/data.sas7bdat",
+#                                      format_file = "./Data/procformat.sas")
+```
+
+You can find a description of this package on [CRAN
+EDCimport](https://cran.r-project.org/package=EDCimport). It will also
+be presented by Dan on module 4 of this training course.
+
+## Visualize data frames
+
+After importing a data base in your **global environment**, you can
+observe the number of rows, columns and the type of variables using
+`str` function or the blue arrow.
+
+![](Data/Capture_Global_environment_str.png){width="50%"}
+
+```{r}
+str(data)
+```
+
+## Visualize data frames
+
+You can visualize the complete data using `View` function. It opens a
+new window with your data. You can also click on the name of the data
+frame in the **global environment**.
+
+```{r}
+View(data)
+```
+
+![](Data/Capture_View.png){width="40%"}
+
+## Visualize data frames
+
+In a `View`, you can explore data values with the arrows and the
+`filter` option.
+
+![](Data/Capture_View_tri.png){width="50%"}
+
+## Visualize data frames
+
+![](Data/Capture_View_filtre.png){width="50%"}
+
+# Manipulate data frame
+
+<iframe src="https://www.tidyverse.org/" style="width:1000px; height:500px">
+
+</iframe>
+
+## Introduction to the tidyverse
+
+The `Tidyverse` is a collection of R packages designed for working with
+data bases with a common design philosophy and grammar. When the package
+`tidyverse` is loaded, its extensions are loaded too.
+
+::::: columns
+::: {.column width="50%"}
+<br> The most common (useful) are :
+
+-   [`ggplot2`](https://ggplot2.tidyverse.org/) (graphical
+    visualization)
+
+-   [`dplyr`](https://dplyr.tidyverse.org/) (data manipulation)
+
+-   [`tidyr`](https://tidyr.tidyverse.org/) (data reshape)
+
+-   [`forcats`](https://forcats.tidyverse.org/) (factors manipulation)
+
+-   [`stringr`](https://stringr.tidyverse.org/) (string manipulation)
+
+-   [`lubridate`](https://lubridate.tidyverse.org/) (date manipulation)
+
+-   [`tibble`](https://tibble.tidyverse.org/)
+:::
+
+::: {.column width="50%"}
+[![](Data/Tidyverse.png)](https://www.tidyverse.org/packages/)
+:::
+:::::
+
+`janitor` is another R package very useful when manipulating data.
+
+### Clean and rename column names
+
+One of the first thing to do after importing data is cleaning variables
+names using `clean_names` function from `janitor` package.
+
+```{r}
+library(janitor)
+data <- janitor::clean_names(data)
+```
+
+<br>
+
+<hr>
+
+<br>
+
+We can also rename column/variable name using `rename` function from
+`dplyr` package with this syntax :
+
+```         
+data <- dplyr::rename(data, new_name_col_1 = old_name_col_1, new_name_col_2 = old_name_col_2)
+```
+
+<br>
+
+To apply one operation for each column/variable name, we can use a
+function inside the `rename` function, specifying the ***.fn*** option.
+
+```         
+data <- dplyr::rename(data, .fn = toupper)
+```
+
+### Filter lines
+
+Keep rows that match one or several logical condition with `filter`
+function from `dplyr` package.
+
+```{r}
+library(tidyverse)
+new_data <- dplyr::filter(data, sex == "Man" & age >= 60)
+head(new_data)
+```
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+data new_data; 
+  set data; 
+  if sex = "Man" AND age >= 60; 
+run; 
+```
+:::
+
+### Select columns
+
+Extract columns/variables of interest as a table with `select` function
+from `dplyr` package.
+
+```{r}
+new_data <- dplyr::select(data, patient_id, sex, age, bmi)
+head(new_data)
+```
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+data new_data; 
+  set data; 
+  keep patient_id sex age bmi; 
+run; 
+```
+:::
+
+### Select columns
+
+Keep all columns except one (or more) using **- column_name**.
+
+```         
+dplyr::select(data, - initial_therapy)
+```
+
+```{r}
+new_data <- dplyr::select(data, - c(diagnosis_date, initial_therapy))
+head(new_data)
+```
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+data new_data; 
+  set data; 
+  drop diagnosis_date initial_therapy; 
+run; 
+```
+:::
+
+### Sort columns
+
+Sort a data frame in ascending order by one or more columns using
+`arrange` function from `dplyr` package.
+
+```{r}
+new_data <- dplyr::arrange(data, age)
+head(new_data)
+```
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+proc sort data = data out = new_data; 
+  by age; 
+run;
+```
+:::
+
+### Sort columns
+
+Use `desc` within `arrange` to sort a data frame in descending order by
+one or more columns.
+
+```{r}
+new_data <- dplyr::arrange(data, desc(age)) 
+head(new_data)
+```
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+proc sort data = data out = new_data;
+  by descending age;
+run;
+```
+:::
+
+### Mutate columns
+
+Create new column or modify existing column with `mutate` function from
+`dplyr` package.
+
+```{r}
+new_data <- dplyr::mutate(data, bmi_integer = as.integer(bmi))
+head( dplyr::select(new_data, patient_id, bmi, bmi_integer) )
+```
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+data new_data; 
+  set data; 
+  bmi_integer = int(bmi); 
+run;
+```
+:::
+
+### Mutate columns
+
+Create new column or modify existing column with `mutate` function from
+`dplyr` package.
+
+```{r}
+new_data <- dplyr::mutate(data, age_cat = if_else(condition = age < 60, 
+                                                  true = 'Age < 60', false = 'Age >= 60'))
+head( dplyr::select(new_data, patient_id, age, age_cat) )
+```
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+data new_data; 
+  set data; 
+  if age < 60 then age_cat = "Age < 60"; 
+  else age_cat = "Age >= 60"; 
+run; 
+```
+:::
+
+### Grouping operations
+
+Function `group_by` from `dplyr` package defines groups of rows using
+column(s) values.
+
+```         
+dplyr::group_by(data, sex)
+dplyr::group_by(data, sex, initial_therapy)
+```
+
+Then, we can apply one operation for each group of rows, separately.
+
+![](Data/Group_by_four.png){width="50%"}
+
+### Grouping operations
+
+Function `group_by` from `dplyr` package defines groups of rows using
+column(s) values.
+
+```{r}
+new_data <- mutate(group_by(data, sex),
+                   age_mean_sex = mean(age),
+                   age_above_mean_sex = age > age_mean_sex) 
+
+new_data <- ungroup(new_data)
+
+head( dplyr::select(new_data, patient_id, sex, age, age_mean_sex, age_above_mean_sex) )
+```
+
+### Grouping operations
+
+<br>
+
+::: {.callout-caution title="group_by"}
+Using `group_by` from `dplyr` can be risky because if you forget to use
+`ungroup`, it might lead to unintended behavior in subsequent
+operations.
+
+For example, any operation after `group_by` will continue to be applied
+to the groups, which can cause errors or incorrect results.
+:::
+
+<br>
+
+::: callout-tip
+Now, it's recommended to use the grouping argument of the operation
+function instead (example to come).
+
+This allows you to perform grouped operations without the need to
+explicitly call `group_by` and worry about forgetting to `ungroup`,
+providing cleaner and safer code.
+:::
+
+### Summarise columns
+
+`summarise` function from `dplyr` package return a new data frame with a
+single row summarizing all observations in the input.
+
+```{r}
+new_data <- dplyr::summarise(data, 
+                             age_mean = mean(age), 
+                             age_min = min(age), 
+                             age_max = max(age))
+head(new_data)
+```
+
+<br>
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+proc summary data = data nway;
+  var age;
+  output out = new_data 
+    mean = age_mean 
+    min = age_min 
+    max = age_max;
+run;
+```
+:::
+
+### Summarise columns
+
+We can also compute aggregated statistics by dimensions/subsets of the
+initial table using `summarise` and its grouping argument `.by`, working
+as `group_by` but avoiding mistakes.
+
+::::: columns
+::: {.column width="60%"}
+```{r}
+new_data <- data %>% 
+  dplyr::summarise(age_mean = mean(age), .by = 'sex')
+head(new_data)
+```
+:::
+
+::: {.column width="40%"}
+![](Data/Group_by_ter.png){width="100%"}
+:::
+:::::
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+proc summary data = data nway; 
+  class sex; 
+  var age; 
+  output out = new_data mean(age) = age_mean; 
+run; 
+```
+:::
+
+## Sequence of operations
+
+When manipulating data, we can chain several operations (clean and
+rename column names, select columns, filter on values, add new
+columns...), using the
+
+**pipe** [`%>%`](https://magrittr.tidyverse.org/reference/pipe.html)
+(`CTrl + Maj + M`).
+
+::::: columns
+::: {.column width="80%"}
+```{r}
+new_data <- data %>% 
+  select(patient_id, sex, age) %>% 
+  filter(sex == "Man" & age >= 60)
+
+head(new_data)
+```
+:::
+
+::: {.column width="20%"}
+![](Data/Pipe.png){width="100%"}
+:::
+:::::
+
+## CheatSheets dplyr
+
+[![](Data/Cheatsheets_dplyr.png){width="70%"}](https://dplyr.tidyverse.org/)
+
+## CheatSheets dplyr
+
+![](Data/Cheatsheets_bis_dplyr.png){width="90%"}
+
+# Recode variables
+
+## `case_when`
+
+`case_when` is a function from `dplyr` package used inside a `mutate`,
+allowing to create a new variable from values of one or more variable(s)
+of the data frame, by successively assessing logical conditions
+`if {...} else {...}` .
+
+```{r}
+new_data <- data %>% 
+  select(patient_id, sex, age) %>%
+  mutate(sex_age = case_when(sex == "Man" & age < 60 ~ "Man under 60yo",
+                             sex == "Man" & age >= 60 ~ "Man over 60yo",
+                             sex == "Woman" & age < 60 ~ "Woman under 60yo",
+                             sex == "Woman" & age >= 60 ~ "Woman over 60yo",
+                             .default = NA))
+head(new_data)
+```
+
+## `case_when`
+
+```         
+new_data <- data %>% 
+  select(patient_id, sex, age) %>%
+  mutate(sex_age = case_when(sex == "Man" & age < 60 ~ "Man under 60yo",
+                             sex == "Man" & age >= 60 ~ "Man over 60yo",
+                             sex == "Woman" & age < 60 ~ "Woman under 60yo",
+                             sex == "Woman" & age >= 60 ~ "Woman over 60yo",
+                             .default = NA))
+```
+
+<br>
+
+::: {.callout-tip title="Equivalent SAS code"}
+``` sas
+data new_data; 
+  set data; 
+  if sex = "Man" and age < 60 then sex_age = "Man under 60yo"; 
+  else if sex = "Man" and age >= 60 then sex_age = "Man over 60yo"; 
+  else if sex = "Woman" and age < 60 then sex_age = "Woman under 60yo"; 
+  else if sex = "Woman" and age >= 60 then sex_age = "Woman over 60yo"; 
+  else sex_age = .; 
+  keep patient_id sex age sex_age; 
+run; 
+```
+:::
+
+## `case_when`
+
+The new variable created by `case_when` and `mutate` can reference a
+variable instead of a static value depending on conditions. You can make
+conditional changes on one variable while keeping the rest of the data
+intact.
+
+```{r}
+library(glue)
+
+new_data <- data %>% 
+  select(patient_id, initial_therapy, chemotherapy) %>%
+  mutate(complete_therapy = case_when(initial_therapy == "Chemotherapy" ~ chemotherapy,
+                                      initial_therapy == "Chemotherapy + Surgery" ~ glue("{chemotherapy}", "Surgery", .sep = " + "),
+                                      .default = initial_therapy))
+```
+
+::: callout-note
+Here is an example with the function `glue` from the package `glue` :
+expressions enclosed by braces `{}` are evaluated as `R` code.
+
+```{r}
+glue("We have clinical data for {nrow(data)} patients on this data set.")
+```
+:::
+
+## `case_when`
+
+The new variable created by `case_when` and `mutate` can reference a
+variable instead of a static value depending on conditions. You can make
+conditional changes on one variable while keeping the rest of the data
+intact.
+
+```{r}
+new_data <- data %>% 
+  select(patient_id, initial_therapy, chemotherapy) %>%
+  mutate(complete_therapy = case_when(initial_therapy == "Chemotherapy" ~ chemotherapy,
+                                      initial_therapy == "Chemotherapy + Surgery" ~ glue("{chemotherapy}", "Surgery", .sep = " + "),
+                                      .default = initial_therapy))
+head(new_data)
+```
+
+
+## `stringr`
+
+`stringr` is an package from `tidyverse` collection, allowing to
+manipulate strings. Regular expressions can especially be used in
+`stringr` functions, to detect some patterns in strings.
+
+```{r}
+data %>% 
+  select(patient_id, initial_therapy) %>% 
+  mutate(surgery_detect = str_detect(string = initial_therapy, pattern = "Surgery"), 
+         surgery_extract = str_extract(string = initial_therapy, pattern = "Surgery")) %>%
+  head()
+```
+
+### CheatSheets stringr
+
+[![](Data/Cheatsheets_stringr.png){width="70%"}](https://stringr.tidyverse.org/)
+
+## `forcats`
+
+`forcats` is a package from `tidyverse` collection, allowing to
+manipulate categorical variables named `factors`. Factors are variables
+with several modalities, that can be ordered and named. These factors
+can be sorted using `relevel` function.
+
+```{r}
+data %>% 
+  select(patient_id, initial_therapy) %>%
+  mutate(init_therapy_fct = as_factor(initial_therapy),
+         init_therapy_recode = fct_recode(init_therapy_fct,
+                                          chimio_chirurgie = "Chemotherapy + Surgery", 
+                                          chimio = "Chemotherapy",
+                                          chirurgie = "Surgery")) %>%
+  head()
+```
+
+### CheatSheets forcats
+
+[![](Data/Cheatsheets_forcats.png){width="70%"}](https://forcats.tidyverse.org/)
+
+## `lubridate`
+
+`lubridate` is a package from `tidyverse` collection, allowing to
+manipulate dates. We can get and set components of a date, compare two
+dates using logical operators ($date_{1} > date_{2}$ return `TRUE` or
+`FALSE`), add or subtract component or a date from another date.
+
+```{r}
+data %>% 
+  select(patient_id, diagnosis_date) %>%
+  mutate(diagnosis_date_bis = ymd(diagnosis_date),
+         diagnosis_year = year(diagnosis_date_bis),
+         diagnosis_today = today() - diagnosis_date_bis) %>%
+  head()
+```
+
+### CheatSheets lubridate
+
+[![](Data/Cheatsheets_lubridate.png){width="70%"}](https://lubridate.tidyverse.org/)
+
+### CheatSheets lubridate
+
+![](Data/Cheatsheets_bis_lubridate.png){width="90%"}
+
+# Pivot data frame
+
+## Pivot from wide to long
+
+`tidyr` package allows to arrange data, particularly to pivot data. With
+function `pivot_longer`, we will obtain one row for each observation.
+
+![](Data/Pivot_longer.png){width="55%"}
+
+Columns selected with option `cols = c(A, B)` **A** and **B** are
+gathered into one column containing the double of rows. The names of the
+columns gathered are reported in new column **N** with option
+`names_to = "N"`. The values of the columns gathered are reported in new
+column **V** with option `values_to = "V"`.
+
+## Pivot from wide to long
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+data_wide <- data %>%
+  summarise(age_min = min(age),
+            age_mean = mean(age),
+            age_max = max(age),
+            .by = "initial_therapy")
+
+data_wide
+```
+
+![](Data/Pivot_longer.png)
+:::
+
+::: {.column width="50%"}
+```{r}
+data_long <- data_wide %>% 
+  pivot_longer(cols = c(age_min, age_mean, age_max), 
+               names_to = "Statistic", 
+               names_prefix = "age_", 
+               values_to = "Age")
+
+data_long
+```
+:::
+:::::
+
+```         
+```
+
+## Pivot from long to wide
+
+With function `pivot_wider`, we will obtain one row for value of one
+column (example: one row for each id_patient).
+
+![](Data/Pivot_wider.png){width="55%"}
+
+Columns selected with the option `names_from = "N"` will define the
+names of the new columns in the output. The values **A** and **B**
+corresponding to each unique value in **N** will be placed into new
+columns as names, with the values reported in the column specified by
+the `values_from = "V"` option. The identifier column **id** specified
+with option `id_cols = id` remains unchanged.
+
+## Pivot from long to wide
+
+::::: columns
+::: {.column width="50%"}
+```{r}
+data_long
+```
+:::
+
+::: {.column width="50%"}
+```{r}
+data_wide <- data_long %>%
+  pivot_wider(id_cols = initial_therapy,
+              names_from = Statistic,
+              names_prefix = "age_",
+              values_from = Age)
+
+data_wide
+```
+:::
+:::::
+
+![](Data/Pivot_longer.png){width="50%" fig-align="center"}
+
+# Join data frames
+
+## Type of joins
+
+::::: columns
+::: {.column width="58%"}
+`dplyr` package contains several functions to combine two data frames
+**A** and **B** in various ways. These mutating joins functions match
+observations from **A** and **B**, based on the key(s).
+
+The `by` argument specifies the column(s) that should be used as the
+**key** to match rows between the two data frames **A** and **B**. If
+the key in **A** and **B** takes different names, you can use option
+`by = join_by("id_a" = "id_b")`.
+:::
+
+::: {.column width="42%"}
+![](Data/Joins_bis.png){width="100%"}
+:::
+:::::
+
+After performing a join, if both data frames have columns with the same
+names (other than key column(s)), it automatically appends a **suffix**
+to distinguish them. The default suffixes are `.x` for the left data
+frame and `.y` for the right data frame. You can customize these
+suffixes with the `suffix` argument.
+
+### Data sets for examples
+
+```{r}
+#| echo: false
+#| include: false
+options(tibble.width = Inf)
+```
+
+```{r}
+data_chimio <- rio::import(file = "./Data/data_chimio.csv")
+
+head(data_chimio)
+```
+
+```{r}
+data_AE <- rio::import(file = "./Data/data_AE.csv")
+
+head(data_AE)
+```
+
+```{r}
+#| echo: false
+#| include: false
+data_AE <- as_tibble(data_AE)
+data_chimio <- as_tibble(data_chimio)
+```
+
+## `left_join`
+
+`left_join` function from `dplyr` package is used to join two data
+frames **A** and **B**, combining all rows from the left **A** data
+frame with matching rows from the right **B** data frame. If there is no
+match in the right data frame, it fills the missing values with `NA`.
+
+![](Data/Joins.png){width="50"}
+
+## `left_join`
+
+```{r}
+data_left <- dplyr::left_join(data_chimio, data_AE, by = 'patient_id') %>%
+  arrange(patient_id)
+
+data_left
+```
+
+## `right_join`
+
+`right_join` function from `dplyr` package is used to join two data
+frame **A** and **B**, keeping all the observations of **B**.
+
+![](Data/Joins.png){width="50%"}
+
+## `right_join`
+
+```{r}
+data_right <- dplyr::right_join(data_chimio, data_AE, by = 'patient_id') %>%
+  arrange(patient_id)
+
+data_right
+```
+
+## `inner_join`
+
+`inner_join` function from `dplyr` package is used to join two data
+frame **A** and **B**, keeping only common observations of one variable
+(matching key) in **A** and **B**.
+
+![](Data/Joins.png){width="50%"}
+
+## `inner_join`
+
+```{r}
+data_inner <- dplyr::inner_join(data_chimio, data_AE, by = 'patient_id') %>%
+  arrange(patient_id)
+
+data_inner
+```
+
+## `full_join`
+
+`full_join` function from `dplyr` package is used to join two data frame
+**A** and **B**, keeping all the observations of **A** and all the
+observations of **B**.
+
+![](Data/Joins.png){width="50%"}
+
+## `full_join`
+
+```{r}
+data_full <- dplyr::full_join(data_chimio, data_AE, by = 'patient_id') %>%
+  arrange(patient_id)
+
+data_full
+```
+
+## Complete script example
+
+```         
+# IMPORT CLINICAL AND BIOLOGICAL DATA ----------------------------------------------
+  
+data_clinical_unilateral_raw <- readxl::read_xlsx(path = paste(file_data, "donnees_cliniques_bilateral.xlsx", 
+                                                  sep = ""), 
+                                                  sheet = "Unilat")
+  
+data_clinical_bilateral_raw <- readxl::read_xlsx(path = paste(file_data, "donnees_cliniques_bilateral.xlsx", 
+                                                 sep = ""), 
+                                                 sheet = "Bilat")
+  
+  
+data_biological_unilateral_raw <- readxl::read_xlsx(path = paste(file_data, "biological_unilateral.xlsx", sep = ""))
+  
+data_biological_bilateral_raw <- readxl::read_xlsx(path = paste(file_data, "biological_bilateral.xlsx", sep = ""))
+  
+(...)
+  
+  
+
+# CLEAN VARIABLES NAMES AND PIVOT BIOLOGICAL DATA ----------------------------------
+  
+data_clinical_unilateral <- data_clinical_unilateral_raw %>%
+  janitor::clean_names() %>%
+  dplyr::rename(traitement = type_de_traitement,
+                id_patient = numero_de_dossier_gr,
+                age = age_au_debut_du_traitement,
+                cancer_primitif = primitif_standardise,
+                histologie = histologie_definitive_standardise,
+                debut_radiotherapie = debut,
+                fin_radiotherapie = fin,
+                chimiotherapie_concomittante = chimio_conco,
+                recidive = recidivie,
+                radiotherapy_adjuvante = rt_adjuvante,
+                chimiotherapie_induction = chimio_induction,
+                recidive_post_traitement = recidivie_post_tt) 
+  
+  
+data_biological_unilateral_wide <- data_biological_unilateral_raw %>%
+  janitor::clean_names() %>%
+  tidyr::separate(col = noigr_datedeb_datefin,
+                  into = c('id_patient', 'debut_radiotherapie', 'fin_radiotherapie'),
+                  sep = "_") %>%
+  tidyr::separate_wider_regex(cols = j_avant,
+                              patterns = c(biological_baseline = "\\d+\\.\\d.", 
+                                           "\\s*-\\s*",
+                                           date_prelevement_baseline = "\\d{2}/\\d{2}/\\d{4}\\s+\\d{2}:\\d{2}"),
+                              too_few = "align_start") 
+  
+data_biological_unilateral <- data_biological_unilateral_wide %>%
+  tidyr::pivot_longer(cols = tidyselect::starts_with('j'),
+                      names_to = "prelevement",
+                      values_to = "biological_date") %>%
+  tidyr::separate_wider_regex(cols = biological_date,
+                              patterns = c(biological = "\\d+\\.\\d.", 
+                                           "\\s*-\\s*",
+                                           date_prelevement = "\\d{2}/\\d{2}/\\d{4}\\s+\\d{2}:\\d{2}",
+                                           "\\s*-\\s*",
+                                           jours_prelevement = "\\d*"),
+                              too_few = "align_start")
+  
+(...)
+  
+  
+  
+# RECODE TYPE OF VARIABLES ---------------------------------------------------------
+  
+indicatrice <- function(x) {
+  
+  # Input : 
+  # x : a numeric vector which takes values 1 (for 'Yes') and 0 (for 'No').
+  # Output :
+  # a vector which is a factor with two levels 'Yes' and 'No'.
+  
+  return(factor(case_when(x == 1 ~ 'Yes',
+                          x == 0 ~ 'No',
+                          is.na(x) ~ NA,
+                          .default = NA),
+                levels = c('Yes', 'No')))
+}
+  
+data_clinical_unilateral <- data_clinical_unilateral %>%
+  dplyr::mutate(oms = as.numeric(case_when(oms == 'NC' ~ NA,
+                                           .default = oms))) %>%
+  dplyr::mutate_if(is.character,
+                   .funs = as.factor) %>% 
+  dplyr::mutate_at(vars('id_patient'), 
+                   .funs = as.character) %>%
+  dplyr::mutate_at(vars(c('chimiotherapie_concomittante', 'recidive', 'reirradiation',
+                          'radiotherapy_adjuvante', 'chimiotherapie_induction', 
+                          'recidive_post_traitement', 'deces')),
+                   .funs = indicatrice)
+  
+(...)
+  
+  
+  
+# BIND DATA OF CONTROL AND EXPERIMENTAL ARM ----------------------------------------
+  
+data_clinical <- data_clinical_unilateral %>%
+  dplyr::bind_rows(data_clinical_bilateral) %>%
+  dplyr::select(- age) # age not complete : it will be (re)computed later
+  
+(...)
+  
+  
+  
+# DERIVATION OF VARIABLES -----------------------------------------------------------
+  
+data_clinical <- data_clinical %>%
+
+  dplyr::mutate(age = floor(lubridate::interval(date_de_naissance, debut_radiotherapie)/years(1)),
+  oms = case_when(oms == 0 ~ '0',
+                  oms == 1 | oms == 2 ~ '1-2',
+                  .default = NA),
+  t = case_when(t == 'Tx' ~ 'Tx',
+                t == 'T0' ~ 'T0',
+                t == 'T1' ~ 'T1',
+                t == 'T2' ~ 'T2',
+                t == 'T3' ~ 'T3',
+                t == 'T4a' | t == 'T4b' ~ 'T4',
+                .default = NA),
+  n = case_when(n == 'Nx' ~ 'Nx',
+                n == 'N0' ~ 'N0',
+                n == 'N1' ~ 'N1',
+                n == 'N2a' | n == 'N2b' | n == 'N2c' ~ 'N2',
+                n == 'N3' ~ 'N3',
+                .default = NA),
+  stade = case_when(m == 'M1' ~ 'Stage IV',
+                    n == 'N3' | t == 'T4' ~ 'Stage III',
+                    n == 'N2' | t == 'T3' ~ 'Stage II',
+                    n == 'N1' | n == 'N0' | t == 'T2' | t == 'T1' | t == 'T0' ~ 'Stage I',
+                    t == 'Tx' &  n == 'Nx' ~ 'TxNx',
+                    .default = NA),
+  stade_new = as.factor(case_when(stade == 'Stage I' | stade == 'Stage II' ~ 'Stage I-II',
+                                  stade == 'Stage III' | stade == 'Stage IV' ~ 'Stage III-IV',
+                                  .default = NA)),
+  
+  duree_radiotherapie = floor(lubridate::interval(debut_radiotherapie, fin_radiotherapie)/days(1)),
+  date_derniere_nouvelle = case_when(!is.na(date_deces) ~ date_deces,
+                                     !is.na(date_derniere_consultation) ~ date_derniere_consultation,
+                                     .default = NA),
+  delai_OS = lubridate::interval(debut_radiotherapie, date_derniere_nouvelle)/months(1),
+  delai_PFS = case_when(!is.na(date_de_recidive) ~ lubridate::interval(debut_radiotherapie, date_de_recidive)/months(1),
+                        .default = lubridate::interval(debut_radiotherapie, date_derniere_nouvelle)/months(1)),
+  duree_suivi_months = lubridate::interval(debut_radiotherapie, date_derniere_nouvelle)/months(1)) 
+  
+  
+data_biological <- data_biological %>%
+  
+  dplyr::mutate(normales = "[1.0 - 4.0] (10^9/L)",
+  prelevement_timing = as.factor(str_extract(prelevement, pattern = "(?<=_)(.*?)(?=_)")),
+  prelevement_number = as.integer(str_extract(prelevement, pattern = "\\d+")),
+  jours_prelevement_bis = case_when((!is.na(date_prelevement) & prelevement_timing == 'pendant') ~ floor(lubridate::interval(debut_radiotherapie, date_prelevement)/days(1)),
+                                    (!is.na(date_prelevement) & prelevement_timing == 'apres') ~ floor(lubridate::interval(debut_radiotherapie, date_prelevement)/days(1)),
+                                    .default = NA),
+  mois_prelevement = case_when((!is.na(date_prelevement) & prelevement_timing == 'pendant') ~ floor(lubridate::interval(debut_radiotherapie, date_prelevement)/months(1)),
+                               (!is.na(date_prelevement) & prelevement_timing == 'apres') ~ floor(lubridate::interval(debut_radiotherapie, date_prelevement)/months(1)),
+                               .default = NA)) 
+  
+(...)
+```
+
+# Conclusion
+
+<br>
+
+::::::::: columns
+::::: {.column width="40%"}
+:::: fragment
+::: incremental
+**You are now able to :**
+
+-   **Import** data bases in R environment
+
+-   **Visualize** the data
+
+-   **Manipulate** the data using `tidyverse`
+
+-   **Create** derived variables
+
+-   **Pivot** the data
+
+-   **Join** several data
+:::
+::::
+:::::
+
+::::: {.column width="60%"}
+:::: fragment
+::: incremental
+**The next steps are learning how to :**
+
+-   create **graphs** using `ggplot2` (training course n°3 created by
+    Nusaïbah)
+
+-   import data from **TrialMaster** using `EDCimport` and create
+    **description tables** using `crosstable` (training course n°4
+    created by Dan)
+
+-   compute **regression models** (training course n°5 created by Dan)
+
+-   create **automatic word reports** using `officer` (training course
+    n°6 created by me)!
+:::
+::::
+:::::
+:::::::::
+
+## Thank you for your attention
+
+<br> <br>
+
+**Good luck for the next training courses !**
+
+# Code With Me

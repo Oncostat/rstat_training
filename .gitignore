@@ -4,6 +4,7 @@
 .Ruserdata
 
 *_cache*
+_*/
 
 *.html
 !title-slide.html

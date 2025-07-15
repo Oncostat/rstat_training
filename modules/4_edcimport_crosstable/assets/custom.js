@@ -1,21 +1,20 @@
 
 console.log("custom.js")
 
-const $ = (selector) => document.querySelectorAll(selector);
-
-const selectNonNested = function(className) {
-    const cleanClassName = className.startsWith('.') ? className : `.${className}`;
-    return document.querySelectorAll(`${cleanClassName}:not(${cleanClassName} ${cleanClassName})`);
+selectNonNested = function(className) {
+  const $ = (selector) => document.querySelectorAll(selector);
+  const cleanClassName = className.startsWith('.') ? className : `.${className}`;
+  return document.querySelectorAll(`${cleanClassName}:not(${cleanClassName} ${cleanClassName})`);
 }
 
 
-const init = function(event) {
+init = function(event) {
 
   console.log("custom.js -> init")
 
 
   // tous les callouts deviennent des fragments non incrémentaux
-  callouts = $(".callout")
+  callouts = document.querySelectorAll(".callout")
   callouts.forEach(element => {
       element.parentElement.classList.add('fragment', 'nonincremental');
       element.classList.add('nonincremental');
@@ -36,7 +35,7 @@ const init = function(event) {
 
 }
 
-const later = function(event) {
+later = function(event) {
 
   console.log("custom.js -> later")
 
@@ -59,9 +58,10 @@ window.addEventListener("ready", (event) => {
   });
   Reveal.on('slidechanged', (event) => {
     console.log("EVENT: slidechanged")
+    later()//overkill: on lance à chaque changement de slide
   });
 
-  setTimeout(later, 1000); //in ms
+  //setTimeout(later, 1000); //in ms
   init()
 });
 

@@ -86,7 +86,7 @@ crosstable(mtcars2, cols=c(mpg, vs),
 
 ## Exemple compliqué
 
-```{r}
+```{r attr.source="real-fragment-index=0"}
 crosstable(mtcars2, cols=c(starts_with("cy"), ends_with("at")), 
            by=c(am, vs), 
            num_digits=3, 
@@ -98,7 +98,7 @@ crosstable(mtcars2, cols=c(starts_with("cy"), ends_with("at")),
 ```
 
 
-:::{.fragment fragment-index=3 real-fragment-index=3}
+:::{.fragment fragment-index=2 real-fragment-index=2}
 ![](media/boom-mind-blown.gif){.absolute bottom=0 right=0}
 ![](media/boom-mind-blown.gif){.absolute bottom=0 left=0}
 :::
