@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="module_boucles_files/libs/clipboard/clipboard.min.js"></script>
+<script src="module_boucles_files/libs/quarto-html/tabby.min.js"></script>
+<script src="module_boucles_files/libs/quarto-html/popper.min.js"></script>
+<script src="module_boucles_files/libs/quarto-html/tippy.umd.min.js"></script>
+<link href="module_boucles_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="module_boucles_files/libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="module_boucles_files/libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.33">
+
+  <meta name="author" content="Dan Chaltiel">
+  <meta name="keywords" content="r, rstat, training, course, module">
+  <title>Oncostat R - Boucles</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="module_boucles_files/libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="module_boucles_files/libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="module_boucles_files/libs/revealjs/dist/theme/quarto-077ed0fd3b2b6c9aff5defd058debd56.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <link href="module_boucles_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="module_boucles_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="module_boucles_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="module_boucles_files/libs/revealjs/plugin/reveal-frag-off/fragoff.css" rel="stylesheet">
+  <link href="module_boucles_files/libs/revealjs/plugin/reveal-drop/drop-runtime.css" rel="stylesheet">
+  <link href="module_boucles_files/libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <script src="assets/coi-serviceworker.min.js"></script>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="center">
+  <h1 class="title">Équipe ONCOSTAT <br> Modules de cours de R</h1>
+
+  <p class="subtitle">Programmation fonctionnelle</p>
+
+  <p class="author">Dan Chaltiel</p>
+
+  <p class="description">Les boucles et les fonctions</p>
+  <br><br><br>
+  <img src="media/logo_cesp.png">
+  <img src="media/logo_gustaveroussy.png">
+
+</section>
+<section id="plan-du-module" class="slide level2 scrollable">
+<h2>Plan du module</h2>
+<ol type="1">
+<li class="fragment">Les boucles</li>
+<li class="fragment">Les fonctions</li>
+</ol>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>Cette présentation est fortement inspirée de l’excellent site <a href="https://juba.github.io/tidyverse">juba.github.io</a>, en particulier les chapitres <a href="https://juba.github.io/tidyverse/14-fonctions.html">14</a> (fonctions) et <a href="https://juba.github.io/tidyverse/18-purrr.html">18</a> (purrr). Allez voir ce site pour en apprendre encore plus!</p>
+</div>
+</div>
+</div>
+<!-- https://juba.github.io/tidyverse/18-purrr.html -->
+<!-- <https://juba.github.io/tidyverse/14-fonctions.html> -->
+</div>
+</section>
+<section>
+<section id="les-boucles" class="title-slide slide level1 center">
+<h1>Les boucles</h1>
+
+<img data-src="media/boucles.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="cest-quoi-une-boucle" class="slide level2">
+<h2>C’est quoi, une boucle ?</h2>
+<ul>
+<li class="fragment">Répéter le même code sur plusieurs éléments (<a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external" target="_blank">DRY</a>)</li>
+<li class="fragment">Remplacer du copier-coller par une structure générique</li>
+<li class="fragment">Améliore la robustesse (toujours)</li>
+<li class="fragment">Améliore la lisibilité (parfois)</li>
+</ul>
+</section>
+<section id="trois-grandes-façons-en-r" class="slide level2">
+<h2>Trois grandes façons en R</h2>
+<ul>
+<li class="fragment"><strong><code>for</code></strong>
+<ul>
+<li class="fragment">Style impératif, proche des autres langages</li>
+<li class="fragment">Très flexible mais peu lisible, parfois lent</li>
+</ul></li>
+<li class="fragment"><strong><code>sapply()</code></strong>
+<ul>
+<li class="fragment">Style fonctionnel en base R</li>
+<li class="fragment">Simplification automatique des sorties, parfois piégeuse</li>
+</ul></li>
+<li class="fragment"><strong><code>purrr::map()</code></strong>
+<ul>
+<li class="fragment">Style fonctionnel <code>tidyverse</code></li>
+<li class="fragment">Type de sortie explicite</li>
+<li class="fragment">S’intègre naturellement dans les pipes et les workflows modernes</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple-simple-vecteur" class="slide level2 no_fragment">
+<h2>Exemple simple (vecteur)</h2>
+<p>On a un vecteur <em>character</em>, et on veut séparer chaque item en Nom/Prénom</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href=""></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Jeanne Alyse"</span>, <span class="st">"Bertrand Domise"</span>, <span class="st">"XXXX"</span>, <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>On va donc utiliser <code>str_split()</code> (package <code>stringr</code>) dans une boucle.</p>
+</div>
+<div class="fragment">
+<div class="panel-tabset">
+<ul id="tabset-1" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-1-1">for</a></li><li><a href="#tabset-1-2">sapply</a></li><li><a href="#tabset-1-3">purrr</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>res_for <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb2-2"><a href=""></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
+<span id="cb2-3"><a href=""></a>  res_for[[i]] <span class="ot">=</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(x[i], <span class="st">" "</span>)</span>
+<span id="cb2-4"><a href=""></a>}</span>
+<span id="cb2-5"><a href=""></a>res_for</span>
+<span id="cb2-6"><a href=""></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb2-7"><a href=""></a><span class="co">#&gt; [[1]][[1]]</span></span>
+<span id="cb2-8"><a href=""></a><span class="co">#&gt; [1] "Jeanne" "Alyse" </span></span>
+<span id="cb2-9"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb2-10"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb2-11"><a href=""></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb2-12"><a href=""></a><span class="co">#&gt; [[2]][[1]]</span></span>
+<span id="cb2-13"><a href=""></a><span class="co">#&gt; [1] "Bertrand" "Domise"  </span></span>
+<span id="cb2-14"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb2-15"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb2-16"><a href=""></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb2-17"><a href=""></a><span class="co">#&gt; [[3]][[1]]</span></span>
+<span id="cb2-18"><a href=""></a><span class="co">#&gt; [1] "XXXX"</span></span>
+<span id="cb2-19"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb2-20"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb2-21"><a href=""></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb2-22"><a href=""></a><span class="co">#&gt; [[4]][[1]]</span></span>
+<span id="cb2-23"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>res_sapply <span class="ot">=</span> <span class="fu">sapply</span>(x, <span class="cf">function</span>(s) stringr<span class="sc">::</span><span class="fu">str_split</span>(s, <span class="st">" "</span>))</span>
+<span id="cb3-2"><a href=""></a>res_sapply</span>
+<span id="cb3-3"><a href=""></a><span class="co">#&gt; $`Jeanne Alyse`</span></span>
+<span id="cb3-4"><a href=""></a><span class="co">#&gt; [1] "Jeanne" "Alyse" </span></span>
+<span id="cb3-5"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb3-6"><a href=""></a><span class="co">#&gt; $`Bertrand Domise`</span></span>
+<span id="cb3-7"><a href=""></a><span class="co">#&gt; [1] "Bertrand" "Domise"  </span></span>
+<span id="cb3-8"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb3-9"><a href=""></a><span class="co">#&gt; $XXXX</span></span>
+<span id="cb3-10"><a href=""></a><span class="co">#&gt; [1] "XXXX"</span></span>
+<span id="cb3-11"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb3-12"><a href=""></a><span class="co">#&gt; $&lt;NA&gt;</span></span>
+<span id="cb3-13"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-3">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>res_purrr <span class="ot">=</span> x <span class="sc">%&gt;%</span> purrr<span class="sc">::</span><span class="fu">map</span>(<span class="sc">~</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(.x, <span class="st">" "</span>))</span>
+<span id="cb4-2"><a href=""></a>res_purrr</span>
+<span id="cb4-3"><a href=""></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb4-4"><a href=""></a><span class="co">#&gt; [[1]][[1]]</span></span>
+<span id="cb4-5"><a href=""></a><span class="co">#&gt; [1] "Jeanne" "Alyse" </span></span>
+<span id="cb4-6"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb4-7"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb4-8"><a href=""></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb4-9"><a href=""></a><span class="co">#&gt; [[2]][[1]]</span></span>
+<span id="cb4-10"><a href=""></a><span class="co">#&gt; [1] "Bertrand" "Domise"  </span></span>
+<span id="cb4-11"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb4-12"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb4-13"><a href=""></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb4-14"><a href=""></a><span class="co">#&gt; [[3]][[1]]</span></span>
+<span id="cb4-15"><a href=""></a><span class="co">#&gt; [1] "XXXX"</span></span>
+<span id="cb4-16"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb4-17"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb4-18"><a href=""></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb4-19"><a href=""></a><span class="co">#&gt; [[4]][[1]]</span></span>
+<span id="cb4-20"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="pour-ou-contre-les-boucles-for" class="slide level2">
+<h2>Pour ou contre: les boucles <code>for</code></h2>
+<p>👎 Contre :</p>
+<ul>
+<li class="fragment">Beaucoup de code pour pas grand chose (<code>5</code> lignes vs <code>2</code>)</li>
+<li class="fragment">Plus ou moins lisible selon la complexité</li>
+<li class="fragment">Ne s’applique pas en pipeline</li>
+<li class="fragment">Déclaration manuelle de l’objet final (souvent mal optimisé)</li>
+<li class="fragment">Programmation non-fonctionnelle → Effets de bords !</li>
+</ul>
+<div class="fragment">
+<p>👍 Pour :</p>
+<ul>
+<li class="fragment">Très flexible</li>
+<li class="fragment">Effets de bords ?</li>
+</ul>
+</div>
+</section>
+<section id="exemple-de-boucle-for-maléfique" class="slide level2">
+<h2>Exemple de boucle <code>for</code> <em>maléfique</em></h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>res_for <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb5-2"><a href=""></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
+<span id="cb5-3"><a href=""></a>  x <span class="ot">=</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(x[i], <span class="st">" "</span>) <span class="co">#variable temporaire</span></span>
+<span id="cb5-4"><a href=""></a>  res_for[i] <span class="ot">=</span> x</span>
+<span id="cb5-5"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>res_for</span>
+<span id="cb6-2"><a href=""></a><span class="co">#&gt; [[1]]</span></span>
+<span id="cb6-3"><a href=""></a><span class="co">#&gt; [1] "Jeanne" "Alyse" </span></span>
+<span id="cb6-4"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href=""></a><span class="co">#&gt; [[2]]</span></span>
+<span id="cb6-6"><a href=""></a><span class="co">#&gt; [1] "NULL"</span></span>
+<span id="cb6-7"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb6-8"><a href=""></a><span class="co">#&gt; [[3]]</span></span>
+<span id="cb6-9"><a href=""></a><span class="co">#&gt; [1] "NULL"</span></span>
+<span id="cb6-10"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href=""></a><span class="co">#&gt; [[4]]</span></span>
+<span id="cb6-12"><a href=""></a><span class="co">#&gt; [1] "NULL"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p>La ligne <code>x = str_split(...)</code> a eu un effet de bord, c’est à dire un effet hors de sa zone, et ça a écrasé notre vecteur d’origine 😱😭</p>
+</div>
+<div class="fragment">
+<p>Dans une très grande boucle <code>for</code>, ce genre de conflit de noms peut arriver !</p>
+</div>
+</section>
+<section id="pour-ou-contre-sapply" class="slide level2">
+<h2>Pour ou contre: <code>sapply()</code></h2>
+<p>Maintenant, on veut appliquer <code>table()</code> à chaque colonne d’une dataframe :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(crosstable)</span>
+<span id="cb7-2"><a href=""></a>x <span class="ot">=</span> mtcars2 <span class="sc">%&gt;%</span> <span class="fu">select</span>(am, vs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">sapply</span>(x, table)</span>
+<span id="cb8-2"><a href=""></a><span class="co">#&gt;        am vs</span></span>
+<span id="cb8-3"><a href=""></a><span class="co">#&gt; auto   19 14</span></span>
+<span id="cb8-4"><a href=""></a><span class="co">#&gt; manual 13 18</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">map</span>(x, table)</span>
+<span id="cb9-2"><a href=""></a><span class="co">#&gt; $am</span></span>
+<span id="cb9-3"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb9-4"><a href=""></a><span class="co">#&gt;   auto manual </span></span>
+<span id="cb9-5"><a href=""></a><span class="co">#&gt;     19     13 </span></span>
+<span id="cb9-6"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb9-7"><a href=""></a><span class="co">#&gt; $vs</span></span>
+<span id="cb9-8"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb9-9"><a href=""></a><span class="co">#&gt; straight  vshaped </span></span>
+<span id="cb9-10"><a href=""></a><span class="co">#&gt;       14       18</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p>Par défaut, <code>sapply()</code> simplifie <strong>implicitement</strong> l’output en vecteur ou en matrice. Comme ici, ça peut donner lieu à des étrangetés.</p>
+<aside class="notes">
+<p>Si l’input change de façon inattendue, ça peut causer des bugs.<br>
+Par exemple, certaines fonctions ne retournent pas la même chose selon la taille de l’output: vecteur si taille 1 mais matrice si taille &gt;1, ou encore une liste de listes…</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="purrr-à-la-rescousse" class="slide level2">
+<h2><code>purrr</code> à la rescousse!</h2>
+<p>À l’opposé, les fonctions de <code>purrr</code> assurent à 100% le type de l’output:</p>
+<ul>
+<li class="fragment"><code>map()</code> retourne une liste</li>
+<li class="fragment"><code>map_chr()</code> retourne un vecteur <code>character</code></li>
+<li class="fragment"><code>map_dbl()</code> retourne un vecteur <code>numeric</code> (double)</li>
+<li class="fragment"><code>map_lgl()</code> retourne un vecteur <code>logical</code></li>
+</ul>
+<div class="fragment">
+<p>Ça donne aussi accès à la syntaxe “lambda-function” : argument par défaut = <code>.x</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>mon_vecteur <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<span id="cb10-2"><a href=""></a><span class="fu">map_dbl</span>(mon_vecteur, <span class="sc">~</span>.x<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb10-3"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span>
+<span id="cb10-4"><a href=""></a><span class="fu">map_dbl</span>(mon_vecteur, <span class="cf">function</span>(x) x<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb10-5"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span>
+<span id="cb10-6"><a href=""></a><span class="fu">map_dbl</span>(mon_vecteur, \(x) x<span class="sc">+</span><span class="dv">1</span>)  <span class="co">#depuis R 4.1</span></span>
+<span id="cb10-7"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>mon_vecteur<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb11-2"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<aside class="notes">
+<p>On aurait évidemment aussi pu écrire simplement `mon_vecteur+1`, on aurait même gagné plusieurs nano-secondes (mais que faire de tout ce temps ?), mais je voulais montrer une boucle.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</div>
+</section>
+<section id="quand-utiliser-des-boucles" class="slide level2">
+<h2>Quand utiliser des boucles ?</h2>
+<div class="fragment">
+<p>Sur des fonctions vectorisées, on n’utilise pas de boucles :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>textes <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"fantastique"</span>, <span class="st">"effectivement"</span>, <span class="st">"igloo"</span>)</span>
+<span id="cb12-2"><a href=""></a><span class="fu">str_count</span>(textes, <span class="st">"f"</span>)</span>
+<span id="cb12-3"><a href=""></a><span class="co">#&gt; [1] 1 2 0</span></span>
+<span id="cb12-4"><a href=""></a><span class="fu">map_int</span>(textes, <span class="sc">~</span> <span class="fu">str_count</span>(.x, <span class="st">"f"</span>)) <span class="co">#moins lisible + moins rapide</span></span>
+<span id="cb12-5"><a href=""></a><span class="co">#&gt; [1] 1 2 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p>On l’utilise sur les fonctions non vectorisées :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>fichiers <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"fichier1.csv"</span>, <span class="st">"fichier2.csv"</span>)</span>
+<span id="cb13-2"><a href=""></a>l <span class="ot">=</span> fichiers <span class="sc">%&gt;%</span> <span class="fu">map</span>(read.csv2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p>Dans <code>str_count()</code>, l’argument <code>pattern</code> n’est pas vectorisé :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">c</span>(<span class="at">a =</span> <span class="st">"a"</span>, <span class="at">e =</span> <span class="st">"e"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href=""></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">str_count</span>(textes, <span class="at">pattern =</span> .x))</span>
+<span id="cb14-3"><a href=""></a><span class="co">#&gt; $a</span></span>
+<span id="cb14-4"><a href=""></a><span class="co">#&gt; [1] 2 0 0</span></span>
+<span id="cb14-5"><a href=""></a><span class="co">#&gt; </span></span>
+<span id="cb14-6"><a href=""></a><span class="co">#&gt; $e</span></span>
+<span id="cb14-7"><a href=""></a><span class="co">#&gt; [1] 1 4 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="oui-mais-et-les-noms" class="slide level2">
+<h2>Oui mais, et les noms ?</h2>
+<p>Un des “avantages” de <code>sapply()</code>, c’est que les noms sont automatiques :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Jeanne Alyse"</span>, <span class="st">"Bertrand Domise"</span>, <span class="st">"XXXX"</span>, <span class="cn">NA</span>)</span>
+<span id="cb15-2"><a href=""></a>get_prenom <span class="ot">=</span> <span class="cf">function</span>(s) stringr<span class="sc">::</span><span class="fu">str_split</span>(s, <span class="st">" "</span>)[[<span class="dv">1</span>]][<span class="dv">1</span>]</span>
+<span id="cb15-3"><a href=""></a><span class="fu">sapply</span>(x, get_prenom) </span>
+<span id="cb15-4"><a href=""></a><span class="co">#&gt;    Jeanne Alyse Bertrand Domise            XXXX            &lt;NA&gt; </span></span>
+<span id="cb15-5"><a href=""></a><span class="co">#&gt;        "Jeanne"      "Bertrand"          "XXXX"              NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>Ca peut poser un problème en cas de noms très longs, donc <code>map()</code> ne prend que les noms explicites :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>x2 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"JA"</span><span class="ot">=</span><span class="st">"Jeanne Alyse"</span>, <span class="at">BD=</span><span class="st">"Bertrand Domise"</span>, <span class="at">XX=</span><span class="st">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"</span>, <span class="at">KO=</span><span class="cn">NA</span>)</span>
+<span id="cb16-2"><a href=""></a><span class="fu">map_chr</span>(x2, get_prenom) </span>
+<span id="cb16-3"><a href=""></a><span class="co">#&gt;         JA         BD         XX         KO </span></span>
+<span id="cb16-4"><a href=""></a><span class="co">#&gt;   "Jeanne" "Bertrand"    "Lorem"         NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Pro tip:</strong></p>
+</div>
+<div class="callout-content">
+<p>La fonction <code>set_names()</code> assigne à un objet des noms basés sur ses propres valeurs.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>x <span class="sc">%&gt;%</span> <span class="fu">set_names</span>()</span>
+<span id="cb17-2"><a href=""></a><span class="co">#&gt;      Jeanne Alyse   Bertrand Domise              XXXX              &lt;NA&gt; </span></span>
+<span id="cb17-3"><a href=""></a><span class="co">#&gt;    "Jeanne Alyse" "Bertrand Domise"            "XXXX"                NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="dailleurs-cest-cool-les-noms-non" class="slide level2">
+<h2>D’ailleurs, c’est cool les noms, non ?</h2>
+<p>La fonction <code>imap()</code> permet de boucler sur un vecteur (<code>.x</code>) et ses noms (<code>.y</code>) en même temps.</p>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>mtcars <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href=""></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb18-3"><a href=""></a>  <span class="fu">imap_chr</span>(<span class="sc">~</span>{</span>
+<span id="cb18-4"><a href=""></a>    <span class="fu">paste</span>(.y, <span class="st">":"</span>, <span class="fu">n_distinct</span>(.x), <span class="st">"valeurs distinctes"</span>)</span>
+<span id="cb18-5"><a href=""></a>  })</span>
+<span id="cb18-6"><a href=""></a><span class="co">#&gt;                            mpg                            cyl                           disp </span></span>
+<span id="cb18-7"><a href=""></a><span class="co">#&gt;  "mpg : 25 valeurs distinctes"   "cyl : 3 valeurs distinctes" "disp : 27 valeurs distinctes"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>Notez que boucler sur une dataframe permet d’itérer sur les colonnes en conservant les noms.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="parallélisation" class="slide level2">
+<h2>Parallélisation</h2>
+<p>A partir de <code>purrr</code> v1.1.0, on peut utiliser <a href="https://purrr.tidyverse.org/reference/in_parallel.html"><code>in_parallel()</code></a> pour paralléliser nos fonctions.</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">library</span>(tictoc)</span>
+<span id="cb19-2"><a href=""></a>very_long_addition <span class="ot">=</span> <span class="cf">function</span>(x, y){</span>
+<span id="cb19-3"><a href=""></a>  <span class="fu">Sys.sleep</span>(<span class="fl">0.1</span>) <span class="co">#on attend 0.1 sec</span></span>
+<span id="cb19-4"><a href=""></a>  x<span class="sc">+</span>y</span>
+<span id="cb19-5"><a href=""></a>}</span>
+<span id="cb19-6"><a href=""></a></span>
+<span id="cb19-7"><a href=""></a><span class="fu">tic</span>(<span class="st">"Sans parallelisation"</span>)</span>
+<span id="cb19-8"><a href=""></a>a <span class="ot">=</span> <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="sc">~</span> <span class="fu">very_long_addition</span>(.x, <span class="dv">1</span>))</span>
+<span id="cb19-9"><a href=""></a><span class="fu">toc</span>()</span>
+<span id="cb19-10"><a href=""></a><span class="co">#&gt; Sans parallelisation: 2.19 sec elapsed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">tic</span>(<span class="st">"Avec parallelisation"</span>)</span>
+<span id="cb20-2"><a href=""></a>mirai<span class="sc">::</span><span class="fu">daemons</span>(<span class="dv">4</span>) <span class="co">#on utilise 4 coeurs</span></span>
+<span id="cb20-3"><a href=""></a></span>
+<span id="cb20-4"><a href=""></a>crate <span class="ot">=</span> <span class="fu">in_parallel</span>(</span>
+<span id="cb20-5"><a href=""></a>  <span class="sc">~</span> <span class="fu">very_long_addition</span>(.x, <span class="dv">1</span>), </span>
+<span id="cb20-6"><a href=""></a>  <span class="at">very_long_addition=</span>very_long_addition</span>
+<span id="cb20-7"><a href=""></a>)</span>
+<span id="cb20-8"><a href=""></a></span>
+<span id="cb20-9"><a href=""></a>b <span class="ot">=</span> <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, crate)</span>
+<span id="cb20-10"><a href=""></a></span>
+<span id="cb20-11"><a href=""></a>mirai<span class="sc">::</span><span class="fu">daemons</span>(<span class="dv">0</span>)</span>
+<span id="cb20-12"><a href=""></a><span class="fu">toc</span>()</span>
+<span id="cb20-13"><a href=""></a><span class="co">#&gt; Avec parallelisation: 1.25 sec elapsed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div></div>
+<div class="fragment">
+<p>Ici, on double presque notre vitesse, et ce serait encore plus impressionnant sur plus d’itérations ou une fonction plus longue !</p>
+</div>
+</section></section>
+<section>
+<section id="les-fonctions" class="title-slide slide level1 center">
+<h1>Les fonctions</h1>
+
+<img data-src="media/slap.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="principe" class="slide level2" style="overflow: hidden;">
+<h2>Principe</h2>
+<blockquote>
+<p>“En R, tout ce qui existe est un objet, et tout ce qui se passe est une fonction.”<br>
+John Chambers</p>
+</blockquote>
+<div class="fragment">
+<p>Une fonction prend des arguments, les transforme, et retourne un résultat :</p>
+</div>
+<div class="fragment">
+<div class="panel-tabset">
+<ul id="tabset-2" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-2-1">Function</a></li><li><a href="#tabset-2-2">Simpler</a></li><li><a href="#tabset-2-3">One-line</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<span id="cb21-2"><a href=""></a>  x1 <span class="ot">=</span> <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb21-3"><a href=""></a>  x2 <span class="ot">=</span> <span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb21-4"><a href=""></a>  rslt <span class="ot">=</span> x1<span class="sc">/</span>x2</span>
+<span id="cb21-5"><a href=""></a>  <span class="fu">return</span>(rslt)</span>
+<span id="cb21-6"><a href=""></a>}</span>
+<span id="cb21-7"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb21-8"><a href=""></a><span class="co">#&gt; [1] 330.0691</span></span>
+<span id="cb21-9"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.6</span>)</span>
+<span id="cb21-10"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<span id="cb22-2"><a href=""></a>  x1 <span class="ot">=</span> <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb22-3"><a href=""></a>  x2 <span class="ot">=</span> <span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb22-4"><a href=""></a>  x1<span class="sc">/</span>x2</span>
+<span id="cb22-5"><a href=""></a>}</span>
+<span id="cb22-6"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb22-7"><a href=""></a><span class="co">#&gt; [1] 330.0691</span></span>
+<span id="cb22-8"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.6</span>)</span>
+<span id="cb22-9"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Par défaut, la dernière ligne vaut <code>return()</code> donc on peut simplifier.</p>
+</div>
+<div id="tabset-2-3">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<span id="cb23-2"><a href=""></a>  <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb23-3"><a href=""></a>}</span>
+<span id="cb23-4"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb23-5"><a href=""></a><span class="co">#&gt; [1] 330.0691</span></span>
+<span id="cb23-6"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.6</span>)</span>
+<span id="cb23-7"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>On peut toujours faire encore plus court, mais essayez de privilégier la lisibilité !</p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-note callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Note</strong></p>
+</div>
+<div class="callout-content">
+<p>Une fonction dont le résultat ne dépend que de ses arguments est appelée une “fonction pure”.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="dry-dont-repeat-yourself" class="slide level2">
+<h2>DRY: <em>Don’t repeat yourself</em></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="media/dry.webp" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment"><p>Règle générale de programmation</p></li>
+<li class="fragment"><p>Au 3ème copié-collé d’un même bout de code, on se force à faire une fonction !</p></li>
+<li class="fragment"><p>On lui donne un nom <strong>explicite</strong>.</p></li>
+<li class="fragment"><p>Ça améliore la lisibilité, la maintenabilité, et la robustesse du code.</p></li>
+</ul>
+</div></div>
+</section>
+<section id="bonnes-pratiques" class="slide level2 scrollable">
+<h2>Bonnes pratiques</h2>
+<p>Comparons deux fonctions :</p>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>a <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb24-2"><a href=""></a>very_bad_function <span class="ot">=</span> <span class="cf">function</span>(x){</span>
+<span id="cb24-3"><a href=""></a>  x <span class="sc">+</span> a <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb24-4"><a href=""></a>}</span>
+<span id="cb24-5"><a href=""></a><span class="fu">very_bad_function</span>(<span class="at">x=</span><span class="dv">1</span>)</span>
+<span id="cb24-6"><a href=""></a><span class="co">#&gt; [1] 2.235631</span></span>
+<span id="cb24-7"><a href=""></a>a<span class="ot">=</span><span class="dv">100</span></span>
+<span id="cb24-8"><a href=""></a><span class="fu">very_bad_function</span>(<span class="at">x=</span><span class="dv">1</span>)</span>
+<span id="cb24-9"><a href=""></a><span class="co">#&gt; [1] 100.8557</span></span>
+<span id="cb24-10"><a href=""></a><span class="fu">very_bad_function</span>(<span class="at">x=</span><span class="dv">1</span>)</span>
+<span id="cb24-11"><a href=""></a><span class="co">#&gt; [1] 98.88467</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div><div class="column fragment" style="width:50%;">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>add_with_noise <span class="ot">=</span> <span class="cf">function</span>(x, y, <span class="at">seed=</span><span class="dv">1234</span>){</span>
+<span id="cb25-2"><a href=""></a>  <span class="fu">set.seed</span>(seed)</span>
+<span id="cb25-3"><a href=""></a>  x <span class="sc">+</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb25-4"><a href=""></a>}</span>
+<span id="cb25-5"><a href=""></a><span class="fu">add_with_noise</span>(<span class="at">x=</span><span class="dv">1</span>, <span class="at">y=</span><span class="dv">1</span>)</span>
+<span id="cb25-6"><a href=""></a><span class="co">#&gt; [1] 0.7929343</span></span>
+<span id="cb25-7"><a href=""></a><span class="fu">add_with_noise</span>(<span class="at">x=</span><span class="dv">1</span>, <span class="at">y=</span><span class="dv">100</span>)</span>
+<span id="cb25-8"><a href=""></a><span class="co">#&gt; [1] 99.79293</span></span>
+<span id="cb25-9"><a href=""></a><span class="fu">add_with_noise</span>(<span class="at">x=</span><span class="dv">1</span>, <span class="at">y=</span><span class="dv">100</span>)</span>
+<span id="cb25-10"><a href=""></a><span class="co">#&gt; [1] 99.79293</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div></div>
+<div class="fragment">
+<p>Pourquoi la fonction de gauche est fort vilaine ?</p>
+<ol type="1">
+<li class="fragment">Elle utilise une variable globale, <code>a</code>, qui peut changer / ne pas exister</li>
+<li class="fragment">Elle n’est pas déterministe / reproductible</li>
+<li class="fragment">Elle a un nom qui ne donne aucune information</li>
+</ol>
+</div>
+</section>
+<section id="wrappers" class="slide level2">
+<h2><em>Wrappers</em></h2>
+<p>Un <em>wrapper</em> est une fonction courte qui vise à “réécrire” une fonction connue pour l’appliquer à un cas particulier.</p>
+<p>Exemple de <code>EDCimport::fct_yesno()</code> :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>fct_yesno <span class="ot">=</span> <span class="cf">function</span>(x){</span>
+<span id="cb26-2"><a href=""></a>  x <span class="ot">=</span> <span class="fu">as.character</span>(x)</span>
+<span id="cb26-3"><a href=""></a>  <span class="fu">fct_recode</span>(x, <span class="st">"Yes"</span> <span class="ot">=</span> <span class="st">"1"</span>, <span class="st">"No"</span> <span class="ot">=</span> <span class="st">"0"</span>)</span>
+<span id="cb26-4"><a href=""></a>}</span>
+<span id="cb26-5"><a href=""></a>input <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
+<span id="cb26-6"><a href=""></a><span class="fu">fct_yesno</span>(input)</span>
+<span id="cb26-7"><a href=""></a><span class="co">#&gt; [1] No  Yes No  No </span></span>
+<span id="cb26-8"><a href=""></a><span class="co">#&gt; Levels: No Yes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div title="Tip">
+<div class="callout callout-tip callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Tip</strong></p>
+</div>
+<div class="callout-content">
+<p>La vraie fonction dans <code>EDCimport</code> est bien plus utile, elle gère les <code>0/1</code>, les <code>TRUE/FALSE</code>, mais aussi les <code>Yes/No</code> encodés, par exemple <code>1-Yes/2-No</code> ou encore les <code>Oui/Non</code>.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="lellipsis-..." class="slide level2">
+<h2>L’ellipsis <code>...</code></h2>
+<p>L’ellipsis (<code>...</code>) s’utilise quand on ne sait pas de combien d’arguments on a besoin.<br>
+C’est le cas par exemple avec <code>dplyr::select()</code>.</p>
+<div class="fragment">
+<p>C’est surtout utile avec les wrappers pour passer des arguments :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>moyenne <span class="ot">=</span> <span class="cf">function</span>(v, ...){</span>
+<span id="cb27-2"><a href=""></a>  <span class="fu">mean</span>(v, ...) <span class="co">#on passe ... à mean()</span></span>
+<span id="cb27-3"><a href=""></a>}</span>
+<span id="cb27-4"><a href=""></a>a <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="cn">NA</span>)</span>
+<span id="cb27-5"><a href=""></a><span class="fu">moyenne</span>(a, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb27-6"><a href=""></a><span class="co">#&gt; [1] 5.5</span></span>
+<span id="cb27-7"><a href=""></a><span class="fu">moyenne</span>(a, <span class="at">na.rm=</span><span class="cn">FALSE</span>)</span>
+<span id="cb27-8"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="fragment">
+<p>On en a rarement besoin directement, mais on l’utilise avec <code>c(...)</code> ou <code>list(...)</code> :</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>f <span class="ot">=</span> <span class="cf">function</span>(...){</span>
+<span id="cb28-2"><a href=""></a>  x <span class="ot">=</span> <span class="fu">c</span>(...)</span>
+<span id="cb28-3"><a href=""></a>  <span class="fu">paste</span>(<span class="fu">names</span>(x), x, <span class="at">sep=</span><span class="st">":"</span>, <span class="at">collapse=</span><span class="st">" -- "</span>)</span>
+<span id="cb28-4"><a href=""></a>}</span>
+<span id="cb28-5"><a href=""></a><span class="fu">f</span>(<span class="at">a=</span><span class="st">"A"</span>, <span class="at">b=</span><span class="st">"B"</span>, <span class="at">c=</span><span class="st">"C"</span>)</span>
+<span id="cb28-6"><a href=""></a><span class="co">#&gt; [1] "a:A -- b:B -- c:C"</span></span>
+<span id="cb28-7"><a href=""></a><span class="fu">f</span>(<span class="at">alpha=</span><span class="fl">0.95</span>, <span class="at">power=</span><span class="fl">0.90</span>, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">type=</span><span class="st">"Schoenfeld"</span>)</span>
+<span id="cb28-8"><a href=""></a><span class="co">#&gt; [1] "alpha:0.95 -- power:0.9 -- na.rm:TRUE -- type:Schoenfeld"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="appel-par-ordre-vs-appel-par-nom" class="slide level2">
+<h2>Appel par ordre <em>vs</em> Appel par nom</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>moyenne <span class="ot">=</span> <span class="cf">function</span>(x, <span class="at">remove_missing=</span><span class="cn">TRUE</span>){</span>
+<span id="cb29-2"><a href=""></a>  <span class="fu">mean</span>(x, <span class="at">na.rm=</span>remove_missing)</span>
+<span id="cb29-3"><a href=""></a>}</span>
+<span id="cb29-4"><a href=""></a>a <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="cn">NA</span>)</span>
+<span id="cb29-5"><a href=""></a><span class="fu">moyenne</span>(a, <span class="cn">TRUE</span>)</span>
+<span id="cb29-6"><a href=""></a><span class="co">#&gt; [1] 5.5</span></span>
+<span id="cb29-7"><a href=""></a><span class="fu">moyenne</span>(<span class="at">x=</span>a, <span class="at">remove_missing=</span><span class="cn">TRUE</span>)</span>
+<span id="cb29-8"><a href=""></a><span class="co">#&gt; [1] 5.5</span></span>
+<span id="cb29-9"><a href=""></a><span class="fu">moyenne</span>(<span class="at">x=</span>a, <span class="at">remove_missing=</span><span class="cn">FALSE</span>)</span>
+<span id="cb29-10"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>En général, on n’appelle pas le 1er argument par nom car peu informatif.</p>
+</div>
+<div class="fragment">
+<p>Certaines fonctions obligent à appeler par nom certains arguments.</p>
+</div>
+<div class="fragment">
+<p>Notez la valeur par défaut de <code>remove_missing</code> qui permet d’écrire simplement:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">moyenne</span>(a)</span>
+<span id="cb30-2"><a href=""></a><span class="co">#&gt; [1] 5.5</span></span>
+<span id="cb30-3"><a href=""></a><span class="fu">mean</span>(a)</span>
+<span id="cb30-4"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</section>
+<section id="erreurs-et-warnings" class="slide level2">
+<h2>Erreurs et warnings</h2>
+<p>Contrairement à SAS, les erreurs R sont <strong>bloquantes</strong> et arrêtent le script : c’est le signe d’un problème majeur qu’il faut corriger.<br>
+Les warnings ne sont pas bloquants.</p>
+<div class="fragment">
+<p>On les émet avec <code>stop()</code> et <code>warning()</code> (base <code>R</code>) ou <code>cli_abort()</code>et <code>cli_warn()</code> (package <code>cli</code>).</p>
+</div>
+<div class="fragment">
+<div class="panel-tabset">
+<ul id="tabset-3" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-3-1">R base</a></li><li><a href="#tabset-3-2">cli</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>n_events_schoenfeld  <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<span id="cb31-2"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&lt;</span><span class="dv">0</span>) <span class="fu">stop</span>(<span class="st">"`za` doit être positif!"</span>)</span>
+<span id="cb31-3"><a href=""></a>  <span class="cf">if</span>(zb<span class="sc">&lt;</span><span class="dv">0</span>) <span class="fu">stop</span>(<span class="st">"`zb` doit être positif!"</span>)</span>
+<span id="cb31-4"><a href=""></a>  <span class="cf">if</span>(hr<span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">||</span> hr<span class="sc">&gt;</span><span class="dv">1</span>) <span class="fu">stop</span>(<span class="st">"`hr` doit être compris entre 0 et 1!"</span>)</span>
+<span id="cb31-5"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&gt;</span><span class="dv">10</span>) <span class="fu">warning</span>(<span class="st">"`za` est vraiment très grand, t'es sûr de toi ?"</span>)</span>
+<span id="cb31-6"><a href=""></a>  <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb31-7"><a href=""></a>}</span>
+<span id="cb31-8"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="sc">-</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb31-9"><a href=""></a><span class="co">#&gt; Error in n_events_schoenfeld(za = -1.96, zb = 1.28, hr = 0.7): `za` doit être positif!</span></span>
+<span id="cb31-10"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">19.6</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb31-11"><a href=""></a><span class="co">#&gt; Warning in n_events_schoenfeld(za = 19.6, zb = 1.28, hr = 0.7): `za` est vraiment très grand, t'es</span></span>
+<span id="cb31-12"><a href=""></a><span class="co">#&gt; sûr de toi ?</span></span>
+<span id="cb31-13"><a href=""></a><span class="co">#&gt; [1] 13708.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-3-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">library</span>(cli)</span>
+<span id="cb32-2"><a href=""></a>n_events_schoenfeld  <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<span id="cb32-3"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&lt;</span><span class="dv">0</span>) <span class="fu">cli_abort</span>(<span class="st">"{.arg za} doit être positif, il vaut {.val {za}}!"</span>)</span>
+<span id="cb32-4"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&gt;</span><span class="dv">10</span>) <span class="fu">cli_warn</span>(<span class="st">"{.arg za} est vraiment très grand ({.val {za}}), t'es sûr de toi ?"</span>)</span>
+<span id="cb32-5"><a href=""></a>  <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb32-6"><a href=""></a>}</span>
+<span id="cb32-7"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="sc">-</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb32-8"><a href=""></a><span class="co">#&gt; Error in `n_events_schoenfeld()`:</span></span>
+<span id="cb32-9"><a href=""></a><span class="co">#&gt; ! `za` doit être positif, il vaut -1.96!</span></span>
+<span id="cb32-10"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">19.6</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb32-11"><a href=""></a><span class="co">#&gt; Warning: `za` est vraiment très grand (19.6), t'es sûr de toi ?</span></span>
+<span id="cb32-12"><a href=""></a><span class="co">#&gt; [1] 13708.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="side-effects" class="slide level2">
+<h2>Side-effects</h2>
+<p>Certaines fonctions ont une action concrete, par exemple <code>print()</code> ou <code>write.csv()</code>.</p>
+<p>On appelle ça des “effets de bord”.</p>
+<p>On a rarement besoin d’en écrire nous-même.</p>
+</section>
+<section id="exemple-final-simulation" class="slide level2">
+<h2>Exemple final: simulation</h2>
+<p>On va prendre un exemple un peu compliqué pour revoir tout ce qu’on a appris !</p>
+<div class="panel-tabset">
+<ul id="tabset-4" class="panel-tabset-tabby"><li><a data-tabby-default="" href="#tabset-4-1"><code>simulate_lm</code></a></li><li><a href="#tabset-4-2"><code>run_simulations</code></a></li><li><a href="#tabset-4-3"><code>show_results</code></a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>simulate_lm <span class="ot">=</span> <span class="cf">function</span>(n, <span class="at">beta=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">seed=</span><span class="cn">NULL</span>){</span>
+<span id="cb33-2"><a href=""></a>  <span class="fu">set.seed</span>(seed)</span>
+<span id="cb33-3"><a href=""></a>  data <span class="ot">=</span> <span class="fu">tibble</span>(</span>
+<span id="cb33-4"><a href=""></a>    <span class="at">x =</span> <span class="fu">rnorm</span>(n),</span>
+<span id="cb33-5"><a href=""></a>    <span class="at">y =</span> beta <span class="sc">*</span> x <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="at">sd=</span>sd)</span>
+<span id="cb33-6"><a href=""></a>  )</span>
+<span id="cb33-7"><a href=""></a>  </span>
+<span id="cb33-8"><a href=""></a>  <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> data) <span class="sc">%&gt;%</span> </span>
+<span id="cb33-9"><a href=""></a>    broom<span class="sc">::</span><span class="fu">tidy</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb33-10"><a href=""></a>    <span class="fu">filter</span>(term<span class="sc">==</span><span class="st">"x"</span>) <span class="sc">%&gt;%</span> <span class="co">#on enlève l'intercept</span></span>
+<span id="cb33-11"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">args_beta=</span>beta, <span class="at">args_sd=</span>sd)</span>
+<span id="cb33-12"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell fragment">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">simulate_lm</span>(<span class="at">n=</span><span class="dv">10000</span>, <span class="at">beta=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb34-2"><a href=""></a><span class="co">#&gt;   term estimate   std.error statistic p.value args_beta args_sd</span></span>
+<span id="cb34-3"><a href=""></a><span class="co">#&gt; 1    x 1.002794 0.009959544  100.6867       0         1       1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<div class="callout callout-warning callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Warning</strong></p>
+</div>
+<div class="callout-content">
+<p>Attention <code>set.seed(NULL)</code> dans une fonction est parfois déconseillé, je ne suis pas expert !</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-4-2">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>run_simulations <span class="ot">=</span> <span class="cf">function</span>(N, n, <span class="at">beta =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>){</span>
+<span id="cb35-2"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">seed =</span> <span class="fu">seq_len</span>(N)) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">res =</span> <span class="fu">map</span>(seed, <span class="sc">~</span><span class="fu">simulate_lm</span>(<span class="at">n=</span>n, <span class="at">beta=</span>beta, <span class="at">sd=</span>sd, <span class="at">seed=</span>.x)))</span>
+<span id="cb35-4"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br></p>
+<div class="cell fragment">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">10</span>, <span class="at">n=</span><span class="dv">10</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">2</span>)</span>
+<span id="cb36-2"><a href=""></a><span class="co">#&gt; # A tibble: 2 × 2</span></span>
+<span id="cb36-3"><a href=""></a><span class="co">#&gt;    seed res             </span></span>
+<span id="cb36-4"><a href=""></a><span class="co">#&gt;   &lt;int&gt; &lt;list&gt;          </span></span>
+<span id="cb36-5"><a href=""></a><span class="co">#&gt; 1     1 &lt;tibble [1 × 7]&gt;</span></span>
+<span id="cb36-6"><a href=""></a><span class="co">#&gt; 2     2 &lt;tibble [1 × 7]&gt;</span></span>
+<span id="cb36-7"><a href=""></a></span>
+<span id="cb36-8"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">10</span>, <span class="at">n=</span><span class="dv">10</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">unnest</span>(res) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">2</span>)</span>
+<span id="cb36-9"><a href=""></a><span class="co">#&gt; # A tibble: 2 × 8</span></span>
+<span id="cb36-10"><a href=""></a><span class="co">#&gt;    seed term  estimate std.error statistic p.value args_beta args_sd</span></span>
+<span id="cb36-11"><a href=""></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb36-12"><a href=""></a><span class="co">#&gt; 1     1 x       -0.516     0.449    -1.15    0.283         0       1</span></span>
+<span id="cb36-13"><a href=""></a><span class="co">#&gt; 2     2 x        0.240     0.415     0.577   0.580         0       1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-4-3">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>show_results <span class="ot">=</span> <span class="cf">function</span>(sim){</span>
+<span id="cb37-2"><a href=""></a>  sim <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a href=""></a>    <span class="fu">unnest</span>(res) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-4"><a href=""></a>    <span class="fu">summarise</span>(<span class="at">avg_beta =</span> <span class="fu">mean</span>(estimate)) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-5"><a href=""></a>    <span class="fu">pull</span>(avg_beta)</span>
+<span id="cb37-6"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><br></p>
+<div class="cell fragment">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">10</span>, <span class="at">n=</span><span class="dv">10</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">show_results</span>()   <span class="co">#peu précis avec n=10</span></span>
+<span id="cb38-2"><a href=""></a><span class="co">#&gt; [1] -0.1713649</span></span>
+<span id="cb38-3"><a href=""></a></span>
+<span id="cb38-4"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">100</span>, <span class="at">n=</span><span class="dv">100</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">show_results</span>() <span class="co">#mieux</span></span>
+<span id="cb38-5"><a href=""></a><span class="co">#&gt; [1] 0.007437185</span></span>
+<span id="cb38-6"><a href=""></a></span>
+<span id="cb38-7"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">100</span>, <span class="at">n=</span><span class="dv">100</span>, <span class="at">beta=</span><span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">show_results</span>() <span class="co">#mieux aussi</span></span>
+<span id="cb38-8"><a href=""></a><span class="co">#&gt; [1] 5.007437</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="débuguer-avec-browser" class="slide level2" style="overflow: hidden;">
+<h2>Débuguer avec <code>browser()</code></h2>
+<p>Imaginons une fonction qui fait un calcul métier un peu obscur:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">library</span>(purrr)</span>
+<span id="cb39-2"><a href=""></a>f <span class="ot">=</span> <span class="cf">function</span>(bias, penalty, values){</span>
+<span id="cb39-3"><a href=""></a>  ref <span class="ot">=</span> <span class="fu">mean</span>(values) <span class="sc">+</span> bias <span class="sc">-</span> penalty</span>
+<span id="cb39-4"><a href=""></a>  values <span class="sc">%&gt;%</span> </span>
+<span id="cb39-5"><a href=""></a>    <span class="fu">map</span>(<span class="sc">~</span>{</span>
+<span id="cb39-6"><a href=""></a>      <span class="fu">data.frame</span>(</span>
+<span id="cb39-7"><a href=""></a>        <span class="at">input =</span> .x,</span>
+<span id="cb39-8"><a href=""></a>        <span class="at">score =</span> (.x <span class="sc">+</span> bias) <span class="sc">/</span> (.x <span class="sc">-</span> ref)</span>
+<span id="cb39-9"><a href=""></a>      )</span>
+<span id="cb39-10"><a href=""></a>    }) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-11"><a href=""></a>    <span class="fu">list_rbind</span>()</span>
+<span id="cb39-12"><a href=""></a>}</span>
+<span id="cb39-13"><a href=""></a><span class="fu">f</span>(<span class="at">bias=</span><span class="dv">2</span>, <span class="at">penalty=</span><span class="dv">1</span>, <span class="at">values=</span><span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>))</span>
+<span id="cb39-14"><a href=""></a><span class="co">#&gt;   input score</span></span>
+<span id="cb39-15"><a href=""></a><span class="co">#&gt; 1     3    -2</span></span>
+<span id="cb39-16"><a href=""></a><span class="co">#&gt; 2     4    -4</span></span>
+<span id="cb39-17"><a href=""></a><span class="co">#&gt; 3     5   -14</span></span>
+<span id="cb39-18"><a href=""></a><span class="co">#&gt; 4     6    16</span></span>
+<span id="cb39-19"><a href=""></a><span class="fu">f</span>(<span class="at">bias=</span><span class="dv">1</span>, <span class="at">penalty=</span><span class="dv">1</span>, <span class="at">values=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>))</span>
+<span id="cb39-20"><a href=""></a><span class="co">#&gt;   input score</span></span>
+<span id="cb39-21"><a href=""></a><span class="co">#&gt; 1     2  -1.5</span></span>
+<span id="cb39-22"><a href=""></a><span class="co">#&gt; 2     4   Inf</span></span>
+<span id="cb39-23"><a href=""></a><span class="co">#&gt; 3     6   3.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="fragment">
+<p>Essayons d’ajouter <code>if(.x - ref == 0) browser()</code> dans la boucle.</p>
+</div>
+</section></section>
+<section>
+<section id="conclusion" class="title-slide slide level1 center">
+<h1>Conclusion</h1>
+
+</section>
+<section id="les-boucles-cest-génial" class="slide level2">
+<h2>Les boucles c’est génial</h2>
+<ul>
+<li class="fragment">Ca réduit la duplication du code (DRY)</li>
+<li class="fragment">Ca améliore la maintenabilité du code</li>
+<li class="fragment">Ca améliore (parfois) la lisibilité du code</li>
+</ul>
+</section>
+<section id="les-fonctions-cest-génial" class="slide level2">
+<h2>Les fonctions c’est génial</h2>
+<ul>
+<li class="fragment">Ca réduit la duplication du code (DRY)</li>
+<li class="fragment">Ca améliore la maintenabilité du code</li>
+<li class="fragment">Ca améliore (parfois) la lisibilité du code</li>
+</ul>
+<aside class="notes">
+<p>Maintenabilité : si vous changez d’avis sur un paramètre et que vous avez fait 20 copier-coller, c’est long. Si vous avez fait une fonction/boucle, c’est rapide !</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="section" class="slide level2">
+<h2><!-- MERCI DE VOTRE ATTENTION --></h2>
+<div class="columns">
+<div class="column" style="width:60%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="media/bob.jpg" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+</div><div class="column" style="width:40%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="media/keep_calm.jpeg" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+</div></div>
+<script src="assets/custom.js"></script>
+
+</section></section>
+    </div>
+  <div class="quarto-auto-generated-content" style="display: none;">
+<div class="footer footer-default">
+<p>Le code source de cette présentation est disponible <a href="https://github.com/Oncostat/rstat_training/" target="_blank">sur GitHub</a>.</p>
+</div>
+</div></div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="module_boucles_files/libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="module_boucles_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/reveal-frag-off/fragoff.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/reveal-drop/drop-runtime.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="module_boucles_files/libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/search/search.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="module_boucles_files/libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': false,
+'previewLinksAuto': true,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'jumpToSlide': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'drop': {"button":true,"shortcut":"`","engine":"webr","webr":{"packages":["purrr","dplyr"]},"pyodide":{"packages":[]}},
+'smaller': true,
+ 
+        // Display controls in the bottom right corner
+        controls: true,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: true,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: true,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1050,
+
+        height: 700,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealFragOff, RevealDrop, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    
+
+    <script>
+
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
+      // slide changes (different for each slide format).
+
+      (function () {
+
+        // dispatch for htmlwidgets
+
+        function fireSlideEnter() {
+
+          const event = window.document.createEvent("Event");
+
+          event.initEvent("slideenter", true, true);
+
+          window.document.dispatchEvent(event);
+
+        }
+
+    
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+
+          fireSlideEnter();
+
+    
+
+          // dispatch for shiny
+
+          if (window.jQuery) {
+
+            if (previousSlide) {
+
+              window.jQuery(previousSlide).trigger("hidden");
+
+            }
+
+            if (currentSlide) {
+
+              window.jQuery(currentSlide).trigger("shown");
+
+            }
+
+          }
+
+        }
+
+    
+
+        // hookup for slidy
+
+        if (window.w3c_slidy) {
+
+          window.w3c_slidy.add_observer(function (slide_num) {
+
+            // slide_num starts at position 1
+
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
+          });
+
+        }
+
+    
+
+      })();
+
+    </script>
+
+    
+
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
+      });
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>
