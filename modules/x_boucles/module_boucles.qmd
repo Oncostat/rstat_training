@@ -35,7 +35,6 @@ format:
         packages:
           - purrr
           - dplyr
-
 execute:
   echo: true
   cache: false
@@ -57,17 +56,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r}
-#| label: init
-#| include: false
-options(width = 100)
-options(crosstable_compact = TRUE)
-```
-
-<!-- https://juba.github.io/tidyverse/18-purrr.html -->
-
-<!-- <https://juba.github.io/tidyverse/14-fonctions.html> -->
-
 ## Plan du module
 
 1.  Les boucles
@@ -83,14 +71,26 @@ chapitres [14](https://juba.github.io/tidyverse/14-fonctions.html)
 (purrr). Allez voir ce site pour en apprendre encore plus!
 :::
 
+<!-- https://juba.github.io/tidyverse/18-purrr.html -->
+
+<!-- <https://juba.github.io/tidyverse/14-fonctions.html> -->
+
+```{r}
+#| label: init
+#| include: false
+options(width = 100)
+options(crosstable_compact = TRUE)
+```
+
 # Les boucles
 
-![](media/mouton.jpg){fig-align="center"}
+![](media/boucles.png){fig-align="center"}
+
 
 ## C’est quoi, une boucle ?
 
 -   Répéter le même code sur plusieurs éléments
-    ([DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself))
+    ([DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself){.external target="_blank"})
 -   Remplacer du copier-coller par une structure générique
 -   Améliore la robustesse (toujours)
 -   Améliore la lisibilité (parfois)
@@ -154,17 +154,17 @@ res_purrr
 
 ## Pour ou contre: les boucles `for`
 
-Contre :
+👎 Contre :
 
--   Beaucoup de code pour pas grand chose
+-   Beaucoup de code pour pas grand chose (`5` lignes vs `2`)
 -   Plus ou moins lisible selon la complexité
 -   Ne s'applique pas en pipeline
 -   Déclaration manuelle de l'objet final (souvent mal optimisé)
--   Programmation non-fonctionnelle -\> Effets de bords !
+-   Programmation non-fonctionnelle → Effets de bords !
 
 . . .
 
-Pour:
+👍 Pour :
 
 -   Très flexible
 -   Effets de bords ?
@@ -287,8 +287,7 @@ l = fichiers %>% map(read.csv2)
 
 . . .
 
-Ou alors quand on veut itérer sur l'argument d'une fonction, et pas sur
-son input :
+Dans `str_count()`, l'argument `pattern` n'est pas vectorisé :
 
 ```{r}
 c(a = "a", e = "e") %>% 
@@ -404,7 +403,7 @@ impressionnant sur plus d'itérations ou une fonction plus longue !
 
 ![](media/slap.jpg){fig-align="center"}
 
-## Principe
+## Principe {style="overflow: hidden;"}
 
 > "En R, tout ce qui existe est un objet, et tout ce qui se passe est
 > une fonction."\
@@ -412,7 +411,7 @@ impressionnant sur plus d'itérations ou une fonction plus longue !
 
 . . .
 
-Une fonction prend en entrée des paramètres, les transforme, et retourne
+Une fonction prend des arguments, les transforme, et retourne
 un résultat :
 
 . . .
@@ -743,7 +742,7 @@ run_simulations(N=100, n=100, beta=5) %>% show_results() #mieux aussi
 :::
 
 
-## Débuguer avec `browser()`
+## Débuguer avec `browser()` {style="overflow: hidden;"}
 
 Imaginons une fonction qui fait un calcul métier un peu obscur:
 
@@ -770,15 +769,14 @@ Essayons d'ajouter `if(.x - ref == 0) browser()` dans la boucle.
 
 # Conclusion
 
-### Les boucles c'est génial
+## Les boucles c'est génial
 
 - Ca réduit la duplication du code (DRY)
 - Ca améliore la maintenabilité du code
 - Ca améliore (parfois) la lisibilité du code
 
-. . . 
 
-### Les fonctions c'est génial
+## Les fonctions c'est génial
 
 - Ca réduit la duplication du code (DRY)
 - Ca améliore la maintenabilité du code

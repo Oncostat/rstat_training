@@ -6,8 +6,8 @@
 <script src="module_boucles_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="module_boucles_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="module_boucles_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="module_boucles_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.25">
+<link href="module_boucles_files/libs/quarto-html/quarto-syntax-highlighting-07ba0ad10f5680c660e360ac31d2f3b6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.6.33">
 
   <meta name="author" content="Dan Chaltiel">
   <meta name="keywords" content="r, rstat, training, course, module">
@@ -30,9 +30,8 @@
       vertical-align: middle;
     }
     /* CSS for syntax highlighting */
-    html { -webkit-text-size-adjust: 100%; }
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -43,7 +42,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -96,7 +95,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="module_boucles_files/libs/revealjs/dist/theme/quarto-0fde88a82f0356838740f155f1088782.css">
+  <link rel="stylesheet" href="module_boucles_files/libs/revealjs/dist/theme/quarto-077ed0fd3b2b6c9aff5defd058debd56.css">
   <link rel="stylesheet" href="assets/style.css">
   <link href="module_boucles_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="module_boucles_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -211,11 +210,6 @@
   <img src="media/logo_gustaveroussy.png">
 
 </section>
-<section class="slide level2">
-
-<!-- https://juba.github.io/tidyverse/18-purrr.html -->
-<!-- <https://juba.github.io/tidyverse/14-fonctions.html> -->
-</section>
 <section id="plan-du-module" class="slide level2 scrollable">
 <h2>Plan du module</h2>
 <ol type="1">
@@ -236,17 +230,19 @@
 </div>
 </div>
 </div>
+<!-- https://juba.github.io/tidyverse/18-purrr.html -->
+<!-- <https://juba.github.io/tidyverse/14-fonctions.html> -->
 </div>
 </section>
 <section>
 <section id="les-boucles" class="title-slide slide level1 center">
 <h1>Les boucles</h1>
 
-<img data-src="media/mouton.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<img data-src="media/boucles.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="cest-quoi-une-boucle" class="slide level2">
 <h2>C’est quoi, une boucle ?</h2>
 <ul>
-<li class="fragment">Répéter le même code sur plusieurs éléments (<a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself">DRY</a>)</li>
+<li class="fragment">Répéter le même code sur plusieurs éléments (<a href="https://en.wikipedia.org/wiki/Don%27t_repeat_yourself" class="external" target="_blank">DRY</a>)</li>
 <li class="fragment">Remplacer du copier-coller par une structure générique</li>
 <li class="fragment">Améliore la robustesse (toujours)</li>
 <li class="fragment">Améliore la lisibilité (parfois)</li>
@@ -277,8 +273,8 @@
 <h2>Exemple simple (vecteur)</h2>
 <p>On a un vecteur <em>character</em>, et on veut séparer chaque item en Nom/Prénom</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-2"><a href=""></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Jeanne Alyse"</span>, <span class="st">"Bertrand Domise"</span>, <span class="st">"XXXX"</span>, <span class="cn">NA</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href=""></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Jeanne Alyse"</span>, <span class="st">"Bertrand Domise"</span>, <span class="st">"XXXX"</span>, <span class="cn">NA</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>On va donc utiliser <code>str_split()</code> (package <code>stringr</code>) dans une boucle.</p>
@@ -289,7 +285,7 @@
 <div class="tab-content">
 <div id="tabset-1-1">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>res_for <span class="ot">=</span> <span class="fu">list</span>()</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a>res_for <span class="ot">=</span> <span class="fu">list</span>()</span>
 <span id="cb2-2"><a href=""></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
 <span id="cb2-3"><a href=""></a>  res_for[[i]] <span class="ot">=</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(x[i], <span class="st">" "</span>)</span>
 <span id="cb2-4"><a href=""></a>}</span>
@@ -311,12 +307,12 @@
 <span id="cb2-20"><a href=""></a><span class="co">#&gt; </span></span>
 <span id="cb2-21"><a href=""></a><span class="co">#&gt; [[4]]</span></span>
 <span id="cb2-22"><a href=""></a><span class="co">#&gt; [[4]][[1]]</span></span>
-<span id="cb2-23"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-23"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-2">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>res_sapply <span class="ot">=</span> <span class="fu">sapply</span>(x, <span class="cf">function</span>(s) stringr<span class="sc">::</span><span class="fu">str_split</span>(s, <span class="st">" "</span>))</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a>res_sapply <span class="ot">=</span> <span class="fu">sapply</span>(x, <span class="cf">function</span>(s) stringr<span class="sc">::</span><span class="fu">str_split</span>(s, <span class="st">" "</span>))</span>
 <span id="cb3-2"><a href=""></a>res_sapply</span>
 <span id="cb3-3"><a href=""></a><span class="co">#&gt; $`Jeanne Alyse`</span></span>
 <span id="cb3-4"><a href=""></a><span class="co">#&gt; [1] "Jeanne" "Alyse" </span></span>
@@ -328,12 +324,12 @@
 <span id="cb3-10"><a href=""></a><span class="co">#&gt; [1] "XXXX"</span></span>
 <span id="cb3-11"><a href=""></a><span class="co">#&gt; </span></span>
 <span id="cb3-12"><a href=""></a><span class="co">#&gt; $&lt;NA&gt;</span></span>
-<span id="cb3-13"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-13"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-1-3">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>res_purrr <span class="ot">=</span> x <span class="sc">%&gt;%</span> purrr<span class="sc">::</span><span class="fu">map</span>(<span class="sc">~</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(.x, <span class="st">" "</span>))</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a>res_purrr <span class="ot">=</span> x <span class="sc">%&gt;%</span> purrr<span class="sc">::</span><span class="fu">map</span>(<span class="sc">~</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(.x, <span class="st">" "</span>))</span>
 <span id="cb4-2"><a href=""></a>res_purrr</span>
 <span id="cb4-3"><a href=""></a><span class="co">#&gt; [[1]]</span></span>
 <span id="cb4-4"><a href=""></a><span class="co">#&gt; [[1]][[1]]</span></span>
@@ -352,7 +348,7 @@
 <span id="cb4-17"><a href=""></a><span class="co">#&gt; </span></span>
 <span id="cb4-18"><a href=""></a><span class="co">#&gt; [[4]]</span></span>
 <span id="cb4-19"><a href=""></a><span class="co">#&gt; [[4]][[1]]</span></span>
-<span id="cb4-20"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb4-20"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -361,16 +357,16 @@
 </section>
 <section id="pour-ou-contre-les-boucles-for" class="slide level2">
 <h2>Pour ou contre: les boucles <code>for</code></h2>
-<p>Contre :</p>
+<p>👎 Contre :</p>
 <ul>
-<li class="fragment">Beaucoup de code pour pas grand chose</li>
+<li class="fragment">Beaucoup de code pour pas grand chose (<code>5</code> lignes vs <code>2</code>)</li>
 <li class="fragment">Plus ou moins lisible selon la complexité</li>
 <li class="fragment">Ne s’applique pas en pipeline</li>
 <li class="fragment">Déclaration manuelle de l’objet final (souvent mal optimisé)</li>
-<li class="fragment">Programmation non-fonctionnelle -&gt; Effets de bords !</li>
+<li class="fragment">Programmation non-fonctionnelle → Effets de bords !</li>
 </ul>
 <div class="fragment">
-<p>Pour:</p>
+<p>👍 Pour :</p>
 <ul>
 <li class="fragment">Très flexible</li>
 <li class="fragment">Effets de bords ?</li>
@@ -380,15 +376,15 @@
 <section id="exemple-de-boucle-for-maléfique" class="slide level2">
 <h2>Exemple de boucle <code>for</code> <em>maléfique</em></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>res_for <span class="ot">=</span> <span class="fu">list</span>()</span>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href=""></a>res_for <span class="ot">=</span> <span class="fu">list</span>()</span>
 <span id="cb5-2"><a href=""></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(x)) {</span>
 <span id="cb5-3"><a href=""></a>  x <span class="ot">=</span> stringr<span class="sc">::</span><span class="fu">str_split</span>(x[i], <span class="st">" "</span>) <span class="co">#variable temporaire</span></span>
 <span id="cb5-4"><a href=""></a>  res_for[i] <span class="ot">=</span> x</span>
-<span id="cb5-5"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb5-5"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>res_for</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>res_for</span>
 <span id="cb6-2"><a href=""></a><span class="co">#&gt; [[1]]</span></span>
 <span id="cb6-3"><a href=""></a><span class="co">#&gt; [1] "Jeanne" "Alyse" </span></span>
 <span id="cb6-4"><a href=""></a><span class="co">#&gt; </span></span>
@@ -399,7 +395,7 @@
 <span id="cb6-9"><a href=""></a><span class="co">#&gt; [1] "NULL"</span></span>
 <span id="cb6-10"><a href=""></a><span class="co">#&gt; </span></span>
 <span id="cb6-11"><a href=""></a><span class="co">#&gt; [[4]]</span></span>
-<span id="cb6-12"><a href=""></a><span class="co">#&gt; [1] "NULL"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-12"><a href=""></a><span class="co">#&gt; [1] "NULL"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
@@ -413,20 +409,20 @@
 <h2>Pour ou contre: <code>sapply()</code></h2>
 <p>Maintenant, on veut appliquer <code>table()</code> à chaque colonne d’une dataframe :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(crosstable)</span>
-<span id="cb7-2"><a href=""></a>x <span class="ot">=</span> mtcars2 <span class="sc">%&gt;%</span> <span class="fu">select</span>(am, vs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a><span class="fu">library</span>(crosstable)</span>
+<span id="cb7-2"><a href=""></a>x <span class="ot">=</span> mtcars2 <span class="sc">%&gt;%</span> <span class="fu">select</span>(am, vs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">sapply</span>(x, table)</span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href=""></a><span class="fu">sapply</span>(x, table)</span>
 <span id="cb8-2"><a href=""></a><span class="co">#&gt;        am vs</span></span>
 <span id="cb8-3"><a href=""></a><span class="co">#&gt; auto   19 14</span></span>
-<span id="cb8-4"><a href=""></a><span class="co">#&gt; manual 13 18</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-4"><a href=""></a><span class="co">#&gt; manual 13 18</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">map</span>(x, table)</span>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href=""></a><span class="fu">map</span>(x, table)</span>
 <span id="cb9-2"><a href=""></a><span class="co">#&gt; $am</span></span>
 <span id="cb9-3"><a href=""></a><span class="co">#&gt; </span></span>
 <span id="cb9-4"><a href=""></a><span class="co">#&gt;   auto manual </span></span>
@@ -435,7 +431,7 @@
 <span id="cb9-7"><a href=""></a><span class="co">#&gt; $vs</span></span>
 <span id="cb9-8"><a href=""></a><span class="co">#&gt; </span></span>
 <span id="cb9-9"><a href=""></a><span class="co">#&gt; straight  vshaped </span></span>
-<span id="cb9-10"><a href=""></a><span class="co">#&gt;       14       18</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb9-10"><a href=""></a><span class="co">#&gt;       14       18</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
@@ -468,19 +464,19 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 <div class="fragment">
 <p>Ça donne aussi accès à la syntaxe “lambda-function” : argument par défaut = <code>.x</code></p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>mon_vecteur <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a>mon_vecteur <span class="ot">=</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span></span>
 <span id="cb10-2"><a href=""></a><span class="fu">map_dbl</span>(mon_vecteur, <span class="sc">~</span>.x<span class="sc">+</span><span class="dv">1</span>)</span>
 <span id="cb10-3"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span>
 <span id="cb10-4"><a href=""></a><span class="fu">map_dbl</span>(mon_vecteur, <span class="cf">function</span>(x) x<span class="sc">+</span><span class="dv">1</span>)</span>
 <span id="cb10-5"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span>
 <span id="cb10-6"><a href=""></a><span class="fu">map_dbl</span>(mon_vecteur, \(x) x<span class="sc">+</span><span class="dv">1</span>)  <span class="co">#depuis R 4.1</span></span>
-<span id="cb10-7"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-7"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>mon_vecteur<span class="sc">+</span><span class="dv">1</span></span>
-<span id="cb11-2"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href=""></a>mon_vecteur<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb11-2"><a href=""></a><span class="co">#&gt; [1] 2 3 4 5 6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <aside class="notes">
 <p>On aurait évidemment aussi pu écrire simplement `mon_vecteur+1`, on aurait même gagné plusieurs nano-secondes (mais que faire de tout ce temps ?), mais je voulais montrer une boucle.</p>
@@ -502,30 +498,30 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 <div class="fragment">
 <p>Sur des fonctions vectorisées, on n’utilise pas de boucles :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>textes <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"fantastique"</span>, <span class="st">"effectivement"</span>, <span class="st">"igloo"</span>)</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href=""></a>textes <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"fantastique"</span>, <span class="st">"effectivement"</span>, <span class="st">"igloo"</span>)</span>
 <span id="cb12-2"><a href=""></a><span class="fu">str_count</span>(textes, <span class="st">"f"</span>)</span>
 <span id="cb12-3"><a href=""></a><span class="co">#&gt; [1] 1 2 0</span></span>
 <span id="cb12-4"><a href=""></a><span class="fu">map_int</span>(textes, <span class="sc">~</span> <span class="fu">str_count</span>(.x, <span class="st">"f"</span>)) <span class="co">#moins lisible + moins rapide</span></span>
-<span id="cb12-5"><a href=""></a><span class="co">#&gt; [1] 1 2 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-5"><a href=""></a><span class="co">#&gt; [1] 1 2 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <p>On l’utilise sur les fonctions non vectorisées :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>fichiers <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"fichier1.csv"</span>, <span class="st">"fichier2.csv"</span>)</span>
-<span id="cb13-2"><a href=""></a>l <span class="ot">=</span> fichiers <span class="sc">%&gt;%</span> <span class="fu">map</span>(read.csv2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href=""></a>fichiers <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"fichier1.csv"</span>, <span class="st">"fichier2.csv"</span>)</span>
+<span id="cb13-2"><a href=""></a>l <span class="ot">=</span> fichiers <span class="sc">%&gt;%</span> <span class="fu">map</span>(read.csv2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
-<p>Ou alors quand on veut itérer sur l’argument d’une fonction, et pas sur son input :</p>
+<p>Dans <code>str_count()</code>, l’argument <code>pattern</code> n’est pas vectorisé :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">c</span>(<span class="at">a =</span> <span class="st">"a"</span>, <span class="at">e =</span> <span class="st">"e"</span>) <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href=""></a><span class="fu">c</span>(<span class="at">a =</span> <span class="st">"a"</span>, <span class="at">e =</span> <span class="st">"e"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb14-2"><a href=""></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">str_count</span>(textes, <span class="at">pattern =</span> .x))</span>
 <span id="cb14-3"><a href=""></a><span class="co">#&gt; $a</span></span>
 <span id="cb14-4"><a href=""></a><span class="co">#&gt; [1] 2 0 0</span></span>
 <span id="cb14-5"><a href=""></a><span class="co">#&gt; </span></span>
 <span id="cb14-6"><a href=""></a><span class="co">#&gt; $e</span></span>
-<span id="cb14-7"><a href=""></a><span class="co">#&gt; [1] 1 4 0</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb14-7"><a href=""></a><span class="co">#&gt; [1] 1 4 0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -533,19 +529,19 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 <h2>Oui mais, et les noms ?</h2>
 <p>Un des “avantages” de <code>sapply()</code>, c’est que les noms sont automatiques :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Jeanne Alyse"</span>, <span class="st">"Bertrand Domise"</span>, <span class="st">"XXXX"</span>, <span class="cn">NA</span>)</span>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href=""></a>x <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Jeanne Alyse"</span>, <span class="st">"Bertrand Domise"</span>, <span class="st">"XXXX"</span>, <span class="cn">NA</span>)</span>
 <span id="cb15-2"><a href=""></a>get_prenom <span class="ot">=</span> <span class="cf">function</span>(s) stringr<span class="sc">::</span><span class="fu">str_split</span>(s, <span class="st">" "</span>)[[<span class="dv">1</span>]][<span class="dv">1</span>]</span>
 <span id="cb15-3"><a href=""></a><span class="fu">sapply</span>(x, get_prenom) </span>
 <span id="cb15-4"><a href=""></a><span class="co">#&gt;    Jeanne Alyse Bertrand Domise            XXXX            &lt;NA&gt; </span></span>
-<span id="cb15-5"><a href=""></a><span class="co">#&gt;        "Jeanne"      "Bertrand"          "XXXX"              NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb15-5"><a href=""></a><span class="co">#&gt;        "Jeanne"      "Bertrand"          "XXXX"              NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>Ca peut poser un problème en cas de noms très longs, donc <code>map()</code> ne prend que les noms explicites :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>x2 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"JA"</span><span class="ot">=</span><span class="st">"Jeanne Alyse"</span>, <span class="at">BD=</span><span class="st">"Bertrand Domise"</span>, <span class="at">XX=</span><span class="st">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"</span>, <span class="at">KO=</span><span class="cn">NA</span>)</span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href=""></a>x2 <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"JA"</span><span class="ot">=</span><span class="st">"Jeanne Alyse"</span>, <span class="at">BD=</span><span class="st">"Bertrand Domise"</span>, <span class="at">XX=</span><span class="st">"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"</span>, <span class="at">KO=</span><span class="cn">NA</span>)</span>
 <span id="cb16-2"><a href=""></a><span class="fu">map_chr</span>(x2, get_prenom) </span>
 <span id="cb16-3"><a href=""></a><span class="co">#&gt;         JA         BD         XX         KO </span></span>
-<span id="cb16-4"><a href=""></a><span class="co">#&gt;   "Jeanne" "Bertrand"    "Lorem"         NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb16-4"><a href=""></a><span class="co">#&gt;   "Jeanne" "Bertrand"    "Lorem"         NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
@@ -563,9 +559,9 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>x <span class="sc">%&gt;%</span> <span class="fu">set_names</span>()</span>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href=""></a>x <span class="sc">%&gt;%</span> <span class="fu">set_names</span>()</span>
 <span id="cb17-2"><a href=""></a><span class="co">#&gt;      Jeanne Alyse   Bertrand Domise              XXXX              &lt;NA&gt; </span></span>
-<span id="cb17-3"><a href=""></a><span class="co">#&gt;    "Jeanne Alyse" "Bertrand Domise"            "XXXX"                NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb17-3"><a href=""></a><span class="co">#&gt;    "Jeanne Alyse" "Bertrand Domise"            "XXXX"                NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -574,13 +570,13 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 <p>La fonction <code>imap()</code> permet de boucler sur un vecteur (<code>.x</code>) et ses noms (<code>.y</code>) en même temps.</p>
 <div class="fragment">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>mtcars <span class="sc">%&gt;%</span> </span>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href=""></a>mtcars <span class="sc">%&gt;%</span> </span>
 <span id="cb18-2"><a href=""></a>  <span class="fu">select</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb18-3"><a href=""></a>  <span class="fu">imap_chr</span>(<span class="sc">~</span>{</span>
 <span id="cb18-4"><a href=""></a>    <span class="fu">paste</span>(.y, <span class="st">":"</span>, <span class="fu">n_distinct</span>(.x), <span class="st">"valeurs distinctes"</span>)</span>
 <span id="cb18-5"><a href=""></a>  })</span>
 <span id="cb18-6"><a href=""></a><span class="co">#&gt;                            mpg                            cyl                           disp </span></span>
-<span id="cb18-7"><a href=""></a><span class="co">#&gt;  "mpg : 25 valeurs distinctes"   "cyl : 3 valeurs distinctes" "disp : 27 valeurs distinctes"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb18-7"><a href=""></a><span class="co">#&gt;  "mpg : 25 valeurs distinctes"   "cyl : 3 valeurs distinctes" "disp : 27 valeurs distinctes"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
@@ -605,7 +601,7 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">library</span>(tictoc)</span>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href=""></a><span class="fu">library</span>(tictoc)</span>
 <span id="cb19-2"><a href=""></a>very_long_addition <span class="ot">=</span> <span class="cf">function</span>(x, y){</span>
 <span id="cb19-3"><a href=""></a>  <span class="fu">Sys.sleep</span>(<span class="fl">0.1</span>) <span class="co">#on attend 0.1 sec</span></span>
 <span id="cb19-4"><a href=""></a>  x<span class="sc">+</span>y</span>
@@ -614,11 +610,11 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 <span id="cb19-7"><a href=""></a><span class="fu">tic</span>(<span class="st">"Sans parallelisation"</span>)</span>
 <span id="cb19-8"><a href=""></a>a <span class="ot">=</span> <span class="fu">map_dbl</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>, <span class="sc">~</span> <span class="fu">very_long_addition</span>(.x, <span class="dv">1</span>))</span>
 <span id="cb19-9"><a href=""></a><span class="fu">toc</span>()</span>
-<span id="cb19-10"><a href=""></a><span class="co">#&gt; Sans parallelisation: 2.19 sec elapsed</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb19-10"><a href=""></a><span class="co">#&gt; Sans parallelisation: 2.19 sec elapsed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column fragment" style="width:50%;">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">tic</span>(<span class="st">"Avec parallelisation"</span>)</span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href=""></a><span class="fu">tic</span>(<span class="st">"Avec parallelisation"</span>)</span>
 <span id="cb20-2"><a href=""></a>mirai<span class="sc">::</span><span class="fu">daemons</span>(<span class="dv">4</span>) <span class="co">#on utilise 4 coeurs</span></span>
 <span id="cb20-3"><a href=""></a></span>
 <span id="cb20-4"><a href=""></a>crate <span class="ot">=</span> <span class="fu">in_parallel</span>(</span>
@@ -630,7 +626,7 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 <span id="cb20-10"><a href=""></a></span>
 <span id="cb20-11"><a href=""></a>mirai<span class="sc">::</span><span class="fu">daemons</span>(<span class="dv">0</span>)</span>
 <span id="cb20-12"><a href=""></a><span class="fu">toc</span>()</span>
-<span id="cb20-13"><a href=""></a><span class="co">#&gt; Avec parallelisation: 1.22 sec elapsed</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb20-13"><a href=""></a><span class="co">#&gt; Avec parallelisation: 1.25 sec elapsed</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
 <div class="fragment">
@@ -642,14 +638,14 @@ Par exemple, certaines fonctions ne retournent pas la même chose selon la taill
 <h1>Les fonctions</h1>
 
 <img data-src="media/slap.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="principe" class="slide level2">
+<section id="principe" class="slide level2" style="overflow: hidden;">
 <h2>Principe</h2>
 <blockquote>
 <p>“En R, tout ce qui existe est un objet, et tout ce qui se passe est une fonction.”<br>
 John Chambers</p>
 </blockquote>
 <div class="fragment">
-<p>Une fonction prend en entrée des paramètres, les transforme, et retourne un résultat :</p>
+<p>Une fonction prend des arguments, les transforme, et retourne un résultat :</p>
 </div>
 <div class="fragment">
 <div class="panel-tabset">
@@ -657,7 +653,7 @@ John Chambers</p>
 <div class="tab-content">
 <div id="tabset-2-1">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
 <span id="cb21-2"><a href=""></a>  x1 <span class="ot">=</span> <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb21-3"><a href=""></a>  x2 <span class="ot">=</span> <span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb21-4"><a href=""></a>  rslt <span class="ot">=</span> x1<span class="sc">/</span>x2</span>
@@ -666,12 +662,12 @@ John Chambers</p>
 <span id="cb21-7"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
 <span id="cb21-8"><a href=""></a><span class="co">#&gt; [1] 330.0691</span></span>
 <span id="cb21-9"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.6</span>)</span>
-<span id="cb21-10"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb21-10"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-2-2">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
 <span id="cb22-2"><a href=""></a>  x1 <span class="ot">=</span> <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb22-3"><a href=""></a>  x2 <span class="ot">=</span> <span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span></span>
 <span id="cb22-4"><a href=""></a>  x1<span class="sc">/</span>x2</span>
@@ -679,19 +675,19 @@ John Chambers</p>
 <span id="cb22-6"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
 <span id="cb22-7"><a href=""></a><span class="co">#&gt; [1] 330.0691</span></span>
 <span id="cb22-8"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.6</span>)</span>
-<span id="cb22-9"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb22-9"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Par défaut, la dernière ligne vaut <code>return()</code> donc on peut simplifier.</p>
 </div>
 <div id="tabset-2-3">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href=""></a>n_events_schoenfeld <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
 <span id="cb23-2"><a href=""></a>  <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span>)</span>
 <span id="cb23-3"><a href=""></a>}</span>
 <span id="cb23-4"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
 <span id="cb23-5"><a href=""></a><span class="co">#&gt; [1] 330.0691</span></span>
 <span id="cb23-6"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.6</span>)</span>
-<span id="cb23-7"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb23-7"><a href=""></a><span class="co">#&gt; [1] 160.918</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>On peut toujours faire encore plus court, mais essayez de privilégier la lisibilité !</p>
 </div>
@@ -738,21 +734,21 @@ John Chambers</p>
 <div class="columns">
 <div class="column" style="width:50%;">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>a <span class="ot">=</span> <span class="dv">1</span></span>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href=""></a>a <span class="ot">=</span> <span class="dv">1</span></span>
 <span id="cb24-2"><a href=""></a>very_bad_function <span class="ot">=</span> <span class="cf">function</span>(x){</span>
 <span id="cb24-3"><a href=""></a>  x <span class="sc">+</span> a <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
 <span id="cb24-4"><a href=""></a>}</span>
 <span id="cb24-5"><a href=""></a><span class="fu">very_bad_function</span>(<span class="at">x=</span><span class="dv">1</span>)</span>
-<span id="cb24-6"><a href=""></a><span class="co">#&gt; [1] 0.5131727</span></span>
+<span id="cb24-6"><a href=""></a><span class="co">#&gt; [1] 2.235631</span></span>
 <span id="cb24-7"><a href=""></a>a<span class="ot">=</span><span class="dv">100</span></span>
 <span id="cb24-8"><a href=""></a><span class="fu">very_bad_function</span>(<span class="at">x=</span><span class="dv">1</span>)</span>
-<span id="cb24-9"><a href=""></a><span class="co">#&gt; [1] 101.6856</span></span>
+<span id="cb24-9"><a href=""></a><span class="co">#&gt; [1] 100.8557</span></span>
 <span id="cb24-10"><a href=""></a><span class="fu">very_bad_function</span>(<span class="at">x=</span><span class="dv">1</span>)</span>
-<span id="cb24-11"><a href=""></a><span class="co">#&gt; [1] 100.7386</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb24-11"><a href=""></a><span class="co">#&gt; [1] 98.88467</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div><div class="column fragment" style="width:50%;">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>add_with_noise <span class="ot">=</span> <span class="cf">function</span>(x, y, <span class="at">seed=</span><span class="dv">1234</span>){</span>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href=""></a>add_with_noise <span class="ot">=</span> <span class="cf">function</span>(x, y, <span class="at">seed=</span><span class="dv">1234</span>){</span>
 <span id="cb25-2"><a href=""></a>  <span class="fu">set.seed</span>(seed)</span>
 <span id="cb25-3"><a href=""></a>  x <span class="sc">+</span> y <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
 <span id="cb25-4"><a href=""></a>}</span>
@@ -761,7 +757,7 @@ John Chambers</p>
 <span id="cb25-7"><a href=""></a><span class="fu">add_with_noise</span>(<span class="at">x=</span><span class="dv">1</span>, <span class="at">y=</span><span class="dv">100</span>)</span>
 <span id="cb25-8"><a href=""></a><span class="co">#&gt; [1] 99.79293</span></span>
 <span id="cb25-9"><a href=""></a><span class="fu">add_with_noise</span>(<span class="at">x=</span><span class="dv">1</span>, <span class="at">y=</span><span class="dv">100</span>)</span>
-<span id="cb25-10"><a href=""></a><span class="co">#&gt; [1] 99.79293</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb25-10"><a href=""></a><span class="co">#&gt; [1] 99.79293</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div></div>
 <div class="fragment">
@@ -778,14 +774,14 @@ John Chambers</p>
 <p>Un <em>wrapper</em> est une fonction courte qui vise à “réécrire” une fonction connue pour l’appliquer à un cas particulier.</p>
 <p>Exemple de <code>EDCimport::fct_yesno()</code> :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>fct_yesno <span class="ot">=</span> <span class="cf">function</span>(x){</span>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href=""></a>fct_yesno <span class="ot">=</span> <span class="cf">function</span>(x){</span>
 <span id="cb26-2"><a href=""></a>  x <span class="ot">=</span> <span class="fu">as.character</span>(x)</span>
 <span id="cb26-3"><a href=""></a>  <span class="fu">fct_recode</span>(x, <span class="st">"Yes"</span> <span class="ot">=</span> <span class="st">"1"</span>, <span class="st">"No"</span> <span class="ot">=</span> <span class="st">"0"</span>)</span>
 <span id="cb26-4"><a href=""></a>}</span>
 <span id="cb26-5"><a href=""></a>input <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>)</span>
 <span id="cb26-6"><a href=""></a><span class="fu">fct_yesno</span>(input)</span>
 <span id="cb26-7"><a href=""></a><span class="co">#&gt; [1] No  Yes No  No </span></span>
-<span id="cb26-8"><a href=""></a><span class="co">#&gt; Levels: No Yes</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb26-8"><a href=""></a><span class="co">#&gt; Levels: No Yes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div title="Tip">
 <div class="callout callout-tip callout-titled callout-style-default">
@@ -810,34 +806,34 @@ C’est le cas par exemple avec <code>dplyr::select()</code>.</p>
 <div class="fragment">
 <p>C’est surtout utile avec les wrappers pour passer des arguments :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>moyenne <span class="ot">=</span> <span class="cf">function</span>(v, ...){</span>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href=""></a>moyenne <span class="ot">=</span> <span class="cf">function</span>(v, ...){</span>
 <span id="cb27-2"><a href=""></a>  <span class="fu">mean</span>(v, ...) <span class="co">#on passe ... à mean()</span></span>
 <span id="cb27-3"><a href=""></a>}</span>
 <span id="cb27-4"><a href=""></a>a <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="cn">NA</span>)</span>
 <span id="cb27-5"><a href=""></a><span class="fu">moyenne</span>(a, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
 <span id="cb27-6"><a href=""></a><span class="co">#&gt; [1] 5.5</span></span>
 <span id="cb27-7"><a href=""></a><span class="fu">moyenne</span>(a, <span class="at">na.rm=</span><span class="cn">FALSE</span>)</span>
-<span id="cb27-8"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb27-8"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div class="fragment">
 <p>On en a rarement besoin directement, mais on l’utilise avec <code>c(...)</code> ou <code>list(...)</code> :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>f <span class="ot">=</span> <span class="cf">function</span>(...){</span>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href=""></a>f <span class="ot">=</span> <span class="cf">function</span>(...){</span>
 <span id="cb28-2"><a href=""></a>  x <span class="ot">=</span> <span class="fu">c</span>(...)</span>
 <span id="cb28-3"><a href=""></a>  <span class="fu">paste</span>(<span class="fu">names</span>(x), x, <span class="at">sep=</span><span class="st">":"</span>, <span class="at">collapse=</span><span class="st">" -- "</span>)</span>
 <span id="cb28-4"><a href=""></a>}</span>
 <span id="cb28-5"><a href=""></a><span class="fu">f</span>(<span class="at">a=</span><span class="st">"A"</span>, <span class="at">b=</span><span class="st">"B"</span>, <span class="at">c=</span><span class="st">"C"</span>)</span>
 <span id="cb28-6"><a href=""></a><span class="co">#&gt; [1] "a:A -- b:B -- c:C"</span></span>
 <span id="cb28-7"><a href=""></a><span class="fu">f</span>(<span class="at">alpha=</span><span class="fl">0.95</span>, <span class="at">power=</span><span class="fl">0.90</span>, <span class="at">na.rm=</span><span class="cn">TRUE</span>, <span class="at">type=</span><span class="st">"Schoenfeld"</span>)</span>
-<span id="cb28-8"><a href=""></a><span class="co">#&gt; [1] "alpha:0.95 -- power:0.9 -- na.rm:TRUE -- type:Schoenfeld"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb28-8"><a href=""></a><span class="co">#&gt; [1] "alpha:0.95 -- power:0.9 -- na.rm:TRUE -- type:Schoenfeld"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
 <section id="appel-par-ordre-vs-appel-par-nom" class="slide level2">
 <h2>Appel par ordre <em>vs</em> Appel par nom</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>moyenne <span class="ot">=</span> <span class="cf">function</span>(x, <span class="at">remove_missing=</span><span class="cn">TRUE</span>){</span>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href=""></a>moyenne <span class="ot">=</span> <span class="cf">function</span>(x, <span class="at">remove_missing=</span><span class="cn">TRUE</span>){</span>
 <span id="cb29-2"><a href=""></a>  <span class="fu">mean</span>(x, <span class="at">na.rm=</span>remove_missing)</span>
 <span id="cb29-3"><a href=""></a>}</span>
 <span id="cb29-4"><a href=""></a>a <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="cn">NA</span>)</span>
@@ -846,7 +842,7 @@ C’est le cas par exemple avec <code>dplyr::select()</code>.</p>
 <span id="cb29-7"><a href=""></a><span class="fu">moyenne</span>(<span class="at">x=</span>a, <span class="at">remove_missing=</span><span class="cn">TRUE</span>)</span>
 <span id="cb29-8"><a href=""></a><span class="co">#&gt; [1] 5.5</span></span>
 <span id="cb29-9"><a href=""></a><span class="fu">moyenne</span>(<span class="at">x=</span>a, <span class="at">remove_missing=</span><span class="cn">FALSE</span>)</span>
-<span id="cb29-10"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb29-10"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>En général, on n’appelle pas le 1er argument par nom car peu informatif.</p>
@@ -857,10 +853,10 @@ C’est le cas par exemple avec <code>dplyr::select()</code>.</p>
 <div class="fragment">
 <p>Notez la valeur par défaut de <code>remove_missing</code> qui permet d’écrire simplement:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">moyenne</span>(a)</span>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href=""></a><span class="fu">moyenne</span>(a)</span>
 <span id="cb30-2"><a href=""></a><span class="co">#&gt; [1] 5.5</span></span>
 <span id="cb30-3"><a href=""></a><span class="fu">mean</span>(a)</span>
-<span id="cb30-4"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb30-4"><a href=""></a><span class="co">#&gt; [1] NA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </section>
@@ -877,7 +873,7 @@ Les warnings ne sont pas bloquants.</p>
 <div class="tab-content">
 <div id="tabset-3-1">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>n_events_schoenfeld  <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href=""></a>n_events_schoenfeld  <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
 <span id="cb31-2"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&lt;</span><span class="dv">0</span>) <span class="fu">stop</span>(<span class="st">"`za` doit être positif!"</span>)</span>
 <span id="cb31-3"><a href=""></a>  <span class="cf">if</span>(zb<span class="sc">&lt;</span><span class="dv">0</span>) <span class="fu">stop</span>(<span class="st">"`zb` doit être positif!"</span>)</span>
 <span id="cb31-4"><a href=""></a>  <span class="cf">if</span>(hr<span class="sc">&lt;</span><span class="dv">0</span> <span class="sc">||</span> hr<span class="sc">&gt;</span><span class="dv">1</span>) <span class="fu">stop</span>(<span class="st">"`hr` doit être compris entre 0 et 1!"</span>)</span>
@@ -889,24 +885,23 @@ Les warnings ne sont pas bloquants.</p>
 <span id="cb31-10"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">19.6</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
 <span id="cb31-11"><a href=""></a><span class="co">#&gt; Warning in n_events_schoenfeld(za = 19.6, zb = 1.28, hr = 0.7): `za` est vraiment très grand, t'es</span></span>
 <span id="cb31-12"><a href=""></a><span class="co">#&gt; sûr de toi ?</span></span>
-<span id="cb31-13"><a href=""></a><span class="co">#&gt; [1] 13708.05</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb31-13"><a href=""></a><span class="co">#&gt; [1] 13708.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-3-2">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">library</span>(cli)</span>
-<span id="cb32-2"><a href=""></a><span class="co">#&gt; Warning: le package 'cli' a été compilé avec la version R 4.4.3</span></span>
-<span id="cb32-3"><a href=""></a>n_events_schoenfeld  <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
-<span id="cb32-4"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&lt;</span><span class="dv">0</span>) <span class="fu">cli_abort</span>(<span class="st">"{.arg za} doit être positif, il vaut {.val {za}}!"</span>)</span>
-<span id="cb32-5"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&gt;</span><span class="dv">10</span>) <span class="fu">cli_warn</span>(<span class="st">"{.arg za} est vraiment très grand ({.val {za}}), t'es sûr de toi ?"</span>)</span>
-<span id="cb32-6"><a href=""></a>  <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span>)</span>
-<span id="cb32-7"><a href=""></a>}</span>
-<span id="cb32-8"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="sc">-</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
-<span id="cb32-9"><a href=""></a><span class="co">#&gt; Error in `n_events_schoenfeld()`:</span></span>
-<span id="cb32-10"><a href=""></a><span class="co">#&gt; ! `za` doit être positif, il vaut -1.96!</span></span>
-<span id="cb32-11"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">19.6</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
-<span id="cb32-12"><a href=""></a><span class="co">#&gt; Warning: `za` est vraiment très grand (19.6), t'es sûr de toi ?</span></span>
-<span id="cb32-13"><a href=""></a><span class="co">#&gt; [1] 13708.05</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href=""></a><span class="fu">library</span>(cli)</span>
+<span id="cb32-2"><a href=""></a>n_events_schoenfeld  <span class="ot">=</span> <span class="cf">function</span>(za, zb, hr){</span>
+<span id="cb32-3"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&lt;</span><span class="dv">0</span>) <span class="fu">cli_abort</span>(<span class="st">"{.arg za} doit être positif, il vaut {.val {za}}!"</span>)</span>
+<span id="cb32-4"><a href=""></a>  <span class="cf">if</span>(za<span class="sc">&gt;</span><span class="dv">10</span>) <span class="fu">cli_warn</span>(<span class="st">"{.arg za} est vraiment très grand ({.val {za}}), t'es sûr de toi ?"</span>)</span>
+<span id="cb32-5"><a href=""></a>  <span class="dv">4</span><span class="sc">*</span>(za<span class="sc">+</span>zb)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> (<span class="fu">log</span>(hr)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb32-6"><a href=""></a>}</span>
+<span id="cb32-7"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="sc">-</span><span class="fl">1.96</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb32-8"><a href=""></a><span class="co">#&gt; Error in `n_events_schoenfeld()`:</span></span>
+<span id="cb32-9"><a href=""></a><span class="co">#&gt; ! `za` doit être positif, il vaut -1.96!</span></span>
+<span id="cb32-10"><a href=""></a><span class="fu">n_events_schoenfeld</span>(<span class="at">za=</span><span class="fl">19.6</span>, <span class="at">zb=</span><span class="fl">1.28</span>, <span class="at">hr=</span><span class="fl">0.7</span>)</span>
+<span id="cb32-11"><a href=""></a><span class="co">#&gt; Warning: `za` est vraiment très grand (19.6), t'es sûr de toi ?</span></span>
+<span id="cb32-12"><a href=""></a><span class="co">#&gt; [1] 13708.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -927,7 +922,7 @@ Les warnings ne sont pas bloquants.</p>
 <div class="tab-content">
 <div id="tabset-4-1">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>simulate_lm <span class="ot">=</span> <span class="cf">function</span>(n, <span class="at">beta=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">seed=</span><span class="cn">NULL</span>){</span>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href=""></a>simulate_lm <span class="ot">=</span> <span class="cf">function</span>(n, <span class="at">beta=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">seed=</span><span class="cn">NULL</span>){</span>
 <span id="cb33-2"><a href=""></a>  <span class="fu">set.seed</span>(seed)</span>
 <span id="cb33-3"><a href=""></a>  data <span class="ot">=</span> <span class="fu">tibble</span>(</span>
 <span id="cb33-4"><a href=""></a>    <span class="at">x =</span> <span class="fu">rnorm</span>(n),</span>
@@ -938,12 +933,12 @@ Les warnings ne sont pas bloquants.</p>
 <span id="cb33-9"><a href=""></a>    broom<span class="sc">::</span><span class="fu">tidy</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb33-10"><a href=""></a>    <span class="fu">filter</span>(term<span class="sc">==</span><span class="st">"x"</span>) <span class="sc">%&gt;%</span> <span class="co">#on enlève l'intercept</span></span>
 <span id="cb33-11"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">args_beta=</span>beta, <span class="at">args_sd=</span>sd)</span>
-<span id="cb33-12"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb33-12"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">simulate_lm</span>(<span class="at">n=</span><span class="dv">10000</span>, <span class="at">beta=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb34-2"><a href=""></a><span class="co">#&gt;   term estimate  std.error statistic p.value args_beta args_sd</span></span>
-<span id="cb34-3"><a href=""></a><span class="co">#&gt; 1    x 1.001138 0.01002163   99.8977       0         1       1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href=""></a><span class="fu">simulate_lm</span>(<span class="at">n=</span><span class="dv">10000</span>, <span class="at">beta=</span><span class="dv">1</span>) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb34-2"><a href=""></a><span class="co">#&gt;   term estimate   std.error statistic p.value args_beta args_sd</span></span>
+<span id="cb34-3"><a href=""></a><span class="co">#&gt; 1    x 1.002794 0.009959544  100.6867       0         1       1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <div class="callout callout-warning callout-titled callout-style-default">
@@ -963,14 +958,14 @@ Les warnings ne sont pas bloquants.</p>
 </div>
 <div id="tabset-4-2">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>run_simulations <span class="ot">=</span> <span class="cf">function</span>(N, n, <span class="at">beta =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>){</span>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href=""></a>run_simulations <span class="ot">=</span> <span class="cf">function</span>(N, n, <span class="at">beta =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>){</span>
 <span id="cb35-2"><a href=""></a>  <span class="fu">tibble</span>(<span class="at">seed =</span> <span class="fu">seq_len</span>(N)) <span class="sc">%&gt;%</span> </span>
 <span id="cb35-3"><a href=""></a>    <span class="fu">mutate</span>(<span class="at">res =</span> <span class="fu">map</span>(seed, <span class="sc">~</span><span class="fu">simulate_lm</span>(<span class="at">n=</span>n, <span class="at">beta=</span>beta, <span class="at">sd=</span>sd, <span class="at">seed=</span>.x)))</span>
-<span id="cb35-4"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb35-4"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">10</span>, <span class="at">n=</span><span class="dv">10</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">2</span>)</span>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">10</span>, <span class="at">n=</span><span class="dv">10</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">2</span>)</span>
 <span id="cb36-2"><a href=""></a><span class="co">#&gt; # A tibble: 2 × 2</span></span>
 <span id="cb36-3"><a href=""></a><span class="co">#&gt;    seed res             </span></span>
 <span id="cb36-4"><a href=""></a><span class="co">#&gt;   &lt;int&gt; &lt;list&gt;          </span></span>
@@ -982,38 +977,38 @@ Les warnings ne sont pas bloquants.</p>
 <span id="cb36-10"><a href=""></a><span class="co">#&gt;    seed term  estimate std.error statistic p.value args_beta args_sd</span></span>
 <span id="cb36-11"><a href=""></a><span class="co">#&gt;   &lt;int&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;</span></span>
 <span id="cb36-12"><a href=""></a><span class="co">#&gt; 1     1 x       -0.516     0.449    -1.15    0.283         0       1</span></span>
-<span id="cb36-13"><a href=""></a><span class="co">#&gt; 2     2 x        0.240     0.415     0.577   0.580         0       1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb36-13"><a href=""></a><span class="co">#&gt; 2     2 x        0.240     0.415     0.577   0.580         0       1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-4-3">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>show_results <span class="ot">=</span> <span class="cf">function</span>(sim){</span>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href=""></a>show_results <span class="ot">=</span> <span class="cf">function</span>(sim){</span>
 <span id="cb37-2"><a href=""></a>  sim <span class="sc">%&gt;%</span> </span>
 <span id="cb37-3"><a href=""></a>    <span class="fu">unnest</span>(res) <span class="sc">%&gt;%</span> </span>
 <span id="cb37-4"><a href=""></a>    <span class="fu">summarise</span>(<span class="at">avg_beta =</span> <span class="fu">mean</span>(estimate)) <span class="sc">%&gt;%</span> </span>
 <span id="cb37-5"><a href=""></a>    <span class="fu">pull</span>(avg_beta)</span>
-<span id="cb37-6"><a href=""></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb37-6"><a href=""></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><br></p>
 <div class="cell fragment">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">10</span>, <span class="at">n=</span><span class="dv">10</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">show_results</span>()   <span class="co">#peu précis avec n=10</span></span>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">10</span>, <span class="at">n=</span><span class="dv">10</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">show_results</span>()   <span class="co">#peu précis avec n=10</span></span>
 <span id="cb38-2"><a href=""></a><span class="co">#&gt; [1] -0.1713649</span></span>
 <span id="cb38-3"><a href=""></a></span>
 <span id="cb38-4"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">100</span>, <span class="at">n=</span><span class="dv">100</span>, <span class="at">beta=</span><span class="dv">0</span>) <span class="sc">%&gt;%</span> <span class="fu">show_results</span>() <span class="co">#mieux</span></span>
 <span id="cb38-5"><a href=""></a><span class="co">#&gt; [1] 0.007437185</span></span>
 <span id="cb38-6"><a href=""></a></span>
 <span id="cb38-7"><a href=""></a><span class="fu">run_simulations</span>(<span class="at">N=</span><span class="dv">100</span>, <span class="at">n=</span><span class="dv">100</span>, <span class="at">beta=</span><span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">show_results</span>() <span class="co">#mieux aussi</span></span>
-<span id="cb38-8"><a href=""></a><span class="co">#&gt; [1] 5.007437</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb38-8"><a href=""></a><span class="co">#&gt; [1] 5.007437</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="débuguer-avec-browser" class="slide level2">
+<section id="débuguer-avec-browser" class="slide level2" style="overflow: hidden;">
 <h2>Débuguer avec <code>browser()</code></h2>
 <p>Imaginons une fonction qui fait un calcul métier un peu obscur:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">library</span>(purrr)</span>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href=""></a><span class="fu">library</span>(purrr)</span>
 <span id="cb39-2"><a href=""></a>f <span class="ot">=</span> <span class="cf">function</span>(bias, penalty, values){</span>
 <span id="cb39-3"><a href=""></a>  ref <span class="ot">=</span> <span class="fu">mean</span>(values) <span class="sc">+</span> bias <span class="sc">-</span> penalty</span>
 <span id="cb39-4"><a href=""></a>  values <span class="sc">%&gt;%</span> </span>
@@ -1035,7 +1030,7 @@ Les warnings ne sont pas bloquants.</p>
 <span id="cb39-20"><a href=""></a><span class="co">#&gt;   input score</span></span>
 <span id="cb39-21"><a href=""></a><span class="co">#&gt; 1     2  -1.5</span></span>
 <span id="cb39-22"><a href=""></a><span class="co">#&gt; 2     4   Inf</span></span>
-<span id="cb39-23"><a href=""></a><span class="co">#&gt; 3     6   3.5</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb39-23"><a href=""></a><span class="co">#&gt; 3     6   3.5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="fragment">
 <p>Essayons d’ajouter <code>if(.x - ref == 0) browser()</code> dans la boucle.</p>
@@ -1046,14 +1041,16 @@ Les warnings ne sont pas bloquants.</p>
 <h1>Conclusion</h1>
 
 </section>
-<h3 id="les-boucles-cest-génial">Les boucles c’est génial</h3>
+<section id="les-boucles-cest-génial" class="slide level2">
+<h2>Les boucles c’est génial</h2>
 <ul>
 <li class="fragment">Ca réduit la duplication du code (DRY)</li>
 <li class="fragment">Ca améliore la maintenabilité du code</li>
 <li class="fragment">Ca améliore (parfois) la lisibilité du code</li>
 </ul>
-<p>. . .</p>
-<h3 id="les-fonctions-cest-génial">Les fonctions c’est génial</h3>
+</section>
+<section id="les-fonctions-cest-génial" class="slide level2">
+<h2>Les fonctions c’est génial</h2>
 <ul>
 <li class="fragment">Ca réduit la duplication du code (DRY)</li>
 <li class="fragment">Ca améliore la maintenabilité du code</li>
@@ -1072,6 +1069,7 @@ Les warnings ne sont pas bloquants.</p>
           overflow: hidden!important;
           display:block!important;
       }</style></aside>
+</section>
 <section id="section" class="slide level2">
 <h2><!-- MERCI DE VOTRE ATTENTION --></h2>
 <div class="columns">
@@ -1283,7 +1281,7 @@ Les warnings ne sont pas bloquants.</p>
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -1386,173 +1384,192 @@ Les warnings ne sont pas bloquants.</p>
     
 
     <script id="quarto-html-after-body" type="application/javascript">
-      window.document.addEventListener("DOMContentLoaded", function (event) {
-        const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
-        tabsets.forEach(function(tabset) {
-          const tabby = new Tabby('#' + tabset.id);
-        });
-        const isCodeAnnotation = (el) => {
-          for (const clz of el.classList) {
-            if (clz.startsWith('code-annotation-')) {                     
-              return true;
-            }
-          }
-          return false;
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
         }
-        const onCopySuccess = function(e) {
-          // button target
-          const button = e.trigger;
-          // don't keep focus
-          button.blur();
-          // flash "checked"
-          button.classList.add('code-copy-button-checked');
-          var currentTitle = button.getAttribute("title");
-          button.setAttribute("title", "Copied!");
-          let tooltip;
-          if (window.bootstrap) {
-            button.setAttribute("data-bs-toggle", "tooltip");
-            button.setAttribute("data-bs-placement", "left");
-            button.setAttribute("data-bs-title", "Copied!");
-            tooltip = new bootstrap.Tooltip(button, 
-              { trigger: "manual", 
-                customClass: "code-copy-button-tooltip",
-                offset: [0, -8]});
-            tooltip.show();    
-          }
-          setTimeout(function() {
-            if (tooltip) {
-              tooltip.hide();
-              button.removeAttribute("data-bs-title");
-              button.removeAttribute("data-bs-toggle");
-              button.removeAttribute("data-bs-placement");
-            }
-            button.setAttribute("title", currentTitle);
-            button.classList.remove('code-copy-button-checked');
-          }, 1000);
-          // clear code selection
-          e.clearSelection();
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
         }
-        const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const onCopySuccess = function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
           for (const childEl of codeEl.children) {
             if (isCodeAnnotation(childEl)) {
               childEl.remove();
             }
           }
           return codeEl.innerText;
-        }
-        const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-          text: getTextToCopy
-        });
-        clipboard.on('success', onCopySuccess);
-        if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-          const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-            text: getTextToCopy,
-            container: window.document.getElementById('quarto-embedded-source-code-modal')
-          });
-          clipboardModal.on('success', onCopySuccess);
-        }
-          var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
-          var mailtoRegex = new RegExp(/^mailto:/);
-            var filterRegex = new RegExp('/' + window.location.host + '/');
-          var isInternal = (href) => {
-              return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
-          }
-          // Inspect non-navigation links and adorn them if external
-         var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
-          for (var i=0; i<links.length; i++) {
-            const link = links[i];
-            if (!isInternal(link.href)) {
-              // undo the damage that might have been done by quarto-nav.js in the case of
-              // links that we want to consider external
-              if (link.dataset.originalHref !== undefined) {
-                link.href = link.dataset.originalHref;
-              }
-            }
-          }
-        function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
-          const config = {
-            allowHTML: true,
-            maxWidth: 500,
-            delay: 100,
-            arrow: false,
-            appendTo: function(el) {
-                return el.closest('section.slide') || el.parentElement;
-            },
-            interactive: true,
-            interactiveBorder: 10,
-            theme: 'light-border',
-            placement: 'bottom-start',
-          };
-          if (contentFn) {
-            config.content = contentFn;
-          }
-          if (onTriggerFn) {
-            config.onTrigger = onTriggerFn;
-          }
-          if (onUntriggerFn) {
-            config.onUntrigger = onUntriggerFn;
-          }
-            config['offset'] = [0,0];
-            config['maxWidth'] = 700;
-          window.tippy(el, config); 
-        }
-        const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-        for (var i=0; i<noterefs.length; i++) {
-          const ref = noterefs[i];
-          tippyHover(ref, function() {
-            // use id or data attribute instead here
-            let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-            try { href = new URL(href).hash; } catch {}
-            const id = href.replace(/^#\/?/, "");
-            const note = window.document.getElementById(id);
-            if (note) {
-              return note.innerHTML;
-            } else {
-              return "";
-            }
-          });
-        }
-        const findCites = (el) => {
-          const parentEl = el.parentElement;
-          if (parentEl) {
-            const cites = parentEl.dataset.cites;
-            if (cites) {
-              return {
-                el,
-                cites: cites.split(' ')
-              };
-            } else {
-              return findCites(el.parentElement)
-            }
-          } else {
-            return undefined;
-          }
-        };
-        var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-        for (var i=0; i<bibliorefs.length; i++) {
-          const ref = bibliorefs[i];
-          const citeInfo = findCites(ref);
-          if (citeInfo) {
-            tippyHover(citeInfo.el, function() {
-              var popup = window.document.createElement('div');
-              citeInfo.cites.forEach(function(cite) {
-                var citeDiv = window.document.createElement('div');
-                citeDiv.classList.add('hanging-indent');
-                citeDiv.classList.add('csl-entry');
-                var biblioDiv = window.document.getElementById('ref-' + cite);
-                if (biblioDiv) {
-                  citeDiv.innerHTML = biblioDiv.innerHTML;
-                }
-                popup.appendChild(citeDiv);
-              });
-              return popup.innerHTML;
-            });
-          }
-        }
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      </script>
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+        const config = {
+          allowHTML: true,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start',
+        };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
     
 
 </body></html>
