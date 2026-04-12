@@ -13,11 +13,11 @@ Le code quarto est disponible sur ce repository (liens ci-dessous) et les diapos
 3)  [Graphiques](modules/3_graph/) (Nusaibah Ibrahimi)
 4)  [Import, checks, et description](modules/4_edcimport_crosstable/) (Dan Chaltiel)
 5)  [Analyses statistiques](modules/5_statistiques/) (Dan Chaltiel)
-6)  [Reporting - officer](modules/6_officer/) (Charlotte Bargain)
+6)  [Reporting - officer](modules/6_boucles/) (Dan Chaltiel)
+
 
 ![](qrcode.png)
 
 ## Ressources
 
-Tutoriel très complet, en français : https://juba.github.io/tidyverse/
-
+Tutoriel très complet, en français : <https://juba.github.io/tidyverse/>
