@@ -1,0 +1,308 @@
+---
+format: html
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+# Code with me - Boucles et Fonctions
+
+On va essayer appliquer ce qu'on a vu dans un exemple pratique
+
+## Initialisation : packages et options
+
+```{r}
+#| include: false
+Sys.setenv(LANGUAGE="en")
+
+# Sys.setenv(R_LIBCURL_SSL_REVOKE_BEST_EFFORT=TRUE) #parefeu GR
+library(tidyverse)
+library(flextable)
+library(crosstable)
+library(glue)
+
+crosstable_options(
+  margin=2
+)
+
+options(
+  ggplot2.discrete.colour = ggsci::scale_colour_lancet, 
+  ggplot2.discrete.fill = ggsci::scale_fill_lancet
+)
+```
+
+## Charger la base de données
+
+Cette base est une simulation visant à reproduire grossièrement les données de l'article. Pour ceux que ça intéresse, je décris le process [ici](https://danchaltiel.github.io/blog/posts/2025-01_20_article_replication/).
+
+Pour l'exemple ici, je simule également une date de progression pour 20% des patients. Il faudra que je l'ajoute dans mon dataset de départ.
+
+```{r}
+input = "destiny_breast04.rds"
+if(!file.exists(input)){
+  download.file("https://github.com/DanChaltiel/blog/raw/refs/heads/main/posts/2025-01_20_article_replication/destiny_breast04.rds", destfile=input)
+}
+
+db = readRDS(input)
+
+# View(db)
+db %>% select(1:10)
+db %>% select(11:last_col())
+```
+
+# 1/ Programmation simple
+
+> On va faire l'analyse à l'ancienne
+
+## Table 1
+
+Une petite `crosstable` sur age:visceral_bl, juste pour regarder sur quoi on va bosser.\
+Voir la doc sur <https://danchaltiel.github.io/crosstable/>.
+
+```{r}
+tbl1 = db %>% 
+  crosstable(age:visceral_bl, 
+             total="row", percent_digits=0,
+             by=arm) %>% 
+  as_flextable(compact=TRUE, header_show_n=TRUE) %>% 
+  highlight(i=5, j=2) %>% 
+  add_footer_lines(c("This is table 1"))
+tbl1 
+```
+
+## Analyse de survie
+
+On recalcule les temps de survie pour la PFS et on génère le Kaplan Meier et le Cox.\
+Le package recommandé aujourd'hui est `ggsurvfit` : <https://www.danieldsjoberg.com/ggsurvfit/articles/gallery.html#kmunicate>.
+
+```{r}
+
+db_surv =
+  db %>% 
+  mutate(
+    time_os = difftime(date_end_of_study, date_enrolment, units="days"),
+    event_os = event_end_of_study,
+    
+    time_prog = difftime(date_prog, date_enrolment, units="days"),
+    event_prog = is.na(date_prog),
+    time_pfs = pmin(time_os, time_prog, na.rm=TRUE),
+    event_pfs = event_end_of_study | event_prog
+  )
+ 
+  
+library(survival)
+library(ggsurvfit)
+
+fit_pfs = survfit2(Surv(time_pfs, event_pfs) ~ arm, data=db_surv)
+lr_test = survdiff(Surv(time_pfs, event_pfs) ~ arm, data=db_surv)$pvalue %>% 
+  format.pval(eps=0.001)
+km_pfs = fit_pfs %>% 
+  ggsurvfit(linewidth = 1) +
+  add_confidence_interval() +
+  add_risktable() +
+  add_censor_mark() +
+  add_pvalue() +
+  add_quantile(y_value = 0.6, color = "gray50", linewidth = 0.75) +
+  scale_ggsurvfit() + 
+  labs(x="Time from randomization (days)", y="PFS")
+km_pfs
+
+cox_pfs = coxph(Surv(time_pfs, event_pfs) ~ arm, data=db_surv)
+cox_pfs
+# cox_pfs_chk = cox.zph(cox_pfs) #TODO mais on n'a pas le temps
+
+fit_pfs_val = tidy_survfit(fit_pfs, times=180) %>% 
+  mutate(across(c(estimate, conf.low, conf.high), ~format_fixed(.x, 2))) %>% 
+  glue_data("{estimate} (95% CI {conf.low}-{conf.high}) in the {strata} arm")
+cox_pfs_val = cox_pfs %>% 
+  broom::tidy(conf.int=TRUE, exponentiate=TRUE) %>% 
+  filter(term=="armT-DXd") %>% 
+  mutate(across(c(estimate, conf.low, conf.high), ~format_fixed(.x, 2))) %>% 
+  glue_data("{estimate} (95% CI {conf.low}-{conf.high})")
+reporting = cli::format_inline(
+  "At 3 months, PFS was {fit_pfs_val}. Cox model HR for treatment was {cox_pfs_val}. Unstratified log-rank p = {lr_test}."
+)
+reporting
+```
+
+## Analyse en sous-groupe
+
+Par exemple si on découpe selon `prior_cdki`:
+
+```{r}
+db_cdki_list = db_surv %>% split(.$prior_cdki)
+db_cdki_list$Yes
+
+cox1 = coxph(Surv(time_os, event_end_of_study) ~ arm, data=db_cdki_list$Yes)
+cox2 = coxph(Surv(time_os, event_end_of_study) ~ arm, data=db_cdki_list$No)
+broom::tidy(cox1, exponentiate=TRUE, conf.int=TRUE)
+broom::tidy(cox2, exponentiate=TRUE, conf.int=TRUE)
+```
+
+# 2/ Programmation fonctionnelle
+
+> Allez, on attaque pour de vrai !
+
+## Analyse de survie - programmation fonctionnelle
+
+On va abstractiser tout ça pour avoir une fonction qui fait toute l'analyse.\
+La question à se poser c'est : quel input pour quel output?\
+Il faut essayer de factoriser au maximum.
+
+```{r}
+#input: f = formula
+analyse = function(f, data, label){
+  fit = survfit2(f, data=data)
+  lr_test = survdiff(f, data=data)$pvalue %>% 
+    format.pval(eps=0.001)
+  km = fit %>% 
+    ggsurvfit(linewidth = 1) +
+    add_confidence_interval() +
+    add_risktable() +
+    add_censor_mark() +
+    add_pvalue() +
+    add_quantile(y_value = 0.6, color = "gray50", linewidth = 0.75) +
+    scale_ggsurvfit() + 
+    labs(x="Time from randomization (days)", y=label)
+  cox = coxph(f, data=data, x=TRUE, model=TRUE)
+  cox_chk = cox.zph(cox)
+  
+  fit_val = tidy_survfit(fit, times=180) %>% 
+    mutate(across(c(estimate, conf.low, conf.high), ~format_fixed(.x, 2))) %>% 
+    glue_data("{estimate} (95% CI {conf.low}-{conf.high}) in the {shQuote(strata)} arm")
+  cox_val = cox %>% 
+    broom::tidy(conf.int=TRUE, exponentiate=TRUE) %>% 
+    filter(term=="armT-DXd") %>% 
+    mutate(across(c(estimate, conf.low, conf.high), ~format_fixed(.x, 2))) %>% 
+    glue_data("{estimate} (95% CI {conf.low}-{conf.high})")
+  
+  txt = cli::format_inline(
+    "At 3 months, {label} was {fit_val}. Cox model HR for treatment was {cox_val}. Unstratified log-rank p = {lr_test}."
+  )
+  
+  lst(fit, km, cox, txt)
+}
+
+f_pfs = Surv(time_pfs, event_pfs) ~ arm
+f_os = Surv(time_os, event_os) ~ arm
+
+analyse_pfs = analyse(f_pfs, data=db_surv, label="PFS")
+analyse_os = analyse(f_os, data=db_surv, label="OS")
+
+
+
+analyse_pfs$txt
+analyse_os$txt
+```
+
+On aurait aussi pu prendre en input une valeur texte genre "pfs" et recréer la formule à l'intérieur de la fonction.
+
+## La même, avec une boucle
+
+```{r}
+formulas = lst(
+  "Overall Survival" = Surv(time_os, event_os) ~ arm,
+  "Progression-Free Survival" = Surv(time_pfs, event_pfs) ~ arm,
+  "Progression-Free Survival (stratified)" = Surv(time_pfs, event_pfs) ~ arm + 
+    strata(race),
+)
+
+rslt = formulas %>% 
+  imap(~{
+    analyse(.x, data=db_surv, label=.y)
+  })
+
+rslt$`Overall Survival`$txt
+rslt$`Progression-Free Survival`$txt
+rslt$`Progression-Free Survival (stratified)`$txt #il faudrait adapter la fonction pour le KMplot
+```
+
+Avantage : on est [**certains**]{.underline} que l'analyse est 100% la même partout.\
+Inconvénient : on a centralisé le risque d'erreur
+
+## Analyse en sous-groupe
+
+On a vu plus haut comment on découpe selon `prior_cdki`, maintenant on va automatiser tout ça 😈:
+
+```{r}
+
+#On split le dataset sur les levels d'une covariate, ça nous donne une liste avec les sous populations
+#Ensuite on map() pour appliquer un modèle de cox sur chaque sous-population (`data`)
+#finalement on rbind pour avoir une jolie dataframe
+
+get_models = function(x){
+  #x="prior_cdki"
+  s = db_surv %>% 
+    split(.[[x]])
+  s %>% 
+    map(~{
+      coxph(f_pfs, data=.x) %>%
+        broom::tidy(exponentiate=TRUE, conf.int=TRUE) %>%
+        select(-std.error, -statistic)
+      #analyse(f_pfs, data=.x, label="PFS") #overkill mais on aurait pu
+    }) %>% 
+    list_rbind(names_to="value") %>% 
+    mutate(covariate=x)
+}
+#Par exemple : 
+# get_models("age")
+# get_models("prior_lines")
+
+
+covariates = c("age", "race", "region", "ecog", "prior_cdki", 
+               "prior_lines", "ihc", "visceral_bl")
+#Maintenant on applique cette fonction `get_models` à tous les covariates d'un seul coup
+rslt_subgp = covariates %>% 
+  set_names() %>% 
+  map(get_models) %>% 
+  list_rbind(names_to="cov") %>% 
+  mutate(
+    term2 = paste(cov, value, sep="="),
+    value = fct_relevel(value, "Other", after=0)
+  )
+rslt_subgp
+```
+
+Et on peut enfin faire le graphique :
+
+```{r}
+p = ggplot(rslt_subgp) +
+  aes(x = estimate, y = value, xmin=conf.low, xmax=conf.high, color=cov) +
+  geom_point() +
+  geom_text(aes(x=1.5, label=round(estimate, 2)), hjust=1.1, size=3) +
+  geom_errorbar(width=0.3, alpha=0.4, linewidth=1) +
+  geom_vline(xintercept=1) +
+  facet_grid(rows=vars(cov), scales="free_y", 
+    switch = "y") +
+  theme_bw() +
+  theme(legend.position="none",
+    strip.placement = "outside",)
+
+p
+```
+
+# Rapport automatisé
+
+Grand final : on crée un rapport automatisé tout propre !
+
+```{r}
+
+library(officer)
+
+doc = read_docx() %>% 
+  body_add_title("Résultats", level=1) %>% 
+  body_add_title("Tableau", level=2) %>% 
+  body_add_normal("Description de la population") %>% 
+  body_add_flextable(tbl1) %>% 
+  body_add_break() %>% 
+  body_add_title("Analyse de survie", level=2) %>% 
+  body_add_normal(rslt$`Progression-Free Survival`$txt) %>% 
+  body_add_gg2(rslt$`Progression-Free Survival`$km, width=17, height=17, units="cm") %>% 
+  body_add_normal(rslt$`Overall Survival`$txt) %>% 
+  body_add_gg2(rslt$`Overall Survival`$km, width=17, height=17, units="cm") %>% 
+  body_add_break() %>% 
+  body_add_title("Analyses en sous-groupes", level=2) %>% 
+  body_add_gg2(p, width=17, height=17, units="cm") 
+
+write_and_open(doc)
+```
